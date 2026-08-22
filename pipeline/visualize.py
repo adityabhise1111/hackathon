@@ -24,6 +24,9 @@ MUTED = (170, 170, 170)
 
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
+# Severity ordering, so the most serious active event wins the label on a track.
+SEV_RANK = {"low": 0, "medium": 1, "high": 2}
+
 
 def _label(img, text, org, colour, scale=0.45, thick=1, pad=3):
     """Text with a filled backing box so it stays readable over any road surface."""
@@ -147,10 +150,16 @@ def render_annotated_video(
             conflict_pairs: list[tuple[int, int, str]] = []
             for t0, t1, a, b, et, sev in flagged:
                 if t0 - 0.4 <= t_now <= t1 + 0.4:
-                    if a >= 0:
-                        active_flags[a] = (et, sev)
-                    if b >= 0:
-                        active_flags[b] = (et, sev)
+                    # Higher severity wins when a track is flagged twice at once,
+                    # so a genuine conflict is never hidden behind a low-priority
+                    # label. Without this the frame filled with the least
+                    # interesting event type.
+                    for tid in (a, b):
+                        if tid < 0:
+                            continue
+                        cur = active_flags.get(tid)
+                        if cur is None or SEV_RANK.get(sev, 0) > SEV_RANK.get(cur[1], 0):
+                            active_flags[tid] = (et, sev)
                     if a >= 0 and b >= 0:
                         conflict_pairs.append((a, b, sev))
                     total_events_seen.add(f"{et}:{a}:{b}:{t0}")
@@ -168,8 +177,12 @@ def render_annotated_video(
                     centres[tid] = (cx, cy)
 
                     flag = active_flags.get(tid)
-                    is_warn = flag is not None
-                    box_colour = WARN if (is_warn and flag[1] == "high") else (WARN_SOFT if is_warn else colour)
+                    sev_now = flag[1] if flag else None
+                    # Low-severity events keep the CLASS colour. Otherwise nearly
+                    # every box turned warning-orange and the class information -
+                    # which is what Level 1 is actually scored on - was lost.
+                    is_warn = sev_now in ("high", "medium")
+                    box_colour = WARN if sev_now == "high" else (WARN_SOFT if is_warn else colour)
                     thickness = 3 if is_warn else 2
 
                     # Trajectory trail. Two layers so the path is continuous from
@@ -207,11 +220,21 @@ def render_annotated_video(
                     _label(img, f"{cls} #{tid}{sp_txt}", (x1, max(y1 - 4, 14)), box_colour)
 
                     if is_warn:
-                        _label(img, flag[0].replace("_", " ").upper(), (x1, min(y2 + 18, H - 4)), WARN, scale=0.42)
+                        # Low-severity events are real output but there are hundreds
+                        # of them; drawing text for every one buried the frame and
+                        # made the whole scene look anomalous. They are all in
+                        # events.csv and the dashboard.
+                        _label(img, flag[0].replace("_", " ").upper(),
+                               (x1, min(y2 + 18, H - 4)), WARN, scale=0.42)
 
             # Conflict pairs: draw the interaction explicitly - this is the thing
-            # fixed-camera systems cannot show.
+            # fixed-camera systems cannot show. Only graded conflicts (medium/high)
+            # get the line and label; the ~150 low-severity close interactions are
+            # a density signal, not safety events, and drawing them all turned the
+            # frame into a web of red lines.
             for a, b, sev in conflict_pairs:
+                if sev not in ("high", "medium"):
+                    continue
                 if a in centres and b in centres:
                     col = WARN if sev == "high" else WARN_SOFT
                     cv2.line(img, centres[a], centres[b], col, 2, cv2.LINE_AA)

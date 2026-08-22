@@ -356,11 +356,140 @@ ffmpeg -i outputs/annotated.mp4 -vcodec libx264 -crf 28 -pix_fmt yuv420p outputs
 
 ---
 
+## 17. Seeding SAM with trajectory points segmented the cars, not the road
+
+**Problem.** Road segmentation was added so analytics could use the *carriageway* as a
+denominator instead of the whole frame (a frame is mostly rooftops and vegetation).
+MobileSAM was chosen: ~40 MB, already inside `ultralytics`, no new dependency, and
+because the drone **hovers** it only has to run on a single frame.
+
+SAM needs prompts. The obvious choice was to prompt it at the trajectory points -
+after all, those are on the road. The mask came back with a measured agreement of
+**IoU 0.342**, and SAM covered only **35.8%** of the area traffic had demonstrably
+driven over, while its own masks covered just 10.5% of the frame.
+
+**Diagnosis.** The tell was in the log line: *24 prompts -> 24 segments*. Exactly one
+segment per prompt. SAM is **class-agnostic** - it returns *the object under the
+point*, and a trajectory point sits on a **vehicle**. We had asked SAM to segment the
+road and it had faithfully segmented 24 cars.
+
+**Fix.** Put the prompts on **bare carriageway**:
+
+- exclude any candidate covered by a detection box in the frame being segmented -
+  `boxes.csv` already records exactly that, and because the aircraft hovers, road a
+  vehicle drove over at t=30 s is bare tarmac at t=0;
+- take at most one candidate per 96 px grid cell, so prompts spread across every arm
+  of the junction instead of clustering in the busiest lane.
+
+SAM's coverage of the travelled area went **35.8% -> 56.7%**, and its own mask area
+went 10.5% -> 27.6% - now comparable to the 26.1% the traffic actually used.
+
+---
+
+## 18. The road mask then included a rooftop and a tree canopy
+
+**Problem.** With better seeds, SAM contributed much more area - and the union of
+"SAM" plus "where traffic drove" now contained a large grey **rooftop** and a big
+**tree canopy**. Visible immediately in the overlay image.
+
+**Diagnosis.** Same root cause as #17, pointing the other way. SAM has no concept of
+"road". Prompted on tarmac, it grows the segment by appearance, and a grey rooftop
+looks like grey tarmac from 70 m up. This is not a tuning problem - a class-agnostic
+model cannot be tuned into having a class.
+
+The consequence would have been silent and bad: the whole point of the mask is to
+report density **per square metre of road**, and a rooftop in the denominator makes
+that number meaningless.
+
+**Fix.** Stop treating SAM as an authority and make it a **proposer**:
+
+> **SAM proposes, the observed traffic vouches.**
+
+Keep the segments separately rather than merging them, then accept a segment only if
+at least 45% of *its own area* lies inside the travelled mask. A road segment
+extending an in-use corridor into its empty lanes passes. A rooftop overlaps the
+travelled area at roughly zero and is rejected.
+
+On this footage **13 of 28 segments were rejected**, IoU rose **0.342 -> 0.468**, and
+the final mask covers 27.2% of the frame against the 26.1% traffic proved - i.e.
+deliberately conservative. The asymmetry is intentional: an over-inclusive road mask
+is worse than a slightly tight one.
+
+Off-road detections are **dimmed in the video but kept in the analytics** by default,
+because a detection on a verge or footpath may well be a real road user - and
+pedestrians are exempt from filtering entirely. Deleting vulnerable road users to
+tidy up a mask would be exactly the wrong trade for a safety system.
+
+---
+
+## 19. "Small object detection" is a claim, so we measured it
+
+**Problem.** Aerial video is fundamentally a small-object problem: at 70 m a
+motorcycle is a few dozen pixels. The textbook responses are to infer at higher
+resolution and to lower the confidence floor. Both also buy false positives, so
+"we enabled small-object detection" is not a result.
+
+**Diagnosis.** `tools/measure_small_objects.py` runs three settings over the same 30
+frames sampled evenly across the clip, and reports detections bucketed by **pixel
+area** plus the fraction landing **inside the road mask** - reusing the segmentation
+from #17/#18, so the two features validate each other.
+
+| Setting | Detections | tiny (<400 px) | small | medium | large | on-road | median conf |
+|---|---|---|---|---|---|---|---|
+| 1280, conf 0.25 (baseline) | 1,250 | 92 | 503 | 636 | 19 | **87.6%** | 0.522 |
+| **1920, conf 0.25** | **1,975** (+58%) | **535** | 743 | 677 | 20 | **79.5%** | 0.469 |
+| 1920, conf 0.15 | 3,164 (+153%) | 1,140 | 1,055 | 916 | 53 | **64.9%** | 0.315 |
+
+**What decided it.** Not the headline count - the *shape* of the change.
+
+Going 1280 -> 1920 added **+443 tiny** and +240 small detections but only **+41
+medium and +1 large**. That is precisely what extra resolution should do if the gain
+is real: more pixels cannot reveal a bus you were already seeing. Tiny detections
+rose **5.8x** (92 -> 535), and 79.5% of all detections still landed on the
+carriageway.
+
+Dropping conf to 0.15 behaves like noise instead. It added +280 medium and +34
+**large** detections - resolution was unchanged, so a lower floor cannot be finding
+genuinely new large vehicles, it is admitting duplicates and junk. On-road fraction
+collapses to **64.9%**: more than a third of detections sit on rooftops and
+vegetation, which is the signature of hallucination, not recall.
+
+**Fix.** Adopt `imgsz: 1920` at `conf: 0.25`. **Reject `conf: 0.15`** despite it
+having by far the biggest detection count.
+
+The cost is honest: 1920 inference is roughly 2.2x slower per frame than 1280, which
+on a CPU-only machine is the difference between a ~25 minute and a ~55 minute pass.
+On the Colab T4 it is free. `summary.json` records `imgsz` for every run, so which
+setting produced which artifact is never ambiguous.
+
+We do **not** claim a recall or precision figure. There is no hand-labelled ground
+truth for this clip, so what is honestly available is the measured delta plus the
+evidence about its plausibility - which is what the table above is.
+
+---
+
+## 20. Trajectory trails vanished behind the vehicle
+
+**Problem.** Trails were drawn over a fixed 45-frame window, so a car's path faded
+out about 1.5 s behind it. Watching the video, you could not see that an ID had
+survived a long occlusion - which is the single thing Level 1 is scored on.
+
+**Diagnosis.** Not a bug; the window was chosen to stop the frame turning into
+spaghetti with 30+ simultaneous tracks. Both requirements are real and they conflict.
+
+**Fix.** Two layers instead of one. The **full history from first detection** is drawn
+thin at 45% brightness, so continuity is visible end to end; the **recent 45 frames**
+are drawn bright and thickening on top, so current motion still reads clearly. Cheap
+- both come from the same `trail_by_track` array already in memory.
+
+---
+
 ## The pattern behind all of these
 
-Six of the sixteen issues above (4, 5, 6, 7, 9, 11) were found by **interrogating
-our own output** - looking at distributions, cross-tabulating by category, and
-asking whether a number was physically plausible - not by seeing a crash.
+Nine of the twenty issues above (4, 5, 6, 7, 9, 11, 17, 18, 19) were found by
+**interrogating our own output** - looking at distributions, cross-tabulating by
+category, and asking whether a number was physically plausible - not by seeing a
+crash.
 
 The conflict detector is the clearest example. It never threw an error. It produced
 confident, well-formatted, plausible-looking output at every stage, and it was
@@ -369,3 +498,11 @@ wrong three times in a row for three completely different reasons: speed noise
 normal oncoming traffic look like head-on collisions (issue 7). Each one was only
 findable by asking "is this number actually believable?" and then checking a
 distribution instead of trusting the answer.
+
+The segmentation work repeated the pattern in miniature, twice in a row and in
+opposite directions - SAM segmenting cars instead of road (17), then swallowing a
+rooftop (18) - and both were caught by a single measured number, the overlap between
+what SAM proposed and where traffic demonstrably drove.
+
+And issue 19 is the same discipline applied *before* believing good news: the setting
+with the largest improvement in detection count is the one we rejected.

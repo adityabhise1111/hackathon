@@ -20,7 +20,10 @@ telemetry:
 
 detector:
   weights: models/yolov8s.pt
-  imgsz: 1280
+  # 1920 not 1280: measured on 30 sampled frames it adds +443 tiny and +240 small
+  # detections but only +41 medium and +1 large - the signature of a real
+  # small-object recall gain. See ISSUES.md #19 and outputs/small_object_study.json.
+  imgsz: 1920
   conf: 0.25
   iou: 0.6
   device: auto            # auto -> cuda if available, else cpu
@@ -90,6 +93,10 @@ anomalies:
   wrong_way_min_speed_kph: 8.0
   wrong_way_deviation_deg: 130.0  # vs the dominant flow of its corridor
   unusual_dwell_s: 25.0
+  # A vehicle stationary for this fraction of its observed life never moved at all,
+  # so it is a PARKED vehicle, not an interrupted journey. Separating the two stopped
+  # 27 kerbside cars being reported as anomalies for the whole clip (ISSUES.md #20).
+  parked_stationary_fraction: 0.9
 
 segmentation:
   # Road-area segmentation. Cheap because the drone HOVERS (measured: altitude
