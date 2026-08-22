@@ -7,8 +7,13 @@ video:
   # Seconds into the ORIGINAL video where this clip starts.
   # Needed to align the DJI telemetry (SRT) with the clip's frames.
   clip_start_s: 120.0
-  # Process every Nth frame. 1 = every frame. 2 = half the work, still smooth trails.
-  frame_stride: 1
+  # Process every Nth frame. Measured: detection runs at 0.41 fps on this 8-core CPU
+  # at native 1920, so every frame would take ~73 min. At stride 2 a vehicle at 20 km/h
+  # moves ~6 px between processed frames against a ~40 px box, so ByteTrack's IoU
+  # association is unaffected - and the 90-frame track_buffer becomes 6 s of real time
+  # instead of 3 s, which bridges occlusions better, not worse. Kinematics divide by
+  # the effective fps, so speeds stay correct.
+  frame_stride: 2
   # Cap frames processed (null = whole clip). Useful for quick smoke tests.
   max_frames: null
 
@@ -19,13 +24,18 @@ telemetry:
   sensor_width_35mm: 36.0
 
 detector:
-  weights: models/yolov8s.pt
+  # ONNX Runtime, not PyTorch: measured 0.41 vs 0.26 fps on this CPU for BYTE-IDENTICAL
+  # output (1,812 detections from both over the same 15 frames). No accuracy trade, 1.6x
+  # faster. Regenerate with: model.export(format='onnx', imgsz=(1088,1920), opset=12)
+  weights: models/yolov8s.onnx
   # 1920 = the NATIVE frame width, and the measured optimum. Two-wheelers found
   # across 24 sampled frames: 1280 -> 13, 1920 -> 139, 2560 -> 70, 3200 -> 67.
   # Upscaling ABOVE native finds more small boxes but classifies fewer of them as
   # two-wheelers - a bicubic-upsampled frame is out of distribution for the class
   # head. See ISSUES.md #22 and outputs/small_object_study2.json.
-  imgsz: 1920
+  # [h, w]. The ONNX graph is exported at a FIXED shape, so this must match it exactly:
+  # 1088 is 1080 padded up to a multiple of 32, 1920 is the native width.
+  imgsz: [1088, 1920]
   # Two-tier confidence, because one threshold cannot serve both ends of the size
   # range. A car at 70 m scores 0.5+; a motorcycle is ~20x16 px and scores
   # 0.15-0.25. A single 0.15 floor found 259 two-wheelers but dropped on-road

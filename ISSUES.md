@@ -484,9 +484,173 @@ are drawn bright and thickening on top, so current motion still reads clearly. C
 
 ---
 
+## 21. Parked cars were reported as traffic anomalies
+
+**Problem.** `events.csv` reported 27 `unusual_dwell` anomalies. Looking at where they
+were, most were cars parked at the kerb for the entire clip.
+
+**Diagnosis.** The dwell detector asked "has this vehicle been stationary for more
+than 25 s?", which is true of a parked car and of a car stuck at a broken signal. The
+test could not tell them apart because it only looked at the duration of the stop, not
+at whether the vehicle ever moved.
+
+**Fix.** Compare stationary time against the vehicle's **whole observed life**. A
+vehicle stationary for >=90% of the time it was visible never made a journey, so it is a
+`parked_vehicle_candidate`, not an interrupted one. Output went from 27 dwell anomalies
+to 20 parked candidates and 7 genuine dwells - the same data, correctly separated.
+
+---
+
+## 22. Two-wheelers were barely detected, and the obvious fix made it worse
+
+**Problem.** Almost no motorcycles or bicycles were being detected at all.
+
+**Diagnosis.** Measured, not assumed: 24 evenly-spaced frames run at four resolutions.
+The first finding was an outright mistake in the config - the source video is **1920 wide
+and we were running the detector at 1280**, i.e. downscaling below native before asking
+it to find a 20 px object. YOLOv8's finest detection head has stride 8, so a 22 px
+motorcycle occupies under 3 grid cells at native and under 2 when downscaled.
+
+| setting | total detections | two-wheelers | tiny boxes (<600 px) | on-road plausibility |
+|---|---|---|---|---|
+| 1280, conf 0.25 | 1,504 | 13 | 448 | 0.80 |
+| **1920, conf 0.25** | 1,979 | **139** | 570 | 0.80 |
+| 2560, conf 0.25 | 2,201 | 70 | 645 | 0.78 |
+| 3200, conf 0.25 | 2,283 | 67 | 690 | 0.77 |
+| 1920, conf 0.15 | 3,412 | 259 | 1,102 | **0.65** |
+
+**The intuitive fix was disproven by the measurement.** Upscaling *above* native keeps
+raising the raw count of tiny boxes, and yet finds **fewer** two-wheelers - a bicubic
+upsampled frame is out of distribution for the class head, so the extra boxes come back
+labelled "car". Dropping confidence to 0.15 does find 259 two-wheelers, but on-road
+plausibility collapses from 0.80 to 0.65, i.e. it is admitting rooftop clutter.
+
+**Fix.** Native 1920, plus a **two-tier confidence floor**, because one threshold cannot
+serve both ends of the size range: a car at 70 m scores 0.5+, a motorcycle scores
+0.15-0.25. Detection is proposed at 0.15 so small road users exist at all, then car / bus
+/ truck are held to 0.25 while two-wheelers and pedestrians stay at 0.15. That buys the
+two-wheeler recall without buying the rooftop cars.
+
+---
+
+## 23. Segmentation was visible but was not filtering anything
+
+**Problem.** The road mask was drawn on the video, and yet cars were still being detected
+and tracked on a rooftop, in a private courtyard, and in vegetation.
+
+**Diagnosis.** The mask was being computed and displayed but `filter_detections` was
+`false`, so it was decoration. The reason it was left off was a genuine worry: an
+off-road detection may be a real road user on a footpath, so deleting detections by
+position risks deleting real data.
+
+The check that resolved the worry: for each track, what fraction of its life is on the
+carriageway? The distribution over all 292 tracks is **perfectly bimodal**:
+
+| on-road fraction | 0-10% | 10-25% | 25-50% | 50-75% | 75-90% | 90-100% |
+|---|---|---|---|---|---|---|
+| tracks | 38 | 0 | 0 | 0 | 0 | 254 |
+
+Nothing at all between 0.1 and 0.9. The threshold value is therefore irrelevant - there
+is nothing ambiguous to threshold. The four detections circled in the bug report all
+measure exactly 0.00.
+
+**Fix.** Filter **per track, not per observation.** A per-observation filter would delete
+the frames where a real vehicle clips a verge, splitting one track into fragments and
+destroying the ID stability Level 1 is actually scored on. A track is now kept or dropped
+as a whole: 34 tracks (8,313 observations) removed, and pedestrians are exempt because a
+footpath is legitimately off-carriageway.
+
+---
+
+## 24. Everything was classified as a car
+
+**Problem.** Trucks, buses and bikes were all labelled `car`. Level 2 asks for
+fine-grained vehicle classification, so this was the deliverable, not a cosmetic issue.
+
+**Diagnosis.** The first instinct was that per-track majority voting was flattening
+minority classes. That was wrong, and querying the raw votes rather than guessing is what
+showed it. Across 69,505 detections the model's own per-frame labels were:
+
+| car | truck | pedestrian | motorcycle | bus |
+|---|---|---|---|---|
+| 63,931 | 2,565 | 1,625 | 817 | 567 |
+
+**92% of every detection came back "car"**, and median per-track vote purity was **1.00**.
+The voting was innocent; the class head was confidently and consistently wrong. YOLO was
+trained on ground-level photographs where a bus is a tall slab of windows. From directly
+overhead it is a long rectangle, which is out of distribution, so the classifier collapses
+onto its dominant prior. No amount of temporal aggregation repairs a systematic error.
+
+**Fix.** Stop asking the network for the fine-grained answer and **measure the vehicle**,
+which telemetry calibration makes possible - and which is how traffic engineering has
+always classified vehicles (FHWA-style schemes use length and axle count, not appearance).
+
+The obstacle is that YOLO returns an **axis-aligned** box, so its width is not the
+vehicle's width - it is a mixture of length and width that depends on heading. Projecting
+two probes gives two equations in two unknowns:
+
+    footprint = L|cos phi| + W|sin phi|      (box bottom edge, on the road plane)
+    depth     = L|sin phi| + W|cos phi|      (box vertical extent, projected down)
+
+solved per observation, with the near-45-degree cases discarded because there the box is
+square and carries no orientation information (|cos 2phi| < 0.35), then taking the median
+per track. Measured size now overrides the model on **20% of tracks**:
+
+| | car | lgv | hgv | bus | motorcycle | pedestrian |
+|---|---|---|---|---|---|---|
+| model said | 231 | 18 | 3 | 2 | 9 | 29 |
+| measured | **182** | **55** | **15** | 2 | 9 | 29 |
+
+Each signal is used where it is strong. The **model keeps** pedestrians and two-wheelers:
+COCO is genuinely good on them from above, and size is weakest exactly there
+(motorcycle 1.92 m vs car 2.54 m is a 1.14x gap, against 1.87x for car vs truck).
+**Size owns** the car / LGV / HGV separation. Where size only says "large", bus vs HGV is a
+tie a tape measure cannot break, so the model breaks it and `class_source` records that.
+
+**What we do not claim.** Measured length is biased upwards by vehicle height - the box's
+far edge is projected onto the road plane, which for a tall vehicle lands beyond the real
+bodywork - so a real 4.4 m car measures ~2.5 m. These are consistent *relative* sizes, not
+catalogue dimensions. The bands are therefore calibrated against the distribution this
+footage produces rather than copied from a vehicle spec sheet, and every track carries the
+`length_m` / `width_m` that classified it.
+
+---
+
+## 25. Peak acceleration came out at 4.6 g
+
+**Problem.** The Level 2 kinematics export reported a peak acceleration of
+**45.25 m/s2** - about 4.6 g. No road vehicle does that.
+
+**Diagnosis.** Acceleration is a second derivative of position. The bottom edge of a
+bounding box jitters by a pixel or two between frames; at 0.0617 m/px and 30 fps, a
+single-pixel wobble differentiates into tens of m/s2. The per-track **maximum** is
+therefore a measurement of the worst frame of tracking noise, not of any manoeuvre - the
+same failure mode that made raw top speed unusable earlier (issue 12).
+
+**Fix.** Report **p95 / p5 per track** as the headline and keep the raw extremes in
+`kinematics.csv` for audit only. Per-class figures land at 0.3-2.0 m/s2, and
+**motorcycles come out highest** - an independent sanity signal we did not tune for, since
+bikes really do accelerate hardest. Fleet extremes are then -8.5 / +8.0 m/s2, which is the
+right magnitude for emergency braking.
+
+Two further guards, because a percentile is not a proof: any track whose acceleration
+exceeds a 10 m/s2 physical envelope is **flagged, not silently clipped** (26 of 292), and
+the fleet extremes are computed over the 266 unflagged tracks - on a very short track p5
+is nearly the raw minimum, so a spike survives the percentile and would set the fleet
+record on its own.
+
+The same run exposed a smaller reporting error: mean speed was NaN for every parked
+vehicle, because averaging over "moving" observations is undefined when a vehicle never
+moved. Both are now reported - `mean_speed_kph` (journey speed, including time stopped at
+the signal) and `mean_moving_speed_kph` (cruise speed) - because they answer different
+questions and collapsing them hides the queueing.
+
+---
+
 ## The pattern behind all of these
 
-Nine of the twenty issues above (4, 5, 6, 7, 9, 11, 17, 18, 19) were found by
+Fourteen of the twenty-five issues above (4, 5, 6, 7, 9, 11, 17, 18, 19, 21, 22,
+23, 24, 25) were found by
 **interrogating our own output** - looking at distributions, cross-tabulating by
 category, and asking whether a number was physically plausible - not by seeing a
 crash.
@@ -506,3 +670,12 @@ what SAM proposed and where traffic demonstrably drove.
 
 And issue 19 is the same discipline applied *before* believing good news: the setting
 with the largest improvement in detection count is the one we rejected.
+
+Issues 22, 24 and 25 are the same discipline again, and each one punished a different
+kind of guess. In 22 the *intuitive* fix - upscale the frame - was measured and rejected,
+because it improved the number we were watching while making the actual goal worse. In 24
+the *plausible* diagnosis - majority voting flattens minority classes - was checked
+against the raw votes and turned out to be innocent, which redirected the fix from the
+aggregation layer to the classifier itself. And 25 never crashed, never looked broken, and
+produced a tidy CSV full of numbers; it was caught by one question - is 4.6 g believable? -
+which is the only question that separates a measurement from a plausible-looking float.
