@@ -65,6 +65,22 @@ def suffixed(name: str, ext: str, tag: str) -> str:
     return os.path.join(OUT_DIR, f"{name}{'_' + tag if tag else ''}{ext}")
 
 
+def latest_video(name: str, tag: str) -> str | None:
+    """
+    Newest render of a video, honouring the `_vN` versioning.
+
+    Renders are never overwritten, so a run directory accumulates annotated.mp4,
+    annotated_v2.mp4, ... The dashboard should always show the most recent one.
+    """
+    base = suffixed(name, ".mp4", tag)
+    root = base[:-4]
+    cands = [base] + glob.glob(f"{root}_v*.mp4")
+    cands = [c for c in cands if os.path.exists(c)]
+    if not cands:
+        return None
+    return max(cands, key=os.path.getmtime)
+
+
 @st.cache_data(show_spinner=False)
 def load_csv(path: str) -> pd.DataFrame:
     if not os.path.exists(path):
@@ -156,6 +172,41 @@ with st.sidebar:
         f"({v.get('processing_fps')} fps processing)"
     )
 
+    seg = summary.get("road_segmentation", {}) or {}
+    if seg.get("enabled"):
+        st.markdown("### Road segmentation")
+        area_frac = seg.get("road_area_frac", seg.get("travelled_area_frac"))
+        st.metric("Carriageway", f"{area_frac:.1%} of frame" if area_frac else "-")
+        if seg.get("road_area_m2"):
+            st.caption(f"{seg['road_area_m2']:,.0f} m2 of road (via the ground projection)")
+        st.caption(f"source: `{seg.get('source')}`")
+        agree = seg.get("agreement") or {}
+        if agree:
+            st.caption(
+                "**Two independent estimates, cross-checked**\n\n"
+                f"MobileSAM vs observed traffic: IoU {agree.get('iou')}, "
+                f"SAM covers {agree.get('sam_covers_travelled_frac', 0):.0%} of the "
+                "area traffic demonstrably used."
+            )
+        vet = seg.get("segment_vetting") or {}
+        if vet:
+            st.caption(
+                f"SAM proposed, traffic vouched: **{vet.get('accepted')} accepted, "
+                f"{vet.get('rejected')} rejected**. SAM is class-agnostic, so "
+                "unvetted it contributed a rooftop and a tree canopy."
+            )
+        filt = seg.get("filter") or {}
+        if filt.get("applied"):
+            st.caption(
+                f"off-road filter dropped {filt.get('observations_dropped')} of "
+                f"{filt.get('observations_before')} observations"
+            )
+        else:
+            st.caption(
+                "Off-road detections are dimmed in the video but **kept** in the "
+                "analytics - a detection on a verge may be a real road user."
+            )
+
 # --------------------------------------------------------------------- header
 st.title("Drone Traffic Intelligence")
 st.caption(
@@ -199,24 +250,45 @@ left, right = st.columns([1.65, 1], gap="large")
 
 with left:
     st.subheader("Annotated aerial view")
-    vid = suffixed("annotated", ".mp4", tag)
-    web = suffixed("annotated_web", ".mp4", tag)
-    playable = web if os.path.exists(web) else vid
-    if os.path.exists(playable):
+    vid = latest_video("annotated", tag)
+    web = latest_video("annotated_web", tag)
+    playable = web if web and os.path.exists(web) else vid
+    if playable and os.path.exists(playable):
         st.video(playable)
         st.markdown(
             "<div class='caveat'>Bounding box, class, track ID, live speed and trajectory "
-            "trail per road user. Flagged objects switch to red/orange; potential conflicts "
-            "are drawn as a line between the two interacting users.</div>",
+            "trail per road user. The trail is drawn from first detection to exit, so ID "
+            "continuity is visible end to end. Off-carriageway area is dimmed. Flagged "
+            "objects switch to red/orange; potential conflicts are drawn as a line "
+            "between the two interacting users.</div>",
             unsafe_allow_html=True,
         )
-        if not os.path.exists(web):
+        st.caption(f"showing `{os.path.basename(playable)}`")
+        if not (web and os.path.exists(web)):
             st.caption(
                 "If the player shows nothing, the file is mp4v-encoded. Re-encode to H.264:"
             )
-            st.code(f"ffmpeg -i {vid} -vcodec libx264 -crf 28 -y {web}", language="bash")
+            st.code(
+                f"ffmpeg -i {vid} -vcodec libx264 -crf 28 -y "
+                f"{str(vid).replace('annotated', 'annotated_web')}",
+                language="bash",
+            )
     else:
         st.info("No annotated video for this run.")
+
+    mask_png = suffixed("road_mask", ".png", tag)
+    if os.path.exists(mask_png):
+        with st.expander("Road segmentation - the drivable-area mask", expanded=False):
+            st.image(mask_png, use_container_width=True)
+            st.markdown(
+                "<div class='caveat'>Computed <b>once</b> per clip, because the aircraft "
+                "hovers. Two independent estimates are combined: MobileSAM segments the "
+                "frame, and every observed trajectory point is rasterised to show where "
+                "traffic demonstrably drove. SAM proposes, the observed traffic vouches - "
+                "a segment is only accepted if it overlaps the travelled area, which is "
+                "what stops a grey rooftop being called road.</div>",
+                unsafe_allow_html=True,
+            )
 
 with right:
     st.subheader("Traffic composition")
