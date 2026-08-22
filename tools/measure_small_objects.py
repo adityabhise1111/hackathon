@@ -91,6 +91,13 @@ def summarise(d: pd.DataFrame, n_frames: int) -> dict:
         "by_size": d["size"].value_counts().to_dict(),
         "median_conf": round(float(d["conf"].median()), 3),
         "median_area_px": int(d["area"].median()),
+        # Called out separately because two-wheelers are the class that visibly
+        # went missing, and they are the smallest motor vehicle in the scene.
+        "two_wheelers": int(d["class"].isin(["motorcycle", "bicycle"]).sum()),
+        "two_wheeler_median_area_px": (
+            int(d.loc[d["class"].isin(["motorcycle", "bicycle"]), "area"].median())
+            if d["class"].isin(["motorcycle", "bicycle"]).any() else None
+        ),
     }
 
 
@@ -144,10 +151,18 @@ def main() -> int:
                                         frame_index=frames[0][0])
             print(f"road mask ready ({(mask > 0).mean():.1%} of frame)")
 
+    # 1920 is the NATIVE frame width. 2560 and 3200 deliberately infer ABOVE
+    # native: YOLO's smallest detection head has a stride of 8, so a motorcycle
+    # that is 22 px wide at native scale occupies under 3 cells of that head and
+    # is effectively invisible to it. Upsampling the input does not add
+    # information, but it does give the network more cells per object, which is
+    # the specific reason it recovers small objects. Cost is the trade-off.
     settings = {
         "baseline_1280_c25": dict(imgsz=1280, conf=0.25),
-        "hires_1920_c25": dict(imgsz=1920, conf=0.25),
-        "hires_1920_c15": dict(imgsz=1920, conf=0.15),
+        "native_1920_c25": dict(imgsz=1920, conf=0.25),
+        "upscale_2560_c25": dict(imgsz=2560, conf=0.25),
+        "upscale_3200_c25": dict(imgsz=3200, conf=0.25),
+        "native_1920_c15": dict(imgsz=1920, conf=0.15),
     }
 
     results, dets = {}, {}

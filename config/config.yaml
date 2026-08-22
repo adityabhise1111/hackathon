@@ -119,7 +119,14 @@ segmentation:
   # Off-road detections are DIMMED in the video by default but NOT deleted from
   # the analytics, because an off-road detection may be a real road user on a
   # footpath or verge. Turn this on to actually drop them.
-  filter_detections: false
+  # Drop tracks that are not on the carriageway. Measured on this clip, the
+  # on-road fraction over 292 tracks is perfectly bimodal: 38 tracks sit at
+  # 0-10%, 254 sit at 90-100%, and NOTHING falls in between. The threshold value
+  # therefore does not matter - there is nothing ambiguous to threshold. The 38
+  # are YOLO firing on parked cars in courtyards, rooftop plant and clutter in
+  # vegetation; the 254 are road users.
+  filter_detections: true
+  min_on_road_fraction: 0.5
   exempt_classes: [pedestrian]  # never filtered - footpaths are legitimately off-carriageway
 
 output:

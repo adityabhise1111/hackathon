@@ -328,13 +328,31 @@ def mask_ground_area_m2(mask: np.ndarray, projector) -> float | None:
     return round(total, 1)
 
 
-def filter_to_road(obs: pd.DataFrame, mask: np.ndarray, classes_exempt=("pedestrian",)) -> tuple[pd.DataFrame, dict]:
+def filter_to_road(
+    obs: pd.DataFrame,
+    mask: np.ndarray,
+    classes_exempt=("pedestrian",),
+    min_on_road_frac: float = 0.5,
+) -> tuple[pd.DataFrame, dict]:
     """
-    Drop observations whose road-contact point falls outside the drivable area.
+    Remove tracks that are not on the carriageway - judged over the WHOLE track.
 
-    Pedestrians are exempt by default: footpaths are legitimately off-carriageway,
-    so masking them out would delete real vulnerable road users - exactly the
-    opposite of what a safety system should do.
+    The decision is deliberately per-track, not per-observation. A per-observation
+    filter looks correct and behaves badly: a real vehicle whose contact point
+    wobbles across the mask edge for a few frames gets its trajectory chopped into
+    fragments, which is precisely the ID instability Level 1 is scored on. Judging
+    the whole track instead means a road user either belongs to the road scene or
+    does not.
+
+    What this removes, concretely: YOLO fires on parked cars in private courtyards,
+    on rooftop plant, and on vehicle-shaped clutter in vegetation. Those objects
+    are never on the carriageway for any part of their life, so their on-road
+    fraction is ~0 while a genuine road user's is ~1. The two populations are
+    cleanly separated, which is why a single 50% threshold is enough.
+
+    Pedestrians are exempt: footpaths are legitimately off-carriageway, and
+    deleting vulnerable road users to tidy up the picture is the wrong trade for a
+    safety system to make.
     """
     if obs.empty or mask is None:
         return obs, {"applied": False}
@@ -342,19 +360,26 @@ def filter_to_road(obs: pd.DataFrame, mask: np.ndarray, classes_exempt=("pedestr
     h, w = mask.shape[:2]
     xi = np.clip(obs["x"].to_numpy(), 0, w - 1).astype(np.int32)
     yi = np.clip(obs["y"].to_numpy(), 0, h - 1).astype(np.int32)
-    on_road = mask[yi, xi] > 0
-    exempt = obs["class"].isin(classes_exempt).to_numpy()
-    keep = on_road | exempt
+    d = obs.assign(_on=(mask[yi, xi] > 0))
 
-    dropped_tracks = sorted(set(obs.loc[~keep, "track_id"]) - set(obs.loc[keep, "track_id"]))
+    frac = d.groupby("track_id")["_on"].mean()
+    exempt_tracks = set(d.loc[d["class"].isin(classes_exempt), "track_id"].unique())
+    off_tracks = {int(t) for t, f in frac.items()
+                  if f < min_on_road_frac and int(t) not in exempt_tracks}
+
+    keep = ~obs["track_id"].isin(off_tracks)
+    dropped = obs.loc[~keep]
     stats = {
         "applied": True,
-        "observations_before": int(len(obs)),
-        "observations_kept": int(keep.sum()),
-        "observations_dropped": int((~keep).sum()),
-        "tracks_dropped_entirely": len(dropped_tracks),
+        "mode": "per-track (a track is kept or dropped as a whole)",
+        "min_on_road_fraction": min_on_road_frac,
+        "tracks_before": int(obs["track_id"].nunique()),
+        "tracks_dropped": len(off_tracks),
+        "observations_dropped": int(len(dropped)),
+        "dropped_by_class": dropped["class"].value_counts().to_dict() if len(dropped) else {},
         "exempt_classes": list(classes_exempt),
-        "note": "off-road detections removed; pedestrians exempt (footpaths are legitimately off-carriageway)",
+        "note": ("tracks spending under half their life on the carriageway are treated as "
+                 "off-road false positives (courtyards, rooftops, vegetation); pedestrians exempt"),
     }
     return obs[keep].reset_index(drop=True), stats
 

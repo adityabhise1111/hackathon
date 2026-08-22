@@ -255,11 +255,16 @@ def main() -> int:
                 obs, filt = road_mask_mod.filter_to_road(
                     obs, road_mask,
                     classes_exempt=tuple(cfg["segmentation"].get("exempt_classes", ["pedestrian"])),
+                    min_on_road_frac=float(cfg["segmentation"].get("min_on_road_fraction", 0.5)),
                 )
                 road_info["filter"] = filt
-                print(f"      off-road filter: dropped {filt['observations_dropped']} of "
-                      f"{filt['observations_before']} observations, "
-                      f"{filt['tracks_dropped_entirely']} tracks removed entirely")
+                print(f"      off-road filter: dropped {filt['tracks_dropped']} of "
+                      f"{filt['tracks_before']} tracks ({filt['observations_dropped']} observations) "
+                      f"- {filt.get('dropped_by_class', {})}")
+                # Boxes must be filtered too, or the renderer would keep drawing
+                # rectangles for tracks that no longer exist in the analytics.
+                if boxes is not None and not boxes.empty:
+                    boxes = boxes[boxes["track_id"].isin(obs["track_id"].unique())].reset_index(drop=True)
 
     # ---- Analytics ---------------------------------------------------------
     print("[4/6] analytics")
