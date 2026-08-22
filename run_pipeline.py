@@ -29,7 +29,7 @@ import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from pipeline import analytics, anomalies, interactions, visualize
+from pipeline import analytics, anomalies, classify, interactions, visualize
 from pipeline import road_mask as road_mask_mod
 from pipeline.calibration import build_projector
 from pipeline.detector import load_detector
@@ -149,6 +149,7 @@ def main() -> int:
     n_frames = 0
 
     reuse = args.from_trajectories
+    class_report: dict = {}
     if reuse:
         # Re-analysis path: detection/tracking already happened, so read the saved
         # trajectories and jump straight to analytics.
@@ -200,10 +201,22 @@ def main() -> int:
             return 1
 
         # ---- Trajectories --------------------------------------------------
-        print("[3/6] trajectories: kinematics + per-track class resolution")
+        print("[3/6] trajectories: kinematics + measured-size classification")
         obs = compute_kinematics(raw, fps, cfg, calibrated)
-        classes = resolve_track_classes(obs, cfg, calibrated)
+        # Fine-grained class comes from MEASURED ground size, not the COCO head
+        # (which called 92% of everything "car" from this altitude). Dimensions
+        # need `heading_px_deg`, so this runs after kinematics.
+        obs = classify.measure_ground_dimensions(obs)
+        classes = classify.classify_tracks(obs, cfg, calibrated)
         obs = apply_track_classes(obs, classes)
+        class_report = classify.classification_report(classes)
+        if class_report:
+            print(f"      resolved: {class_report['resolved_by_class']}")
+            print(f"      model would have said: {class_report['model_would_have_said']}")
+            print(f"      measured size overrode the model on "
+                  f"{class_report['size_overrode_model']} tracks "
+                  f"({class_report['size_overrode_model_pct']}%): "
+                  f"{'; '.join(class_report['override_flow'][:5])}")
         obs.to_csv(out("trajectories_csv"), index=False)
         # Boxes are persisted so --from-trajectories can also re-render the video.
         boxes.to_csv(os.path.join(out_dir, f"boxes{'_' + args.tag if args.tag else ''}.csv"),
@@ -277,6 +290,12 @@ def main() -> int:
     turns = analytics.turning_movements(summary)
     stability = analytics.id_stability_stats(obs, summary, fps, stride)
     stationary = analytics.stationary_candidates(summary, cfg)
+    # LEVEL 2: per-object velocity and acceleration in real units.
+    kin, kin_stats = analytics.build_kinematics(obs, summary, cfg, calibrated)
+    if kin_stats:
+        print(f"      kinematics: {kin_stats['road_users']} road users, fleet mean "
+              f"{kin_stats['fleet_mean_speed_kph']} km/h, hardest braking "
+              f"{kin_stats['hardest_braking_ms2']} m/s2")
 
     inter = interactions.find_interactions(obs, cfg, calibrated)
     headways = interactions.following_headways(obs, inter, calibrated)
@@ -296,6 +315,7 @@ def main() -> int:
         ("queues", queues), ("congestion", congestion), ("active_tracks", active),
         ("directional_flow", flow), ("turning_movements", turns),
         ("interactions", inter), ("headways", headways),
+        ("kinematics", kin),
     ):
         p = os.path.join(out_dir, f"{name}{'_' + args.tag if args.tag else ''}.csv")
         (table if table is not None and not table.empty else pd.DataFrame()).to_csv(p, index=False)
@@ -328,6 +348,8 @@ def main() -> int:
         "calibration": calib_info,
         "road_segmentation": road_info,
         "counts": counts,
+        "classification": class_report,
+        "kinematics": kin_stats,
         "id_stability": stability,
         "speed": speed_stats,
         "congestion": {

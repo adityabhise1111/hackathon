@@ -41,6 +41,7 @@ OBS_COLUMNS = [
     "world_x",
     "world_y",
     "footprint_m",
+    "depth_m",
     "box_w",
     "box_h",
 ]
@@ -57,14 +58,22 @@ class TrajectoryStore:
         if not tracks:
             return
 
-        # Bottom-centre plus the two bottom corners; the corners give us the
-        # vehicle's ground footprint width, used for the LGV/HGV size split.
+        # Four probe points per box:
+        #   bottom-centre  -> the road-contact position
+        #   bottom-left/right -> the ground footprint ACROSS the box
+        #   top-centre     -> the ground extent ALONG the viewing direction
+        # The bottom edge lies in the road plane, so its projection is exact. The
+        # top-centre probe is the box's far edge projected onto the same plane; for
+        # a tall vehicle it lands beyond the real bodywork, which is why the pair is
+        # solved for length and width in classify.py rather than read off directly.
         pts = []
         for tr in tracks:
             x1, y1, x2, y2 = tr["xyxy"]
-            pts.append([(x1 + x2) / 2.0, y2])
+            cx = (x1 + x2) / 2.0
+            pts.append([cx, y2])
             pts.append([x1, y2])
             pts.append([x2, y2])
+            pts.append([cx, y1])
 
         ground = None
         if self.projector is not None:
@@ -83,16 +92,19 @@ class TrajectoryStore:
                 "world_x": np.nan,
                 "world_y": np.nan,
                 "footprint_m": np.nan,
+                "depth_m": np.nan,
                 "box_w": round(float(x2 - x1), 1),
                 "box_h": round(float(y2 - y1), 1),
             }
             if ground is not None:
-                centre, left, right = ground[3 * i], ground[3 * i + 1], ground[3 * i + 2]
+                centre, left, right, top = ground[4 * i:4 * i + 4]
                 if not np.isnan(centre).any():
                     row["world_x"] = round(float(centre[0]), 3)
                     row["world_y"] = round(float(centre[1]), 3)
                 if not (np.isnan(left).any() or np.isnan(right).any()):
                     row["footprint_m"] = round(float(np.linalg.norm(right - left)), 2)
+                if not (np.isnan(top).any() or np.isnan(centre).any()):
+                    row["depth_m"] = round(float(np.linalg.norm(top - centre)), 2)
             self._rows.append(row)
 
     def to_frame(self) -> pd.DataFrame:
@@ -231,6 +243,11 @@ def apply_track_classes(df: pd.DataFrame, classes: pd.DataFrame) -> pd.DataFrame
     """Replace the noisy per-frame class with the resolved per-track class."""
     if df.empty:
         return df
+    # Drop any columns a previous resolution pass already added, otherwise the
+    # rename below produces two `class_raw` columns and the fillna gets a
+    # DataFrame instead of a Series. This happens on --from-trajectories, where
+    # the input CSV has already been through here once.
+    df = df.drop(columns=[c for c in ("class_raw", "class_source") if c in df.columns])
     df = df.rename(columns={"class": "class_raw"}).merge(
         classes[["track_id", "class", "class_source"]], on="track_id", how="left"
     )

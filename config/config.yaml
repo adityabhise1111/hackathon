@@ -67,6 +67,30 @@ analytics:
   # Honest label: this is a footprint-length heuristic, not a model class.
   lgv_hgv_split_m: 7.0
 
+classification:
+  # LEVEL 2 - fine-grained vehicle classification from MEASURED size.
+  #
+  # Why not just use the model: across 69,505 Level 1 detections COCO said "car"
+  # 63,931 times (92%), and per-track vote purity was 1.00 - the class head is
+  # confidently and consistently wrong from 70 m looking down, so no amount of
+  # voting fixes it. We measure the vehicle instead (see pipeline/classify.py).
+  #
+  # Thresholds are on the SOLVED ground length and are calibrated against the
+  # distribution this footage produces, not copied from a vehicle catalogue.
+  # De-rotating an axis-aligned box compresses absolute scale (a 4.4 m car
+  # measures ~2.2 m); what classification needs is a monotonic ordering, and the
+  # measured class-median ratios are car->lgv 1.74x and lgv->hgv 1.84x.
+  size_bands:
+    - [3.0, car]
+    - [4.5, lgv]          # van / light goods
+    # above 4.5 m -> "large": bus vs HGV is a tie the tape measure cannot break,
+    # so the model's opinion decides it and the source column says so.
+  min_size_observations: 8  # usable (non-degenerate) solves before size may override
+  # The model keeps these: COCO is genuinely good on people and two-wheelers from
+  # above, and size is weakest exactly here (motorcycle 1.92 m vs car 2.19 m is
+  # only 1.14x, against 1.87x for car vs truck). Use each signal where it is strong.
+  model_owned_classes: [pedestrian, bicycle, motorcycle]
+
 interactions:
   neighbour_radius_m: 25.0      # only test pairs closer than this
   ttc_max_s: 2.5                # critical-conflict threshold; conflict studies use 1.5-3.0 s
