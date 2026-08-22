@@ -57,6 +57,7 @@ def render_annotated_video(
     frame_stride: int = 1,
     trail_len: int = 45,
     max_frames: int | None = None,
+    road_mask: np.ndarray | None = None,
 ) -> dict:
     """
     Draw boxes, IDs, classes, speeds, trails, anomaly markers and a live HUD.
@@ -75,6 +76,19 @@ def render_annotated_video(
         raise RuntimeError(f"cannot open video writer: {out_path}")
 
     box_by_frame = {f: g for f, g in boxes.groupby("frame")} if not boxes.empty else {}
+
+    # Road-focus layer. Precomputed ONCE outside the loop - the whole point of the
+    # hover assumption is that the mask is identical on every frame, so per-frame
+    # cost is a single blend plus a contour draw, not a segmentation pass.
+    off_road = road_contour = None
+    if road_mask is not None:
+        m = road_mask
+        if m.shape[:2] != (H, W):
+            m = cv2.resize(m, (W, H), interpolation=cv2.INTER_NEAREST)
+        off_road = (m == 0)
+        road_contour, _ = cv2.findContours(
+            (m > 0).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
+        )
     # Trails come from the smoothed pixel path of each track.
     trail_by_track: dict[int, np.ndarray] = {}
     obs_sorted = obs.sort_values(["track_id", "frame"])
@@ -121,6 +135,13 @@ def render_annotated_video(
             if max_frames is not None and written >= max_frames:
                 break
             t_now = frame_idx / fps
+
+            # Push everything off the carriageway into the background so the eye
+            # goes where the traffic is. Non-destructive: pixels are dimmed, never
+            # blanked, so a judge can still see what was excluded and why.
+            if off_road is not None:
+                img[off_road] = (img[off_road] * 0.38).astype(np.uint8)
+                cv2.drawContours(img, road_contour, -1, (70, 200, 110), 1, cv2.LINE_AA)
 
             active_flags: dict[int, tuple[str, str]] = {}
             conflict_pairs: list[tuple[int, int, str]] = []

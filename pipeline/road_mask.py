@@ -73,44 +73,102 @@ def travelled_mask(
     return _largest_components(canvas)
 
 
-def sam_road_mask(
-    frame: np.ndarray,
-    seed_points: np.ndarray,
-    weights: str = "mobile_sam.pt",
-    max_seeds: int = 24,
-) -> tuple[np.ndarray | None, str]:
+def _seed_points(
+    trav: np.ndarray,
+    occupied: np.ndarray | None,
+    max_seeds: int,
+    grid: int = 96,
+) -> np.ndarray:
     """
-    Segment the road with MobileSAM, prompted by points where traffic was observed.
+    Choose SAM prompt points that are actually ON BARE ROAD.
 
-    Prompting matters: SAM is class-agnostic, so an unprompted call returns every
-    object in the scene with no idea which is road. Seeding it with real trajectory
-    points means the returned segments are the surfaces traffic travels on.
+    This is the subtle part. The obvious move - prompt SAM at the trajectory
+    points - does the wrong thing: a trajectory point sits on a VEHICLE, and SAM
+    is class-agnostic, so it dutifully returns the car. Measured on this footage
+    that gave exactly one segment per prompt and only 35% overlap with the
+    travelled area: SAM had segmented 24 cars.
 
-    Returns (mask, note). mask is None if the model is unavailable - the caller then
-    falls back to the empirical mask rather than failing.
+    Two corrections:
+      * drop candidates covered by a detection box in the segmented frame, so
+        every prompt lands on empty carriageway. The hover means road a vehicle
+        drove over at t=30s is bare tarmac at t=0.
+      * pick at most one candidate per grid cell, so prompts spread across every
+        arm of the junction instead of clustering in the busiest lane.
+    """
+    ys, xs = np.nonzero(trav)
+    if len(xs) == 0:
+        return np.empty((0, 2), np.int32)
+
+    if occupied is not None:
+        free = occupied[ys, xs] == 0
+        # Only apply the filter if it leaves us something to work with.
+        if free.sum() >= max_seeds:
+            ys, xs = ys[free], xs[free]
+
+    cells: dict[tuple[int, int], tuple[int, int]] = {}
+    for x, y in zip(xs, ys):
+        key = (int(y) // grid, int(x) // grid)
+        if key not in cells:
+            cells[key] = (int(x), int(y))
+
+    pts = np.array(list(cells.values()), np.int32)
+    if len(pts) > max_seeds:
+        idx = np.linspace(0, len(pts) - 1, max_seeds).astype(int)
+        pts = pts[idx]
+    return pts
+
+
+def _occupied_mask(boxes: pd.DataFrame, frame_index: int, shape: tuple[int, int],
+                   pad: int = 6) -> np.ndarray | None:
+    """Pixels covered by a detection box in the frame being segmented."""
+    if boxes is None or boxes.empty or "frame" not in boxes:
+        return None
+    g = boxes[boxes["frame"] == frame_index]
+    if g.empty:
+        return None
+    h, w = shape
+    occ = np.zeros((h, w), np.uint8)
+    for r in g.itertuples(index=False):
+        x1 = max(int(r.x1) - pad, 0)
+        y1 = max(int(r.y1) - pad, 0)
+        x2 = min(int(r.x2) + pad, w - 1)
+        y2 = min(int(r.y2) + pad, h - 1)
+        occ[y1:y2, x1:x2] = 255
+    return occ
+
+
+def sam_segments(
+    frame: np.ndarray,
+    seeds: np.ndarray,
+    weights: str = "mobile_sam.pt",
+) -> tuple[list[np.ndarray], str]:
+    """
+    Run MobileSAM at the given prompt points and return the raw segments.
+
+    Deliberately returns the segments SEPARATELY rather than one merged mask, so
+    the caller can vet each one. SAM is class-agnostic: it will happily return a
+    rooftop or a tree canopy that looks like tarmac, and merging first makes that
+    impossible to undo.
+
+    Returns ([] , note) if the model is unavailable - the caller then falls back to
+    the empirical mask rather than failing.
     """
     try:
         from ultralytics import SAM
     except Exception as exc:                       # pragma: no cover
-        return None, f"ultralytics SAM unavailable: {exc}"
+        return [], f"ultralytics SAM unavailable: {exc}"
 
-    if len(seed_points) == 0:
-        return None, "no trajectory seed points available"
-
-    # Spread the seeds over the travelled area instead of clustering them all in
-    # the busiest spot, so distinct road arms each get prompted.
-    idx = np.linspace(0, len(seed_points) - 1, min(max_seeds, len(seed_points))).astype(int)
-    seeds = seed_points[idx]
+    if len(seeds) == 0:
+        return [], "no usable bare-road seed points"
 
     try:
         model = SAM(weights)
         res = model(frame, points=seeds.tolist(), labels=[1] * len(seeds), verbose=False)
     except Exception as exc:
-        return None, f"SAM inference failed: {exc}"
+        return [], f"SAM inference failed: {exc}"
 
     h, w = frame.shape[:2]
-    acc = np.zeros((h, w), np.uint8)
-    got = 0
+    segs: list[np.ndarray] = []
     for r in res:
         if r.masks is None:
             continue
@@ -118,22 +176,60 @@ def sam_road_mask(
             mm = (m > 0.5).astype(np.uint8) * 255
             if mm.shape != (h, w):
                 mm = cv2.resize(mm, (w, h), interpolation=cv2.INTER_NEAREST)
-            # A single SAM segment covering almost the whole frame is a failure
-            # mode (it grabbed the entire image), not a road.
-            if mm.mean() / 255.0 > 0.85:
+            frac = mm.mean() / 255.0
+            # Degenerate segments: one covering almost the whole frame grabbed the
+            # entire image; a tiny one is a single vehicle or a road marking.
+            if frac > 0.85 or frac < 0.0005:
                 continue
-            acc = np.maximum(acc, mm)
-            got += 1
+            segs.append(mm)
 
-    if got == 0:
-        return None, "SAM returned no usable masks"
-    return _largest_components(acc), f"MobileSAM, {len(seeds)} trajectory-seeded prompts, {got} segments"
+    if not segs:
+        return [], "SAM returned no usable masks"
+    return segs, f"MobileSAM, {len(seeds)} bare-road prompts, {len(segs)} raw segments"
+
+
+def vet_segments(
+    segs: list[np.ndarray],
+    trav: np.ndarray,
+    min_overlap: float = 0.45,
+) -> tuple[np.ndarray, dict]:
+    """
+    Keep only SAM segments that the observed traffic vouches for.
+
+    SAM PROPOSES, the trajectory data DECIDES. A segment is accepted when at least
+    `min_overlap` of its own area falls inside the travelled mask - i.e. it is the
+    surface traffic demonstrably drove on, extended outward to its true edges
+    (empty lanes, unused arms). A rooftop or tree canopy overlaps the travelled
+    area at roughly zero and is rejected.
+
+    This asymmetry is deliberate: an over-inclusive road mask is worse than a
+    conservative one, because "density per square metre of road" becomes
+    meaningless once rooftops are in the denominator.
+    """
+    keep = np.zeros_like(trav)
+    tb = trav > 0
+    accepted = rejected = 0
+    for s in segs:
+        sb = s > 0
+        area = int(sb.sum())
+        if area == 0:
+            continue
+        overlap = float((sb & tb).sum()) / area
+        if overlap >= min_overlap:
+            keep[sb] = 255
+            accepted += 1
+        else:
+            rejected += 1
+    return keep, {"accepted": accepted, "rejected": rejected,
+                  "min_overlap_with_travelled": min_overlap}
 
 
 def build_road_mask(
     obs: pd.DataFrame,
     frame: np.ndarray,
     cfg: dict,
+    boxes: pd.DataFrame | None = None,
+    frame_index: int = 0,
 ) -> tuple[np.ndarray, dict]:
     """
     Combine the empirical and geometric estimates into one drivable-area mask.
@@ -162,12 +258,26 @@ def build_road_mask(
 
     sam = None
     if scfg.get("use_sam", True):
-        seeds = obs.dropna(subset=["x", "y"])[["x", "y"]].to_numpy()
-        sam, note = sam_road_mask(
-            frame, seeds, weights=scfg.get("sam_weights", "mobile_sam.pt"),
-            max_seeds=int(scfg.get("sam_max_seeds", 24)),
+        occ = _occupied_mask(boxes, frame_index, (h, w))
+        seeds = _seed_points(
+            trav, occ, max_seeds=int(scfg.get("sam_max_seeds", 24)),
+            grid=int(scfg.get("seed_grid_px", 96)),
         )
+        info["seeds"] = {
+            "count": int(len(seeds)),
+            "excluded_occupied_pixels": occ is not None,
+            "note": "prompts placed on bare carriageway, not on vehicles - see road_mask._seed_points",
+        }
+        segs, note = sam_segments(frame, seeds, weights=scfg.get("sam_weights", "mobile_sam.pt"))
         info["sam"] = note
+        if segs:
+            sam, vet = vet_segments(
+                segs, trav, min_overlap=float(scfg.get("min_segment_overlap", 0.45))
+            )
+            info["segment_vetting"] = vet
+            if not sam.any():
+                sam = None
+                info["segment_vetting"]["outcome"] = "every segment rejected -> travelled mask only"
 
     if sam is None:
         # Honest degradation: empirical mask only, and say so.

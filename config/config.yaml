@@ -91,6 +91,24 @@ anomalies:
   wrong_way_deviation_deg: 130.0  # vs the dominant flow of its corridor
   unusual_dwell_s: 25.0
 
+segmentation:
+  # Road-area segmentation. Cheap because the drone HOVERS (measured: altitude
+  # spread 0.023 m, pitch 0.0 deg, yaw 0.4 deg over 6824 telemetry records), so a
+  # mask computed on ONE frame is valid for the whole clip.
+  enabled: true
+  frame_index: 0                # frame the mask is computed from
+  use_sam: true                 # MobileSAM (~40 MB) via ultralytics; no new dependency
+  sam_weights: mobile_sam.pt
+  sam_max_seeds: 24             # trajectory points used to prompt SAM
+  # The empirical estimate: rasterised trajectory points dilated by ~a lane width.
+  # 26 px at 0.0617 m/px is about 1.6 m, roughly half a lane.
+  lane_width_px: 26
+  # Off-road detections are DIMMED in the video by default but NOT deleted from
+  # the analytics, because an off-road detection may be a real road user on a
+  # footpath or verge. Turn this on to actually drop them.
+  filter_detections: false
+  exempt_classes: [pedestrian]  # never filtered - footpaths are legitimately off-carriageway
+
 output:
   dir: outputs
   annotated_video: outputs/annotated.mp4

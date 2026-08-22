@@ -30,6 +30,7 @@ import yaml
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pipeline import analytics, anomalies, interactions, visualize
+from pipeline import road_mask as road_mask_mod
 from pipeline.calibration import build_projector
 from pipeline.detector import load_detector
 from pipeline.tracker import iter_tracked_frames, video_info
@@ -56,6 +57,15 @@ def main() -> int:
     ap.add_argument("--no-video", action="store_true", help="skip annotated video rendering")
     ap.add_argument("--tag", default="", help="suffix for output filenames")
     ap.add_argument(
+        "--in-tag", default=None,
+        help="tag to READ existing trajectories/boxes from, when it differs from "
+             "--tag. Lets a re-analysis read the untagged run and write a tagged one.",
+    )
+    ap.add_argument(
+        "--overwrite-video", action="store_true",
+        help="overwrite the annotated video instead of writing the next _vN version",
+    )
+    ap.add_argument(
         "--from-trajectories", nargs="?", const="__default__", default=None,
         metavar="CSV",
         help="skip detection+tracking and re-derive all analytics from an existing "
@@ -64,6 +74,7 @@ def main() -> int:
              "seconds instead of a full re-processing run.",
     )
     args = ap.parse_args()
+    in_tag = args.tag if args.in_tag is None else args.in_tag
 
     cfg = load_config(args.config)
     if args.video:
@@ -89,6 +100,29 @@ def main() -> int:
             return base
         root, ext = os.path.splitext(base)
         return f"{root}_{args.tag}{ext}"
+
+    def in_path(name: str, ext: str = ".csv") -> str:
+        """Path of an input side-table, using --in-tag (defaults to --tag)."""
+        return os.path.join(out_dir, f"{name}{'_' + in_tag if in_tag else ''}{ext}")
+
+    def out_path(name: str, ext: str = ".csv") -> str:
+        """Path of an output side-table, using --tag."""
+        return os.path.join(out_dir, f"{name}{'_' + args.tag if args.tag else ''}{ext}")
+
+    def next_video_path(base: str) -> str:
+        """
+        Never clobber a rendered video: pick the next free `_vN`.
+
+        Renders are the artifact a human actually reviews, so each iteration stays
+        on disk side by side and successive versions can be compared directly.
+        """
+        if args.overwrite_video or not os.path.exists(base):
+            return base
+        root, ext = os.path.splitext(base)
+        n = 2
+        while os.path.exists(f"{root}_v{n}{ext}"):
+            n += 1
+        return f"{root}_v{n}{ext}"
 
     vinfo = video_info(video_path)
     fps = vinfo["fps"]
@@ -118,9 +152,12 @@ def main() -> int:
     if reuse:
         # Re-analysis path: detection/tracking already happened, so read the saved
         # trajectories and jump straight to analytics.
-        traj_path = out("trajectories_csv") if reuse == "__default__" else reuse
+        traj_path = reuse
+        if reuse == "__default__":
+            root, ext = os.path.splitext(cfg["output"]["trajectories_csv"])
+            traj_path = f"{root}_{in_tag}{ext}" if in_tag else f"{root}{ext}"
         obs = pd.read_csv(traj_path)
-        boxes_path = os.path.join(out_dir, f"boxes{'_' + args.tag if args.tag else ''}.csv")
+        boxes_path = in_path("boxes")
         boxes = pd.read_csv(boxes_path) if os.path.exists(boxes_path) else pd.DataFrame()
         calibrated = "sx" in obs.columns and obs["sx"].notna().any()
         n_frames = int(obs["frame"].nunique())
@@ -180,6 +217,49 @@ def main() -> int:
                                                 "iou": cfg["detector"]["iou"],
                                                 "classes": cfg["detector"]["classes"],
                                                 "device": "reused", "half": False})
+
+    # ---- Road segmentation -------------------------------------------------
+    # Runs on ONE frame because the aircraft hovers (see road_mask.py). It gives
+    # the analytics layer a drivable-area denominator, so density is per square
+    # metre OF ROAD rather than per square metre of frame - the frame includes
+    # rooftops and vegetation that no vehicle can ever occupy.
+    road_mask = None
+    road_info = {"enabled": False, "reason": "disabled in config"}
+    if cfg.get("segmentation", {}).get("enabled", False):
+        print("[3b/6] road segmentation")
+        cap = cv2.VideoCapture(video_path)
+        cap.set(cv2.CAP_PROP_POS_FRAMES, int(cfg["segmentation"].get("frame_index", 0)))
+        ok, seg_frame = cap.read()
+        cap.release()
+        if not ok:
+            road_info = {"enabled": False, "reason": "could not read a frame to segment"}
+            print("      could not read a frame -> skipped")
+        else:
+            road_mask, road_info = road_mask_mod.build_road_mask(
+                obs, seg_frame, cfg, boxes=boxes,
+                frame_index=int(cfg["segmentation"].get("frame_index", 0)),
+            )
+            ov = road_mask_mod.render_mask_overlay(
+                seg_frame, road_mask, out_path("road_mask", ".png")
+            )
+            road_info["overlay"] = ov
+            road_info["road_area_m2"] = road_mask_mod.mask_ground_area_m2(road_mask, projector)
+            print(f"      {road_info['source']}  road covers "
+                  f"{road_info.get('road_area_frac', road_info['travelled_area_frac']):.1%} of frame"
+                  + (f"  = {road_info['road_area_m2']} m2" if road_info.get("road_area_m2") else ""))
+            if road_info.get("agreement"):
+                a = road_info["agreement"]
+                print(f"      SAM vs observed-traffic agreement: IoU {a['iou']}, "
+                      f"SAM covers {a['sam_covers_travelled_frac']:.0%} of travelled area")
+            if cfg["segmentation"].get("filter_detections", False):
+                obs, filt = road_mask_mod.filter_to_road(
+                    obs, road_mask,
+                    classes_exempt=tuple(cfg["segmentation"].get("exempt_classes", ["pedestrian"])),
+                )
+                road_info["filter"] = filt
+                print(f"      off-road filter: dropped {filt['observations_dropped']} of "
+                      f"{filt['observations_before']} observations, "
+                      f"{filt['tracks_dropped_entirely']} tracks removed entirely")
 
     # ---- Analytics ---------------------------------------------------------
     print("[4/6] analytics")
@@ -241,6 +321,7 @@ def main() -> int:
         "detector": det_settings,
         "tracker": {"type": "bytetrack", "config": cfg["tracker"]["config"]},
         "calibration": calib_info,
+        "road_segmentation": road_info,
         "counts": counts,
         "id_stability": stability,
         "speed": speed_stats,
@@ -281,14 +362,16 @@ def main() -> int:
 
     # ---- Annotated video ---------------------------------------------------
     if cfg["output"].get("write_video", True):
-        print("[6/6] rendering annotated video")
+        vid_out = next_video_path(out("annotated_video"))
+        print(f"[6/6] rendering annotated video -> {vid_out}")
         r = visualize.render_annotated_video(
-            video_path=video_path, out_path=out("annotated_video"),
+            video_path=video_path, out_path=vid_out,
             obs=obs, boxes=boxes, summary=summary, events=events,
             congestion=congestion, counts=counts, calibrated=calibrated,
             fps=fps, frame_stride=stride,
             trail_len=int(cfg["output"].get("trail_len", 45)),
             max_frames=max_frames,
+            road_mask=road_mask,
         )
         print(f"      -> {r['output']} ({r['frames_written']} frames)")
     else:
