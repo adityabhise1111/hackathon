@@ -151,10 +151,21 @@ def render_annotated_video(
                     box_colour = WARN if (is_warn and flag[1] == "high") else (WARN_SOFT if is_warn else colour)
                     thickness = 3 if is_warn else 2
 
-                    # Trajectory trail from the smoothed path.
+                    # Trajectory trail. Two layers so the path is continuous from
+                    # first detection to exit WITHOUT the frame turning into
+                    # spaghetti at 30+ simultaneous tracks:
+                    #   full history -> thin and dim (proves ID continuity)
+                    #   recent window -> thick and bright (shows current motion)
                     tr = trail_by_track.get(tid)
                     if tr is not None:
-                        seg = tr[(tr[:, 0] <= frame_idx) & (tr[:, 0] > frame_idx - trail_len * frame_stride)]
+                        hist = tr[tr[:, 0] <= frame_idx]
+                        if len(hist) > 1:
+                            dim = tuple(int(c * 0.45) for c in box_colour)
+                            cv2.polylines(
+                                img, [hist[:, 1:3].astype(np.int32)],
+                                False, dim, 1, cv2.LINE_AA,
+                            )
+                        seg = hist[hist[:, 0] > frame_idx - trail_len * frame_stride]
                         if len(seg) > 1:
                             pts = seg[:, 1:3].astype(np.int32)
                             # Fade the tail: older points thinner.
