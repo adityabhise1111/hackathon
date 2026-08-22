@@ -20,11 +20,20 @@ telemetry:
 
 detector:
   weights: models/yolov8s.pt
-  # 1920 not 1280: measured on 30 sampled frames it adds +443 tiny and +240 small
-  # detections but only +41 medium and +1 large - the signature of a real
-  # small-object recall gain. See ISSUES.md #19 and outputs/small_object_study.json.
+  # 1920 = the NATIVE frame width, and the measured optimum. Two-wheelers found
+  # across 24 sampled frames: 1280 -> 13, 1920 -> 139, 2560 -> 70, 3200 -> 67.
+  # Upscaling ABOVE native finds more small boxes but classifies fewer of them as
+  # two-wheelers - a bicubic-upsampled frame is out of distribution for the class
+  # head. See ISSUES.md #22 and outputs/small_object_study2.json.
   imgsz: 1920
-  conf: 0.25
+  # Two-tier confidence, because one threshold cannot serve both ends of the size
+  # range. A car at 70 m scores 0.5+; a motorcycle is ~20x16 px and scores
+  # 0.15-0.25. A single 0.15 floor found 259 two-wheelers but dropped on-road
+  # plausibility from 0.80 to 0.65 (rooftop clutter admitted as cars); a single
+  # 0.25 floor found 13. So: propose at 0.15, then hold each class to its own bar.
+  conf: 0.15              # permissive floor passed to YOLO - proposals only
+  strict_conf: 0.25       # car / bus / truck must clear this
+  small_conf: 0.15        # motorcycle / bicycle / pedestrian may stay at the floor
   iou: 0.6
   device: auto            # auto -> cuda if available, else cpu
   half: true              # fp16 on GPU

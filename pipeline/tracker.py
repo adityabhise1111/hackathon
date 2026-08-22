@@ -45,6 +45,12 @@ def iter_tracked_frames(
     if not cap.isOpened():
         raise RuntimeError(f"cannot open video: {video_path}")
 
+    # Per-class confidence floors, applied after detection. `conf` passed to YOLO is
+    # the LOW floor (so small road users are proposed at all); these floors then
+    # decide what survives, per class.
+    class_floor = dict(det_settings.get("class_conf", {}) or {})
+    strict_floor = float(det_settings.get("strict_conf", det_settings.get("conf", 0.25)))
+
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     frame_idx = -1
     processed = 0
@@ -84,10 +90,19 @@ def iter_tracked_frames(
                 confs = boxes.conf.float().cpu().tolist()
                 xyxy = boxes.xyxy.float().cpu().numpy()
                 for tid, c, cf, box in zip(ids, clss, confs, xyxy):
+                    name = COCO_TO_CLASS.get(int(c), str(int(c)))
+                    # Per-class confidence floor. Detection runs at the LOW floor so
+                    # small road users get a chance at all, then large classes are
+                    # held to the strict floor. A motorcycle at 70 m is ~20x16 px and
+                    # scores 0.15-0.25; a car scores 0.5+. One global threshold has to
+                    # choose between missing every two-wheeler and admitting rooftop
+                    # junk as cars, and the measurement showed exactly that trade.
+                    if cf < class_floor.get(name, strict_floor):
+                        continue
                     tracks.append(
                         {
                             "track_id": int(tid),
-                            "cls": COCO_TO_CLASS.get(int(c), str(int(c))),
+                            "cls": name,
                             "conf": float(cf),
                             "xyxy": box,
                         }

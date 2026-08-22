@@ -61,6 +61,18 @@ def load_detector(cfg: dict):
     device = resolve_device(dcfg.get("device", "auto"))
     model = YOLO(dcfg["weights"])
 
+    # Two-tier confidence. YOLO is run at `conf` (the permissive floor) so that
+    # small road users are proposed at all; `strict_conf` then filters the large,
+    # easy classes back to a high bar, and `class_conf` overrides per class.
+    # Measured on this clip: a single 0.25 floor found 13 two-wheelers across 24
+    # frames, a single 0.15 floor found 259 but dropped on-road plausibility from
+    # 0.80 to 0.65 by admitting rooftop clutter as cars.
+    strict = float(dcfg.get("strict_conf", 0.25))
+    class_conf = {c: strict for c in ("car", "bus", "truck")}
+    class_conf.update({c: float(dcfg.get("small_conf", 0.15))
+                       for c in ("motorcycle", "bicycle", "pedestrian")})
+    class_conf.update(dcfg.get("class_conf", {}) or {})
+
     on_gpu = device not in ("cpu",)
     settings = {
         "weights": dcfg["weights"],
@@ -69,6 +81,8 @@ def load_detector(cfg: dict):
         "iou": dcfg.get("iou", 0.6),
         "classes": dcfg.get("classes", sorted(COCO_TO_CLASS)),
         "device": device,
+        "strict_conf": strict,
+        "class_conf": class_conf,
         # fp16 only helps on GPU; on CPU it is slower or unsupported.
         "half": bool(dcfg.get("half", True)) and on_gpu,
     }
