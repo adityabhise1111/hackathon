@@ -1,0 +1,101 @@
+# Traffic Intelligence - pipeline configuration
+# All tunables live here so analytics can be re-run without touching code.
+
+video:
+  # Working clip (1920-wide, downscaled from the 4K original for speed).
+  path: data/intersection.mp4
+  # Seconds into the ORIGINAL video where this clip starts.
+  # Needed to align the DJI telemetry (SRT) with the clip's frames.
+  clip_start_s: 120.0
+  # Process every Nth frame. 1 = every frame. 2 = half the work, still smooth trails.
+  frame_stride: 1
+  # Cap frames processed (null = whole clip). Useful for quick smoke tests.
+  max_frames: null
+
+telemetry:
+  # DJI embeds per-frame flight data as a tx3g subtitle track.
+  srt_path: data/intersection_full.srt
+  # DJI reports focal_len as a 35mm-equivalent value.
+  sensor_width_35mm: 36.0
+
+detector:
+  weights: models/yolov8s.pt
+  imgsz: 1280
+  conf: 0.25
+  iou: 0.6
+  device: auto            # auto -> cuda if available, else cpu
+  half: true              # fp16 on GPU
+  # COCO ids we care about: person, bicycle, car, motorcycle, bus, truck
+  classes: [0, 1, 2, 3, 5, 7]
+
+tracker:
+  config: config/bytetrack.yaml
+
+trajectory:
+  # Kinematics are computed over a sliding window to suppress per-frame jitter.
+  smooth_window: 9        # frames, centred moving average on ground coords
+  speed_window_s: 0.5     # seconds of separation used for the speed estimate
+  min_track_frames: 8     # discard flicker tracks shorter than this
+
+analytics:
+  stationary_speed_kph: 3.0     # below this a road user counts as not moving
+  stationary_min_s: 5.0         # sustained duration before we flag it
+  queue_speed_kph: 8.0          # "in a queue" speed ceiling
+  queue_cluster_radius_m: 14.0  # spatial link distance for queue clustering
+  queue_min_vehicles: 3
+  congestion:
+    # Congestion score thresholds -> LOW / MEDIUM / HIGH
+    medium_score: 0.35
+    high_score: 0.6
+  turning:
+    # Heading change (degrees) that separates a turn from going straight.
+    straight_max_deg: 25.0
+    min_path_len_m: 12.0        # ignore tracks too short to judge a turn
+  # Calibration-derived size split for the COCO "truck" class.
+  # Honest label: this is a footprint-length heuristic, not a model class.
+  lgv_hgv_split_m: 7.0
+
+interactions:
+  neighbour_radius_m: 25.0      # only test pairs closer than this
+  ttc_max_s: 2.5                # critical-conflict threshold; conflict studies use 1.5-3.0 s
+  ttc_min_s: 0.2                # below this is physically implausible = tracking noise
+  min_approach_speed_kph: 10.0  # at walking pace nothing is a conflict; also kills stopped pairs
+  near_miss_distance_m: 2.5     # sustained proximity while both moving
+  # A constant-velocity projection turns small speed errors into fake conflicts.
+  # These two filters are what separate a real conflict from tracker jitter:
+  min_closing_speed_kph: 6.0    # must genuinely be closing along the line of centres
+  min_persistence_frames: 5     # and must keep triggering, not flicker for one frame
+  # Conflict GRADING. Measured on this footage, a bare TTC<=1.5s test flags ~90% of
+  # all interacting pairs - because in dense mixed traffic low TTC is normal
+  # behaviour, not danger (a queue creeping at 9 km/h with a 3 m gap trips it).
+  # Closing speed is the proxy for how much energy an evasive manoeuvre must
+  # absorb, so grading on TTC *and* closing speed separates real conflicts from
+  # routine density. Only critical + serious are reported as conflicts.
+  critical_ttc_s: 1.5           # serious-conflict line from the conflict literature
+  critical_closing_kph: 20.0    # evasion is genuinely demanding above this
+  serious_closing_kph: 12.0
+  vulnerable_closing_kph: 8.0   # a pedestrian struck at 8 km/h is still injured
+  # The conflict envelope is sized on LATERAL half-width, not an omnidirectional
+  # radius. With a radius (~half vehicle length) two cars get a 3.8 m envelope,
+  # but a lane is only ~3.0-3.5 m wide - so normal oncoming traffic passing in the
+  # adjacent lane was being reported as a head-on conflict. Margin allows for
+  # position noise.
+  conflict_envelope_margin: 1.15
+  # Vulnerable classes get a wider safety envelope.
+  vulnerable_classes: [pedestrian, motorcycle, bicycle]
+  vulnerable_ttc_s: 5.0
+
+anomalies:
+  sudden_stop_decel_kph_s: 18.0   # deceleration spike
+  wrong_way_min_speed_kph: 8.0
+  wrong_way_deviation_deg: 130.0  # vs the dominant flow of its corridor
+  unusual_dwell_s: 25.0
+
+output:
+  dir: outputs
+  annotated_video: outputs/annotated.mp4
+  trajectories_csv: outputs/trajectories.csv
+  events_csv: outputs/events.csv
+  summary_json: outputs/summary.json
+  trail_len: 45                 # frames of trail drawn behind each object
+  write_video: true
