@@ -13,7 +13,7 @@ video:
   # association is unaffected - and the 90-frame track_buffer becomes 6 s of real time
   # instead of 3 s, which bridges occlusions better, not worse. Kinematics divide by
   # the effective fps, so speeds stay correct.
-  frame_stride: 2
+  frame_stride: 3
   # Cap frames processed (null = whole clip). Useful for quick smoke tests.
   max_frames: null
 

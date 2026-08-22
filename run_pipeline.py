@@ -159,7 +159,22 @@ def main() -> int:
             traj_path = f"{root}_{in_tag}{ext}" if in_tag else f"{root}{ext}"
         obs = pd.read_csv(traj_path)
         boxes_path = in_path("boxes")
+        if not os.path.exists(boxes_path):
+            # Fall back to the untagged boxes file: --tag names the OUTPUT, and a
+            # re-render usually reads a previous untagged run's boxes.
+            alt = os.path.join(out_dir, "boxes.csv")
+            if os.path.exists(alt):
+                boxes_path = alt
         boxes = pd.read_csv(boxes_path) if os.path.exists(boxes_path) else pd.DataFrame()
+        # A saved trajectories.csv has already had its per-frame labels replaced by a
+        # resolved per-track class, with the model's own output kept in `class_raw`.
+        # Re-classification must vote on the RAW labels; voting on resolved ones just
+        # re-derives the previous answer and reports a 0% override rate.
+        if "class_raw" in obs.columns:
+            obs["class"] = obs["class_raw"]
+            obs = obs.drop(columns=["class_raw"] +
+                           [c for c in ("class_source",) if c in obs.columns])
+            print("      restored raw per-frame labels from class_raw before re-classifying")
         calibrated = "sx" in obs.columns and obs["sx"].notna().any()
         n_frames = int(obs["frame"].nunique())
         elapsed = 1e-6
@@ -168,7 +183,36 @@ def main() -> int:
         if boxes.empty:
             print("      (no boxes.csv -> annotated video cannot be re-rendered)")
             cfg["output"]["write_video"] = False
-        print("[3/6] trajectories: reused as-is (kinematics already computed)")
+        print("[3/6] trajectories: reused; re-running classification")
+        # Classification is cheap and depends only on geometry, so it is re-run on
+        # reuse rather than trusting whatever labels the CSV was saved with. The
+        # ground dimensions need `depth_m`, which older runs did not record - it can
+        # be recovered from the saved boxes without re-detecting anything, since the
+        # projection is a pure function of the box and the (hovering) camera pose.
+        if calibrated and projector is not None and not boxes.empty and "depth_m" not in obs:
+            bx = boxes.copy()
+            cx = (bx["x1"] + bx["x2"]) / 2.0
+            probes = np.stack([np.c_[cx, bx["y2"]], np.c_[bx["x1"], bx["y2"]],
+                               np.c_[bx["x2"], bx["y2"]], np.c_[cx, bx["y1"]]],
+                              axis=1).reshape(-1, 2)
+            gp = projector.pixels_to_ground(probes).reshape(-1, 4, 2)
+            bx["footprint_m"] = np.linalg.norm(gp[:, 2] - gp[:, 1], axis=1).round(2)
+            bx["depth_m"] = np.linalg.norm(gp[:, 3] - gp[:, 0], axis=1).round(2)
+            obs = obs.drop(columns=[c for c in ("footprint_m", "depth_m") if c in obs.columns])
+            obs = obs.merge(bx[["frame", "track_id", "footprint_m", "depth_m"]],
+                            on=["frame", "track_id"], how="left")
+            print(f"      recovered footprint_m/depth_m for {len(bx)} boxes by reprojection")
+        obs = classify.measure_ground_dimensions(obs)
+        classes = classify.classify_tracks(obs, cfg, calibrated)
+        obs = apply_track_classes(obs, classes)
+        class_report = classify.classification_report(classes)
+        if class_report:
+            print(f"      resolved: {class_report['resolved_by_class']}")
+            print(f"      model would have said: {class_report['model_would_have_said']}")
+            print(f"      measured size overrode the model on "
+                  f"{class_report['size_overrode_model']} tracks "
+                  f"({class_report['size_overrode_model_pct']}%)")
+        obs.to_csv(out("trajectories_csv"), index=False)
     else:
         model, det_settings = load_detector(cfg)
         print(f"[2/6] detector {det_settings['weights']} on device={det_settings['device']} "
