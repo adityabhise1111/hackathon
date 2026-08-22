@@ -99,7 +99,13 @@ segmentation:
   frame_index: 0                # frame the mask is computed from
   use_sam: true                 # MobileSAM (~40 MB) via ultralytics; no new dependency
   sam_weights: mobile_sam.pt
-  sam_max_seeds: 24             # trajectory points used to prompt SAM
+  sam_max_seeds: 48             # bare-carriageway points used to prompt SAM
+  seed_grid_px: 96              # at most one prompt per grid cell -> spread over all arms
+  # SAM proposes, observed traffic decides. A SAM segment is accepted only if this
+  # fraction of it lies inside the travelled area. Measured: without this test SAM
+  # contributed a rooftop and a tree canopy, because it is class-agnostic and grey
+  # roof looks like grey tarmac. 13 of 28 segments get rejected on this footage.
+  min_segment_overlap: 0.45
   # The empirical estimate: rasterised trajectory points dilated by ~a lane width.
   # 26 px at 0.0617 m/px is about 1.6 m, roughly half a lane.
   lane_width_px: 26
