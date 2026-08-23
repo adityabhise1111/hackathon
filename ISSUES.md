@@ -645,12 +645,119 @@ moved. Both are now reported - `mean_speed_kph` (journey speed, including time s
 the signal) and `mean_moving_speed_kph` (cruise speed) - because they answer different
 questions and collapsing them hides the queueing.
 
+## 26. The dashboard opened on the wrong run
+
+**Symptom.** After a new pipeline run finished, opening the dashboard still showed
+the previous run's numbers. Nothing looked broken - the figures were internally
+consistent, just stale.
+
+**Cause.** The run selector listed tags from `glob`, which returns them in
+filesystem order. `annotated.mp4` (the very first run) sorted ahead of `_v4`, so
+the default selection was the oldest run in the folder.
+
+**Why it mattered more than it looks.** This is the failure mode that loses a demo.
+Every number on screen is real and self-consistent, so there is no visual cue that
+you are presenting three-hour-old results.
+
+**Fix.** Order runs by the summary JSON's modification time, newest first, so the
+dashboard always opens on the most recent run.
+
+---
+
+## 27. Merging the two per-vehicle tables silently corrupted the columns
+
+**Symptom.** Building the vehicle register from `track_summary` + `kinematics`
+produced columns named `mean_speed_kph_x` and `mean_speed_kph_y`, and the display
+column list matched neither, so the speed columns silently disappeared from the
+table.
+
+**Cause.** Both exports legitimately carry `class`, `n_obs`, `length_m`, `width_m`
+and `mean_speed_kph` - they were designed to each stand alone as an artifact. A
+plain merge on `track_id` therefore collides on five columns and pandas suffixes
+them rather than failing.
+
+**Fix.** Drop the duplicated columns from the right-hand table before merging, so
+the register keeps one authoritative copy of each. The two CSVs on disk stay
+self-contained, which was the point of exporting them separately.
+
+**Related, same root cause.** The "notable vehicles" helper in the interpretation
+brief sorts a table by a column and then selects a keep-list that already contains
+that column, producing a duplicate that made `to_json(orient="records")` raise
+`DataFrame columns must be unique`. Fixed with `dict.fromkeys` to de-duplicate
+while preserving order.
+
+---
+
+## 28. The LLM call would have sent the API key to a third party, invisibly
+
+**Symptom.** Testing the interpretation call with a deliberately invalid key
+returned a 401 whose body was neither Anthropic's error format nor Anthropic's
+wording:
+
+```
+Error code: 401 - {'error': {'message': '?????', 'type': 'new_api_error'}}
+```
+
+The request id and error type did not match the Anthropic API at all.
+
+**Cause.** This machine has `ANTHROPIC_BASE_URL=https://agentrouter.org` set in the
+environment, and the Anthropic SDK honours that variable automatically. So
+`anthropic.Anthropic(api_key=key)` - the obvious one-line constructor - quietly
+routes both the API key and the request body to a third-party proxy, with nothing
+in the code or on screen indicating it.
+
+**Why this is a real issue and not a curiosity.** The dashboard asks the user to
+paste an API key into a text box. Sending that credential somewhere the user did
+not choose is a credential-disclosure bug, and the evidence brief goes with it.
+The failure is silent by construction: if the proxy works, everything looks fine.
+
+**Fix.** The endpoint is now resolved explicitly rather than inherited:
+
+- `resolve_endpoint()` returns the base URL that will actually be used.
+- The sidebar displays it, and warns when it is not `api.anthropic.com`, with a
+  checkbox to force the real endpoint.
+- The CLI prints the same warning and takes `--base-url`.
+- The key is session-scoped: never written to disk, never logged, never committed.
+
+**Transferable lesson.** A convenience default that reads from the environment is a
+supply-chain surface. Any SDK constructor that can silently retarget where
+credentials go should have its destination pinned and displayed.
+
+---
+
+## 29. The smallest size band absorbs anything smaller than a car
+
+**Symptom.** The fastest vehicle in the run, track #1080 at an estimated 47.9 km/h,
+is classified `car` but measures 1.44 m x 0.66 m - two-wheeler proportions, roughly
+half the measured length of the class median car (1.90 m).
+
+**Cause.** The size bands are open at the bottom: `< 3.0 m -> car`. There is no
+floor beneath the car band, so any motor vehicle the detector did not already call a
+motorcycle falls into `car` regardless of how small it measures. Two-wheelers are
+deliberately model-owned (issue 24) precisely because size discriminates them
+poorly - but that decision left the size path with no way to express "too small to
+be a car".
+
+**Status: open, documented, not fixed.** The honest fix is a lower band plus a
+disagreement rule (size says two-wheeler, model says car -> flag rather than
+silently pick one), which is a classification change, not a display change. It is
+recorded here rather than patched quietly because the count of cars is very slightly
+overstated and the count of two-wheelers understated, and anyone quoting those two
+numbers should know it.
+
+**How it was found.** By reading the interpretation brief's own "fastest vehicles"
+shortlist and noticing that the class label and the measured dimensions on the same
+row disagreed. The brief was built to let a language model cross-check the numbers;
+the first thing it did was catch us.
+
+---
+
 ---
 
 ## The pattern behind all of these
 
-Fourteen of the twenty-five issues above (4, 5, 6, 7, 9, 11, 17, 18, 19, 21, 22,
-23, 24, 25) were found by
+Eighteen of the twenty-nine issues above (4, 5, 6, 7, 9, 11, 17, 18, 19, 21, 22,
+23, 24, 25, 26, 27, 28, 29) were found by
 **interrogating our own output** - looking at distributions, cross-tabulating by
 category, and asking whether a number was physically plausible - not by seeing a
 crash.
@@ -679,3 +786,13 @@ against the raw votes and turned out to be innocent, which redirected the fix fr
 aggregation layer to the classifier itself. And 25 never crashed, never looked broken, and
 produced a tidy CSV full of numbers; it was caught by one question - is 4.6 g believable? -
 which is the only question that separates a measurement from a plausible-looking float.
+
+Issues 26 to 29 came from the last hour, and three of them are the same lesson in a
+new costume. 26 and 27 are silent-wrong-output bugs: a stale run and a corrupted
+merge both produce a screen full of plausible, self-consistent numbers, which is
+strictly more dangerous than a traceback. 28 is that same silence applied to a
+credential - an SDK reading an environment variable we did not set, in a direction we
+did not choose. And 29 we did not fix: the brief we built so that a language model
+could cross-check our measurements immediately surfaced a row where our own class
+label and our own measured dimensions contradicted each other, and the correct
+response to that is to write it down, not to bury it.
