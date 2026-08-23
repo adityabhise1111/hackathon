@@ -18,6 +18,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from pipeline import interpret as interp
+
 OUT_DIR = "outputs"
 
 st.set_page_config(page_title="Drone Traffic Intelligence", page_icon="::", layout="wide")
@@ -134,6 +136,27 @@ calib = summary.get("calibration", {})
 calibrated = bool(calib.get("usable"))
 counts = summary.get("counts", {})
 speed = summary.get("speed", {})
+
+with st.sidebar:
+    st.markdown("### Interpretation")
+    # Session-scoped only: never written to disk, never logged, never in the repo.
+    api_key = st.text_input("Anthropic API key", type="password",
+                            value=os.environ.get("ANTHROPIC_API_KEY", ""),
+                            help="Used only for the interpretation section. Held in "
+                                 "this browser session; not saved to disk.")
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        st.caption("Loaded from ANTHROPIC_API_KEY.")
+    llm_model = st.text_input("model", value=interp.MODEL)
+    # The SDK honours ANTHROPIC_BASE_URL silently, so show where the key and the
+    # brief will actually be sent. This machine has a proxy configured.
+    endpoint = interp.resolve_endpoint()
+    if endpoint != interp.DEFAULT_ENDPOINT:
+        st.warning(f"Requests go to `{endpoint}` (from ANTHROPIC_BASE_URL), "
+                   f"not to Anthropic directly.")
+        if st.checkbox("send to api.anthropic.com instead", value=False):
+            endpoint = interp.DEFAULT_ENDPOINT
+    else:
+        st.caption(f"Endpoint: {endpoint}")
 
 # ------------------------------------------------------------------- sidebar
 with st.sidebar:
@@ -736,6 +759,144 @@ with t5:
         st.dataframe(tracks[show], use_container_width=True, hide_index=True, height=460)
         st.download_button("Download track summary CSV", tracks.to_csv(index=False),
                            file_name="track_summary.csv", mime="text/csv")
+
+# --------------------------------------------------------------- interpretation
+st.subheader("Automated interpretation")
+st.caption(
+    "A language model reads the measurements and writes them up. It performs no "
+    "analysis of its own and sees no video - only the evidence brief below, which is "
+    "built entirely from the numbers already on this page."
+)
+
+ipath = interp.interpretation_path(OUT_DIR, tag)
+brief = interp.build_evidence(summary, kin, events, tracks)
+saved = load_json(ipath)
+
+ic1, ic2 = st.columns([3, 1], gap="large")
+with ic2:
+    st.markdown("**Evidence brief**")
+    st.caption(
+        f"{len(brief)} sections, {len(json.dumps(brief, default=str)) / 1024:.1f} KB, "
+        f"{sum(len(v) for v in brief.get('notable_vehicles', {}).values())} notable vehicles. "
+        "One API call per run, cached to disk."
+    )
+    st.download_button("Download evidence brief JSON",
+                       json.dumps(brief, indent=1, default=str),
+                       file_name=f"evidence_brief{'_' + tag if tag else ''}.json",
+                       mime="application/json")
+    go_btn = st.button("Generate interpretation" if not saved else "Regenerate",
+                       type="primary" if not saved else "secondary")
+    if not api_key:
+        st.caption("Needs an API key - paste one in the sidebar.")
+
+if go_btn:
+    if not api_key:
+        st.error("No API key. Paste one into the sidebar, or set ANTHROPIC_API_KEY "
+                 "and run `python -m pipeline.interpret --tag %s`." % (tag or ""))
+    else:
+        with st.spinner("Reading the measurements..."):
+            try:
+                saved = interp.interpret(brief, api_key, llm_model, base_url=endpoint)
+                with open(ipath, "w", encoding="utf-8") as fh:
+                    json.dump(saved, fh, indent=1, default=str)
+            except Exception as exc:  # surfaced, not swallowed - the key is the usual cause
+                st.error(f"Interpretation failed: {type(exc).__name__}: {exc}")
+                saved = {}
+
+with ic1:
+    if not saved:
+        st.info("No interpretation generated for this run yet.")
+    else:
+        if saved.get("headline"):
+            st.markdown(f"#### {saved['headline']}")
+        if saved.get("scene"):
+            st.write(saved["scene"])
+
+if saved:
+    def _ev(items):
+        return (" &nbsp;·&nbsp; ".join(f"<code>{e}</code>" for e in items)) if items else ""
+
+    findings = saved.get("findings", [])
+    if findings:
+        st.markdown("##### Findings")
+        for f in findings:
+            sev = str(f.get("severity", "low")).lower()
+            col = SEV_COLOR.get(sev, "#7d8794")
+            st.markdown(
+                f"<div style='border-left:3px solid {col};padding:.15rem 0 .35rem .7rem;"
+                f"margin:.5rem 0'>"
+                f"<span class='pill' style='background:{col}22;color:{col}'>{sev}</span>"
+                f"&nbsp;<b>{f.get('title', '')}</b><br>"
+                f"<span style='color:#c3cad6'>{f.get('detail', '')}</span><br>"
+                f"<span style='font-size:.75rem;color:#8b95a5'>evidence: "
+                f"{_ev(f.get('evidence', []))}</span></div>",
+                unsafe_allow_html=True,
+            )
+
+    b1, b2 = st.columns(2, gap="large")
+    with b1:
+        beh = saved.get("behaviours", [])
+        if beh:
+            st.markdown("##### Behaviour patterns")
+            for b in beh:
+                st.markdown(
+                    f"**{b.get('pattern', '')}**  \n"
+                    f"<span style='color:#c3cad6'>{b.get('detail', '')}</span>  \n"
+                    f"<span style='font-size:.75rem;color:#8b95a5'>evidence: "
+                    f"{_ev(b.get('evidence', []))}</span>",
+                    unsafe_allow_html=True,
+                )
+    with b2:
+        anom = saved.get("anomalies", [])
+        if anom:
+            st.markdown("##### Anomalies")
+            for a in anom:
+                conf = str(a.get("confidence", "low")).lower()
+                col = SEV_COLOR.get({"high": "high", "medium": "medium"}.get(conf, "low"),
+                                    "#7d8794")
+                st.markdown(
+                    f"**{a.get('what', '')}** "
+                    f"<span class='pill' style='background:{col}22;color:{col}'>"
+                    f"{conf} confidence</span>  \n"
+                    f"<span style='color:#c3cad6'>{a.get('why_flagged', '')}</span>  \n"
+                    f"<span style='font-size:.78rem;color:#8b95a5'>Innocent reading: "
+                    f"{a.get('alternative_explanation', 'n/a')}</span>  \n"
+                    f"<span style='font-size:.75rem;color:#8b95a5'>evidence: "
+                    f"{_ev(a.get('evidence', []))}</span>",
+                    unsafe_allow_html=True,
+                )
+
+    c1, c2 = st.columns(2, gap="large")
+    with c1:
+        cav = saved.get("data_caveats", [])
+        if cav:
+            st.markdown("##### Read this before quoting the numbers")
+            for c in cav:
+                st.markdown(f"<div class='caveat'>{c}</div>", unsafe_allow_html=True)
+    with c2:
+        rec = saved.get("recommended_checks", [])
+        if rec:
+            st.markdown("##### What this clip cannot settle")
+            for r in rec:
+                st.markdown(f"- {r}")
+
+    meta = saved.get("_meta", {})
+    if meta:
+        st.caption(
+            f"{meta.get('model', 'model')} · {meta.get('input_tokens', '?')} input / "
+            f"{meta.get('output_tokens', '?')} output tokens · "
+            f"saw {len(meta.get('evidence_keys', []))} evidence sections, no video"
+        )
+    with st.expander("Exactly what the model was given"):
+        st.caption(
+            "The full brief, verbatim. Every figure in the write-up above must trace "
+            "back to something in here - the system prompt forbids introducing any "
+            "number that is not present, and requires an `evidence` list per claim."
+        )
+        st.json(brief, expanded=False)
+    st.download_button("Download interpretation JSON", json.dumps(saved, indent=1, default=str),
+                       file_name=f"interpretation{'_' + tag if tag else ''}.json",
+                       mime="application/json")
 
 # ------------------------------------------------------------------ limitations
 st.divider()
