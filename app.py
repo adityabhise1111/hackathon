@@ -89,6 +89,56 @@ def latest_video(name: str, tag: str) -> str | None:
     return max(cands, key=os.path.getmtime)
 
 
+def playable_video(name: str, tag: str) -> tuple[str | None, str | None]:
+    """
+    Pick the file a browser can actually decode, and report the newest raw render.
+
+    OpenCV's writer produces mp4v/mpeg4, which no browser will play - the player
+    renders but sits at 0:00. Every render therefore gets an H.264 sibling named
+    `<render>_web.mp4`, and that is what must be handed to st.video().
+
+    The naming is `annotated_<tag>[_vN][_web].mp4`, so the web transcode of run v4
+    is `annotated_v4_web.mp4`. Asking suffixed() for "annotated_web" instead builds
+    `annotated_web_v4.mp4`, which does not exist - the lookup silently missed, fell
+    back to the raw mpeg4 render, and the video appeared blank.
+
+    Returns (file_to_play, newest_raw_render) so the caller can say when the newest
+    render has no transcode yet.
+    """
+    base = suffixed(name, ".mp4", tag)
+    root = base[:-4]
+    family = [base, f"{root}_web.mp4"]
+    family += glob.glob(f"{root}_v[0-9]*.mp4") + glob.glob(f"{root}_v[0-9]*_web.mp4")
+    family = [c for c in dict.fromkeys(family) if os.path.exists(c)]
+
+    # `_vN` is overloaded: it marks a re-render of one run (annotated_v3.mp4) AND it
+    # is used as a run tag (annotated_v4.mp4). Filename alone cannot tell them apart,
+    # so a run that has its own summary JSON owns its files - otherwise the default
+    # run would show v4's video, which is the wrong footage under the right heading.
+    known = {t for t in available_tags() if t}
+    def _own(path: str) -> bool:
+        rel = os.path.basename(path)[len(os.path.basename(root)):]
+        rel = rel[:-len(".mp4")].removesuffix("_web").lstrip("_")
+        return not rel or rel.split("_")[0] not in known
+    family = [c for c in family if _own(c)]
+    if not family:
+        return None, None
+
+    raws = [c for c in family if not c.endswith("_web.mp4")]
+    webs = [c for c in family if c.endswith("_web.mp4")]
+    newest_raw = max(raws, key=os.path.getmtime) if raws else None
+
+    # The transcode of the newest render is the ideal; otherwise the newest
+    # transcode of any render still beats an unplayable file.
+    if newest_raw:
+        sibling = newest_raw[:-4] + "_web.mp4"
+        if os.path.exists(sibling):
+            return sibling, newest_raw
+    if webs:
+        return max(webs, key=os.path.getmtime), newest_raw
+    return newest_raw, newest_raw
+
+
 @st.cache_data(show_spinner=False)
 def load_csv(path: str) -> pd.DataFrame:
     if not os.path.exists(path):
@@ -280,9 +330,7 @@ left, right = st.columns([1.65, 1], gap="large")
 
 with left:
     st.subheader("Annotated aerial view")
-    vid = latest_video("annotated", tag)
-    web = latest_video("annotated_web", tag)
-    playable = web if web and os.path.exists(web) else vid
+    playable, newest_raw = playable_video("annotated", tag)
     if playable and os.path.exists(playable):
         st.video(playable)
         st.markdown(
@@ -293,14 +341,29 @@ with left:
             "between the two interacting users.</div>",
             unsafe_allow_html=True,
         )
-        st.caption(f"showing `{os.path.basename(playable)}`")
-        if not (web and os.path.exists(web)):
+        mb = os.path.getsize(playable) / 1e6
+        st.caption(f"showing `{os.path.basename(playable)}` ({mb:.0f} MB)")
+        if playable.endswith("_web.mp4") and newest_raw and \
+                newest_raw[:-4] + "_web.mp4" != playable:
+            # A newer render exists but has no H.264 sibling, so it cannot be played
+            # here yet. Say so rather than quietly showing older footage.
             st.caption(
-                "If the player shows nothing, the file is mp4v-encoded. Re-encode to H.264:"
+                f"A newer render `{os.path.basename(newest_raw)}` exists without an "
+                f"H.264 transcode, so it is not playable in a browser. To use it:"
             )
             st.code(
-                f"ffmpeg -i {vid} -vcodec libx264 -crf 28 -y "
-                f"{str(vid).replace('annotated', 'annotated_web')}",
+                f"ffmpeg -i {newest_raw} -vcodec libx264 -pix_fmt yuv420p -crf 28 -y "
+                f"{newest_raw[:-4]}_web.mp4",
+                language="bash",
+            )
+        elif not playable.endswith("_web.mp4"):
+            st.caption(
+                "This file is mp4v-encoded, which browsers cannot decode - if the player "
+                "is blank, re-encode to H.264:"
+            )
+            st.code(
+                f"ffmpeg -i {playable} -vcodec libx264 -pix_fmt yuv420p -crf 28 -y "
+                f"{playable[:-4]}_web.mp4",
                 language="bash",
             )
     else:
