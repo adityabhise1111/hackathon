@@ -194,13 +194,40 @@ def resolve_endpoint(base_url: str | None = None) -> str:
     return (base_url or os.environ.get("ANTHROPIC_BASE_URL") or DEFAULT_ENDPOINT).rstrip("/")
 
 
+def _extract_json(raw: str) -> dict:
+    """
+    Pull the JSON object out of a model reply.
+
+    Without assistant prefill the reply can arrive wrapped in a markdown fence, or
+    with a sentence before or after the object, so the braces are located rather
+    than assumed. Cheaper and more portable than a tool-call round trip.
+    """
+    s = raw.strip()
+    if s.startswith("```"):
+        s = s.split("\n", 1)[-1] if "\n" in s else s
+        s = s.rsplit("```", 1)[0]
+    s = s.strip().removeprefix("json").strip()
+    start, end = s.find("{"), s.rfind("}")
+    if start < 0 or end <= start:
+        return {"headline": raw[:400], "_parse_failed": True}
+    for candidate in (s[start:end + 1], s[start:]):
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+    return {"headline": raw[:400], "_parse_failed": True}
+
+
 def interpret(evidence: dict, api_key: str, model: str = MODEL,
               base_url: str | None = None) -> dict:
     """
     Send the brief to Claude and return the parsed interpretation.
 
-    The reply is forced into JSON by prefilling an opening brace, which is more
-    reliable than asking politely and cheaper than a tool-call round trip.
+    The JSON shape is requested in the system prompt and located in the reply by
+    _extract_json. An earlier version forced it by prefilling an opening brace in an
+    assistant turn, which is more reliable on the Anthropic API directly but is
+    rejected outright by some gateways ("This model does not support assistant
+    message prefill"), so the conversation now ends on the user turn.
     """
     import anthropic
 
@@ -213,19 +240,13 @@ def interpret(evidence: dict, api_key: str, model: str = MODEL,
         messages=[
             {"role": "user",
              "content": "Evidence brief for this survey:\n\n"
-                        + json.dumps(evidence, indent=1, default=str)},
-            {"role": "assistant", "content": "{"},
+                        + json.dumps(evidence, indent=1, default=str)
+                        + "\n\nReply with the JSON object only - no markdown fence, "
+                          "no commentary before or after it."},
         ],
     )
-    raw = "{" + "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
-    try:
-        out = json.loads(raw)
-    except json.JSONDecodeError:
-        # Trailing prose after a valid object is the only failure seen; cut to the
-        # last closing brace and retry rather than losing the whole response.
-        cut = raw.rfind("}")
-        out = json.loads(raw[:cut + 1]) if cut > 0 else {"headline": raw[:400],
-                                                         "_parse_failed": True}
+    raw = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+    out = _extract_json(raw)
     out["_meta"] = {
         "model": msg.model,
         "endpoint": endpoint,
