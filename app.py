@@ -53,12 +53,18 @@ SEV_COLOR = {"high": "#ff4d5a", "medium": "#ffa03c", "low": "#7d8794"}
 
 # --------------------------------------------------------------------------- io
 def available_tags() -> list[str]:
-    """Discover pipeline runs by looking for summary JSONs."""
-    tags = []
+    """
+    Discover pipeline runs by looking for summary JSONs, newest first.
+
+    Ordered by write time so the dashboard opens on the most recent run rather
+    than on whichever tag happens to sort first - a stale default is the fastest
+    way to demo the wrong numbers.
+    """
+    found = []
     for p in glob.glob(os.path.join(OUT_DIR, "summary*.json")):
         base = os.path.basename(p)[len("summary"):-len(".json")]
-        tags.append(base.lstrip("_"))
-    return sorted(tags, key=lambda t: (t != "", t))
+        found.append((os.path.getmtime(p), base.lstrip("_")))
+    return [t for _, t in sorted(found, reverse=True)]
 
 
 def suffixed(name: str, ext: str, tag: str) -> str:
@@ -122,6 +128,7 @@ turns = load_csv(suffixed("turning_movements", ".csv", tag))
 flow = load_csv(suffixed("directional_flow", ".csv", tag))
 inter = load_csv(suffixed("interactions", ".csv", tag))
 headways = load_csv(suffixed("headways", ".csv", tag))
+kin = load_csv(suffixed("kinematics", ".csv", tag))
 
 calib = summary.get("calibration", {})
 calibrated = bool(calib.get("usable"))
@@ -307,7 +314,24 @@ with right:
         fig.update_traces(textposition="outside", cliponaxis=False)
         st.plotly_chart(fig, use_container_width=True)
 
-        if calibrated and not tracks.empty and "class_source" in tracks:
+        # How the classes were actually decided. Read from the run's own report so
+        # this text can never drift from what the pipeline did.
+        creport = summary.get("classification", {})
+        if creport:
+            over = creport.get("size_overrode_model", 0)
+            pct = creport.get("size_overrode_model_pct", 0)
+            flow_txt = "; ".join(creport.get("override_flow", [])[:4])
+            st.markdown(
+                f"<div class='caveat'><b>How these classes were decided:</b> the detector's own "
+                f"class head is unreliable from this altitude, so each vehicle is measured on the "
+                f"calibrated ground plane and classified by its solved length. Measured size "
+                f"overrode the model on <b>{over} of {creport.get('tracks', 0)} road users "
+                f"({pct}%)</b> - {flow_txt}. People and two-wheelers keep the model's label, where "
+                f"it is strong. {creport.get('caveat', '')} Every vehicle's deciding signal is "
+                f"recorded per-row in <code>class_source</code>.</div>",
+                unsafe_allow_html=True,
+            )
+        elif calibrated and not tracks.empty and "class_source" in tracks:
             n_heur = int((tracks["class_source"] == "size_heuristic_from_calibration").sum())
             if n_heur:
                 st.markdown(
@@ -389,6 +413,160 @@ if not obs.empty:
     )
 else:
     st.info("No trajectories for this run.")
+
+st.divider()
+
+# ------------------------------------------------------------- vehicle register
+st.subheader("Vehicle register")
+st.caption(
+    "Every road user the pipeline tracked, with the measurement that classified it. "
+    "One row per identity, not per detection."
+)
+
+if tracks.empty:
+    st.info("No track summary available for this run.")
+else:
+    # One row per road user: lifetime/path facts from track_summary, speed and
+    # acceleration from the kinematics export. Merged here rather than in the
+    # pipeline so each stays a single-purpose artifact.
+    reg = tracks.copy()
+    if not kin.empty:
+        # Take only what track_summary does not already carry, so the merge cannot
+        # produce _x/_y suffixed duplicates of mean_speed_kph and friends.
+        kin_cols = ["track_id"] + [c for c in kin.columns if c not in tracks.columns]
+        reg = reg.merge(kin[kin_cols], on="track_id", how="left")
+
+    f1, f2, f3 = st.columns([2, 2, 1], gap="medium")
+    with f1:
+        pick_class = st.multiselect(
+            "vehicle class", sorted(reg["class"].dropna().unique()), default=[],
+            placeholder="all classes",
+        )
+    with f2:
+        search = st.text_input("find vehicle by ID", placeholder="e.g. 42")
+    with f3:
+        only_moved = st.checkbox("moved only", value=False,
+                                 help="hide vehicles that never exceeded the stationary threshold")
+
+    view = reg
+    if pick_class:
+        view = view[view["class"].isin(pick_class)]
+    if search.strip():
+        view = view[view["track_id"].astype(str).str.contains(search.strip())]
+    if only_moved and "moving_fraction" in view:
+        view = view[view["moving_fraction"].fillna(0) > 0.05]
+
+    cols = [c for c in [
+        "track_id", "class", "class_source", "length_m", "width_m",
+        "first_t", "last_t", "visible_s", "n_obs",
+        "mean_speed_kph", "mean_moving_speed_kph", "p85_speed_kph", "max_speed_kph",
+        "p95_accel_ms2", "p5_decel_ms2", "path_len_m", "stationary_s", "turn_type",
+    ] if c in view.columns]
+    st.dataframe(view[cols], use_container_width=True, hide_index=True, height=340)
+    st.caption(f"{len(view)} of {len(reg)} road users shown")
+    st.download_button("Download vehicle register CSV", view.to_csv(index=False),
+                       file_name="vehicle_register.csv", mime="text/csv")
+
+    # ------------------------------------------------------ single vehicle drill-down
+    st.markdown("#### Individual vehicle")
+    ids = view["track_id"].tolist() or reg["track_id"].tolist()
+    sel = st.selectbox("vehicle ID", ids, format_func=lambda i: f"#{int(i)}")
+    row = reg[reg["track_id"] == sel].iloc[0]
+    trace = obs[obs["track_id"] == sel].sort_values("frame") if not obs.empty else pd.DataFrame()
+
+    colr = CLASS_COLOR.get(str(row.get("class")), "#7d8794")
+    st.markdown(
+        f"<span class='pill' style='background:{colr}22;color:{colr}'>"
+        f"#{int(sel)} &middot; {str(row.get('class', '?')).upper()}</span>",
+        unsafe_allow_html=True,
+    )
+
+    m = st.columns(5, gap="small")
+    def _fmt(v, unit="", nd=1):
+        try:
+            f = float(v)
+        except (TypeError, ValueError):
+            return "n/a"
+        return f"{f:.{nd}f}{unit}" if f == f else "n/a"
+
+    m[0].metric("Measured size",
+                f"{_fmt(row.get('length_m'), 'm', 2)} x {_fmt(row.get('width_m'), 'm', 2)}")
+    m[1].metric("Journey speed", _fmt(row.get("mean_speed_kph"), " km/h"))
+    m[2].metric("Cruise speed", _fmt(row.get("mean_moving_speed_kph"), " km/h"))
+    m[3].metric("Peak accel / decel",
+                f"{_fmt(row.get('p95_accel_ms2'), '', 2)} / {_fmt(row.get('p5_decel_ms2'), '', 2)}")
+    m[4].metric("Tracked for", _fmt(row.get("visible_s"), " s"))
+
+    st.markdown(
+        f"<div class='caveat'>Classified as <b>{row.get('class', '?')}</b> because "
+        f"<code>class_source = {row.get('class_source', 'model')}</code>. "
+        "Sizes are consistent relative measurements from the calibrated ground plane, "
+        "biased upwards by vehicle height - not catalogue dimensions.</div>",
+        unsafe_allow_html=True,
+    )
+
+    if not trace.empty:
+        g1, g2 = st.columns(2, gap="large")
+        with g1:
+            st.markdown("**Speed and acceleration over time**")
+            speed_col = "speed_kph" if calibrated and trace["speed_kph"].notna().any() else "speed_px_s"
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=trace["timestamp"], y=trace[speed_col], mode="lines",
+                line=dict(color=colr, width=2), name="speed",
+            ))
+            if calibrated and "accel_kph_s" in trace and trace["accel_kph_s"].notna().any():
+                fig.add_trace(go.Scatter(
+                    x=trace["timestamp"], y=trace["accel_kph_s"] / 3.6, mode="lines",
+                    line=dict(color="#64dcf0", width=1.2), name="accel (m/s2)", yaxis="y2",
+                ))
+            fig.update_layout(
+                height=300, margin=dict(l=0, r=0, t=8, b=0),
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#12151a",
+                xaxis=dict(title="time (s)", gridcolor="#1f242c"),
+                yaxis=dict(title="km/h" if speed_col == "speed_kph" else "px/s",
+                           gridcolor="#1f242c"),
+                yaxis2=dict(title="m/s2", overlaying="y", side="right", showgrid=False),
+                legend=dict(orientation="h", y=1.14, x=0, title=None),
+            )
+            st.plotly_chart(fig, use_container_width=True)
+        with g2:
+            st.markdown("**Path travelled**")
+            use_m = calibrated and trace["sx"].notna().any()
+            xs, ys = (trace["sx"], trace["sy"]) if use_m else (trace["x"], trace["y"])
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=xs, y=ys, mode="lines+markers",
+                line=dict(color=colr, width=2), marker=dict(size=3),
+                hovertemplate="t=%{customdata:.1f}s<extra></extra>",
+                customdata=trace["timestamp"],
+            ))
+            fig.update_layout(
+                height=300, margin=dict(l=0, r=0, t=8, b=0),
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#12151a",
+                xaxis=dict(title="east (m)" if use_m else "x (px)", gridcolor="#1f242c"),
+                yaxis=dict(title="north (m)" if use_m else "y (px)", gridcolor="#1f242c",
+                           autorange=None if use_m else "reversed",
+                           scaleanchor="x", scaleratio=1),
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+    # A vehicle can appear as either party in a conflict, so match both id columns.
+    if not events.empty and "track_id" in events:
+        mine = events["track_id"] == sel
+        if "secondary_track_id" in events:
+            mine = mine | (events["secondary_track_id"] == sel)
+        own = events[mine]
+    else:
+        own = pd.DataFrame()
+    if not own.empty:
+        st.markdown(f"**Events involving #{int(sel)}**")
+        ecols = [c for c in ["event_type", "severity", "timestamp", "duration",
+                             "value", "unit", "description"] if c in own.columns]
+        st.dataframe(own[ecols].sort_values("timestamp"), use_container_width=True,
+                     hide_index=True, height=160)
+    else:
+        st.caption("No events recorded for this vehicle.")
 
 st.divider()
 
@@ -566,7 +744,8 @@ with st.expander("Limitations and what we deliberately do not claim", expanded=F
         """
 | Area | What we claim | What we do **not** claim |
 |---|---|---|
-| **Classes** | Detector classes: pedestrian, bicycle, car, motorcycle, bus, truck | The model does **not** distinguish LGV from HGV. That split is a footprint-size heuristic from calibration, tagged `class_source` in the CSV |
+| **Classes** | Fine-grained classes (car, LGV, HGV, bus, motorcycle, bicycle, pedestrian) decided from the vehicle's **measured** ground length, with the deciding signal recorded per vehicle in `class_source` | Not the detector's own class head - it calls 92% of everything "car" from this altitude. Measured length is biased upwards by vehicle height, so sizes are consistent *relative* measurements, not catalogue dimensions. Bus vs HGV is a tie size cannot break, so the model decides it |
+| **Acceleration** | Per-vehicle p95 accel / p5 decel in m/s^2, over a smoothed ground track | Not instantaneous peaks. Acceleration is a second derivative, so raw extremes are dominated by pixel jitter; they are kept in the CSV for audit and flagged when beyond 10 m/s^2 |
 | **Speed** | Estimated km/h from a telemetry-derived ground plane | Not survey-grade. Assumes flat ground; uses the box bottom as the road-contact point |
 | **Stationary** | "Stationary vehicle **candidate**", cross-referenced against detected queues | Not an incident. One clip cannot separate a breakdown from a red light |
 | **Wrong way** | Movement against the **observed dominant flow** of that part of the road, learned from the data | Not a legal violation - we have no HD map of legal carriageway directions |
