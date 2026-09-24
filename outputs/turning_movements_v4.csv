@@ -1,0 +1,14 @@
+turn_type,class,road_users
+straight,car,74
+straight,motorcycle,24
+right,car,15
+left,car,10
+right,lgv,5
+straight,lgv,5
+right,motorcycle,5
+straight,hgv,4
+left,lgv,4
+right,pedestrian,2
+left,motorcycle,1
+straight,pedestrian,1
+u-turn,car,1

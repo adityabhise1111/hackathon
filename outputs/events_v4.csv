@@ -1,0 +1,651 @@
+event_type,track_id,secondary_track_id,timestamp,duration,x,y,severity,value,unit,description
+against_dominant_flow,6.0,,0.0,4.04,626.3,737.6,high,175.6,deg from local flow,"lgv #6 moved 176 deg against the dominant local flow for 116.0 observations (flow anomaly, not a confirmed violation)"
+against_dominant_flow,19.0,,0.0,1.83,1505.1,1015.7,high,165.9,deg from local flow,"car #19 moved 166 deg against the dominant local flow for 55.0 observations (flow anomaly, not a confirmed violation)"
+against_dominant_flow,58.0,,0.07,3.1,1410.3,389.3,high,178.3,deg from local flow,"car #58 moved 178 deg against the dominant local flow for 89.0 observations (flow anomaly, not a confirmed violation)"
+sudden_stop,64.0,,0.9,,1672.38,92.06,high,-40.3,km/h/s,car #64 decelerated 40 km/h/s at t=0.9s
+sudden_stop,54.0,,1.6,,1683.72,96.07,high,-37.9,km/h/s,motorcycle #54 decelerated 38 km/h/s at t=1.6s
+potential_conflict,50.0,177.0,1.83,,16.0,-42.8,high,0.21,s (TTC),"Potential conflict (critical): hgv #50 <-> car #177 - projected TTC 0.2s, closest approach 0.8m, closing 21 km/h (crossing)"
+potential_conflict,129.0,177.0,1.83,,16.0,-42.8,high,0.22,s (TTC),"Potential conflict (critical): bus #129 <-> car #177 - projected TTC 0.2s, closest approach 0.8m, closing 21 km/h (merging)"
+potential_conflict,288.0,329.0,3.5,,17.1,-43.4,high,0.51,s (TTC),"Potential conflict (critical): bus #288 <-> car #329 - projected TTC 0.5s, closest approach 1.0m, closing 24 km/h (head-on)"
+potential_conflict,50.0,329.0,3.8,,16.2,-42.9,high,0.22,s (TTC),"Potential conflict (critical): hgv #50 <-> car #329 - projected TTC 0.2s, closest approach 1.0m, closing 20 km/h (crossing)"
+queue_formation,,,4.0,2.0,-33.8,11.4,high,37.8,m,"Queue of 13 vehicles, ~38 m long at t=4s"
+potential_conflict,17.0,52.0,4.61,,-91.4,-1.1,high,0.73,s (TTC),"Potential conflict (critical): car #17 <-> car #52 - projected TTC 0.7s, closest approach 2.1m, closing 22 km/h (crossing)"
+sudden_stop,14.0,,4.8,,696.97,628.7,high,-42.5,km/h/s,car #14 decelerated 43 km/h/s at t=4.8s
+potential_conflict,138.0,351.0,5.44,,-22.6,12.0,high,0.42,s (TTC),"Potential conflict (critical): car #138 <-> car #351 - projected TTC 0.4s, closest approach 0.9m, closing 25 km/h (head-on)"
+potential_conflict,41.0,433.0,5.51,,-90.7,-1.4,high,0.75,s (TTC),"Potential conflict (critical): car #41 <-> car #433 - projected TTC 0.8s, closest approach 1.8m, closing 30 km/h (merging)"
+potential_conflict,269.0,433.0,5.64,,-92.5,-1.1,high,0.39,s (TTC),"Potential conflict (critical): car #269 <-> car #433 - projected TTC 0.4s, closest approach 1.1m, closing 24 km/h (merging)"
+sudden_stop,218.0,,5.81,,1607.37,166.17,high,-74.7,km/h/s,motorcycle #218 decelerated 75 km/h/s at t=5.8s
+potential_conflict,14.0,25.0,5.84,,-18.4,-28.0,high,0.3,s (TTC),"Potential conflict (critical): car #14 <-> motorcycle #25 - projected TTC 0.3s, closest approach 1.0m, closing 17 km/h (crossing/vulnerable-road-user)"
+sudden_stop,41.0,,5.91,,1662.64,104.17,high,-58.6,km/h/s,car #41 decelerated 59 km/h/s at t=5.9s
+queue_formation,,,6.0,2.0,-21.4,-16.1,high,82.3,m,"Queue of 41 vehicles, ~82 m long at t=6s"
+potential_conflict,14.0,474.0,6.57,,-22.7,-27.2,high,0.29,s (TTC),"Potential conflict (critical): car #14 <-> pedestrian #474 - projected TTC 0.3s, closest approach 0.9m, closing 17 km/h (crossing/vulnerable-road-user)"
+potential_conflict,38.0,52.0,7.94,,-90.7,-1.7,high,1.06,s (TTC),"Potential conflict (critical): motorcycle #38 <-> car #52 - projected TTC 1.1s, closest approach 1.5m, closing 22 km/h (crossing/vulnerable-road-user)"
+potential_conflict,45.0,189.0,8.07,,-83.2,-2.6,high,0.22,s (TTC),"Potential conflict (critical): motorcycle #45 <-> motorcycle #189 - projected TTC 0.2s, closest approach 0.5m, closing 21 km/h (following/vulnerable-road-user)"
+sudden_stop,45.0,,8.11,,1613.59,132.97,high,-36.7,km/h/s,motorcycle #45 decelerated 37 km/h/s at t=8.1s
+potential_conflict,474.0,480.0,11.95,,-21.3,-26.5,high,0.62,s (TTC),"Potential conflict (critical): pedestrian #474 <-> car #480 - projected TTC 0.6s, closest approach 1.1m, closing 20 km/h (crossing/vulnerable-road-user)"
+potential_conflict,40.0,52.0,12.14,,-92.9,-1.2,high,0.31,s (TTC),"Potential conflict (critical): motorcycle #40 <-> car #52 - projected TTC 0.3s, closest approach 1.2m, closing 19 km/h (following/vulnerable-road-user)"
+potential_conflict,14.0,606.0,12.21,,-44.8,-19.5,high,0.4,s (TTC),"Potential conflict (critical): car #14 <-> motorcycle #606 - projected TTC 0.4s, closest approach 0.7m, closing 13 km/h (crossing/vulnerable-road-user)"
+potential_conflict,480.0,774.0,12.98,,-26.0,-24.2,high,0.21,s (TTC),"Potential conflict (critical): car #480 <-> car #774 - projected TTC 0.2s, closest approach 1.1m, closing 20 km/h (crossing)"
+potential_conflict,480.0,901.0,13.21,,-27.3,-23.7,high,0.2,s (TTC),"Potential conflict (critical): car #480 <-> motorcycle #901 - projected TTC 0.2s, closest approach 1.3m, closing 18 km/h (head-on/vulnerable-road-user)"
+sudden_stop,40.0,,13.51,,1740.65,49.28,high,-52.3,km/h/s,motorcycle #40 decelerated 52 km/h/s at t=13.5s
+queue_formation,,,14.0,2.0,-13.4,-33.1,high,82.0,m,"Queue of 32 vehicles, ~82 m long at t=14s"
+sudden_stop,22.0,,14.18,,1619.29,121.27,high,-47.7,km/h/s,car #22 decelerated 48 km/h/s at t=14.2s
+against_dominant_flow,901.0,,14.18,5.94,842.3,647.2,high,174.3,deg from local flow,"motorcycle #901 moved 174 deg against the dominant local flow for 52.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,22.0,895.0,14.55,,-91.4,-1.4,high,0.53,s (TTC),"Potential conflict (critical): car #22 <-> car #895 - projected TTC 0.5s, closest approach 1.3m, closing 29 km/h (head-on)"
+potential_conflict,22.0,52.0,14.75,,-92.6,-1.0,high,0.24,s (TTC),"Potential conflict (critical): car #22 <-> car #52 - projected TTC 0.2s, closest approach 1.4m, closing 22 km/h (crossing)"
+sudden_stop,480.0,,15.18,,1082.9,452.55,high,-42.3,km/h/s,car #480 decelerated 42 km/h/s at t=15.2s
+sudden_stop,25.0,,15.52,,399.97,125.07,high,-55.6,km/h/s,motorcycle #25 decelerated 56 km/h/s at t=15.5s
+potential_conflict,24.0,52.0,15.92,,-88.6,-2.3,high,1.49,s (TTC),"Potential conflict (critical): motorcycle #24 <-> car #52 - projected TTC 1.5s, closest approach 1.5m, closing 24 km/h (merging/vulnerable-road-user)"
+sudden_stop,693.0,,15.95,,1187.69,791.73,high,-110.4,km/h/s,car #693 decelerated 110 km/h/s at t=15.9s
+queue_formation,,,16.0,2.0,-21.4,-26.9,high,80.3,m,"Queue of 36 vehicles, ~80 m long at t=16s"
+against_dominant_flow,774.0,,16.55,8.64,617.8,786.5,high,169.9,deg from local flow,"car #774 moved 170 deg against the dominant local flow for 256.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,329.0,585.0,17.78,,-63.6,-8.9,high,0.54,s (TTC),"Potential conflict (critical): car #329 <-> motorcycle #585 - projected TTC 0.5s, closest approach 1.4m, closing 17 km/h (following/vulnerable-road-user)"
+sudden_stop,329.0,,17.95,,1411.68,281.12,high,-75.7,km/h/s,car #329 decelerated 76 km/h/s at t=18.0s
+potential_conflict,474.0,1094.0,18.32,,-19.9,-18.2,high,1.37,s (TTC),"Potential conflict (critical): pedestrian #474 <-> car #1094 - projected TTC 1.4s, closest approach 1.0m, closing 16 km/h (crossing/vulnerable-road-user)"
+potential_conflict,627.0,775.0,20.32,,-97.8,3.5,high,1.32,s (TTC),"Potential conflict (critical): car #627 <-> car #775 - projected TTC 1.3s, closest approach 1.8m, closing 23 km/h (following)"
+sudden_stop,1163.0,,20.52,,1268.8,359.46,high,-69.6,km/h/s,motorcycle #1163 decelerated 70 km/h/s at t=20.5s
+sudden_stop,775.0,,20.55,,1733.74,71.12,high,-69.7,km/h/s,car #775 decelerated 70 km/h/s at t=20.6s
+potential_conflict,271.0,880.0,20.59,,-33.2,-19.1,high,1.19,s (TTC),"Potential conflict (critical): car #271 <-> car #880 - projected TTC 1.2s, closest approach 2.1m, closing 22 km/h (crossing)"
+sudden_stop,1001.0,,21.19,,1700.24,112.69,high,-83.5,km/h/s,car #1001 decelerated 84 km/h/s at t=21.2s
+against_dominant_flow,1262.0,,21.99,4.37,408.2,898.8,high,179.4,deg from local flow,"car #1262 moved 179 deg against the dominant local flow for 127.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,1111.0,1262.0,22.42,,-3.5,-29.4,high,0.21,s (TTC),"Potential conflict (critical): lgv #1111 <-> car #1262 - projected TTC 0.2s, closest approach 2.1m, closing 33 km/h (head-on)"
+potential_conflict,271.0,1080.0,22.59,,-32.6,-19.8,high,1.15,s (TTC),"Potential conflict (critical): car #271 <-> car #1080 - projected TTC 1.1s, closest approach 2.0m, closing 25 km/h (crossing)"
+potential_conflict,1202.0,1285.0,22.82,,-23.5,6.3,high,1.06,s (TTC),"Potential conflict (critical): hgv #1202 <-> car #1285 - projected TTC 1.1s, closest approach 2.5m, closing 30 km/h (head-on)"
+potential_conflict,564.0,1199.0,22.99,,-23.4,-18.0,high,0.92,s (TTC),"Potential conflict (critical): car #564 <-> motorcycle #1199 - projected TTC 0.9s, closest approach 1.3m, closing 13 km/h (merging/vulnerable-road-user)"
+potential_conflict,325.0,1305.0,23.42,,-92.8,-0.9,high,0.21,s (TTC),"Potential conflict (critical): motorcycle #325 <-> car #1305 - projected TTC 0.2s, closest approach 1.4m, closing 12 km/h (crossing/vulnerable-road-user)"
+potential_conflict,52.0,1091.0,23.89,,-92.6,-1.3,high,0.41,s (TTC),"Potential conflict (critical): car #52 <-> motorcycle #1091 - projected TTC 0.4s, closest approach 0.8m, closing 14 km/h (following/vulnerable-road-user)"
+potential_conflict,1091.0,1305.0,23.92,,-92.8,-1.2,high,0.26,s (TTC),"Potential conflict (critical): motorcycle #1091 <-> car #1305 - projected TTC 0.3s, closest approach 0.8m, closing 14 km/h (crossing/vulnerable-road-user)"
+sudden_stop,1315.0,,24.02,,1420.41,983.49,high,-39.7,km/h/s,car #1315 decelerated 40 km/h/s at t=24.0s
+potential_conflict,1285.0,1315.0,24.46,,-23.5,10.7,high,0.3,s (TTC),"Potential conflict (critical): car #1285 <-> car #1315 - projected TTC 0.3s, closest approach 2.0m, closing 20 km/h (head-on)"
+against_dominant_flow,1557.0,,27.66,0.67,876.6,707.1,high,149.1,deg from local flow,"lgv #1557 moved 149 deg against the dominant local flow for 19.0 observations (flow anomaly, not a confirmed violation)"
+sudden_stop,880.0,,28.06,,1614.31,162.47,high,-77.4,km/h/s,car #880 decelerated 77 km/h/s at t=28.1s
+potential_conflict,631.0,1203.0,28.43,,-70.0,-9.4,high,1.13,s (TTC),"Potential conflict (critical): car #631 <-> pedestrian #1203 - projected TTC 1.1s, closest approach 0.8m, closing 19 km/h (merging/vulnerable-road-user)"
+potential_conflict,1287.0,1392.0,28.5,,-11.0,-26.8,high,1.16,s (TTC),"Potential conflict (critical): car #1287 <-> car #1392 - projected TTC 1.2s, closest approach 1.6m, closing 22 km/h (merging)"
+potential_conflict,1600.0,1622.0,28.86,,16.7,-42.2,high,0.22,s (TTC),"Potential conflict (critical): hgv #1600 <-> car #1622 - projected TTC 0.2s, closest approach 1.9m, closing 20 km/h (merging)"
+potential_conflict,50.0,1622.0,28.86,,16.7,-42.2,high,0.23,s (TTC),"Potential conflict (critical): hgv #50 <-> car #1622 - projected TTC 0.2s, closest approach 1.9m, closing 20 km/h (merging)"
+sudden_stop,1080.0,,30.7,,1745.69,88.55,high,-103.0,km/h/s,car #1080 decelerated 103 km/h/s at t=30.7s
+against_dominant_flow,1810.0,,32.33,12.48,1456.2,310.1,high,178.1,deg from local flow,"car #1810 moved 178 deg against the dominant local flow for 291.0 observations (flow anomaly, not a confirmed violation)"
+sudden_stop,631.0,,32.7,,1667.42,90.43,high,-42.6,km/h/s,car #631 decelerated 43 km/h/s at t=32.7s
+potential_conflict,52.0,631.0,32.7,,-93.1,-0.8,high,0.31,s (TTC),"Potential conflict (critical): car #52 <-> car #631 - projected TTC 0.3s, closest approach 0.9m, closing 21 km/h (crossing)"
+potential_conflict,631.0,1760.0,32.7,,-93.1,-0.8,high,0.33,s (TTC),"Potential conflict (critical): car #631 <-> lgv #1760 - projected TTC 0.3s, closest approach 0.9m, closing 20 km/h (merging)"
+potential_conflict,10.0,1686.0,32.83,,-24.9,17.6,high,0.81,s (TTC),"Potential conflict (critical): car #10 <-> motorcycle #1686 - projected TTC 0.8s, closest approach 1.5m, closing 18 km/h (crossing/vulnerable-road-user)"
+potential_conflict,934.0,1760.0,33.4,,-88.6,-1.7,high,1.31,s (TTC),"Potential conflict (critical): car #934 <-> lgv #1760 - projected TTC 1.3s, closest approach 1.7m, closing 30 km/h (crossing)"
+potential_conflict,52.0,934.0,33.4,,-88.6,-1.7,high,1.36,s (TTC),"Potential conflict (critical): car #52 <-> car #934 - projected TTC 1.4s, closest approach 2.0m, closing 29 km/h (following)"
+sudden_stop,1654.0,,34.47,,1332.33,434.36,high,-39.2,km/h/s,car #1654 decelerated 39 km/h/s at t=34.5s
+potential_conflict,1189.0,1882.0,35.2,,-31.1,-12.9,high,0.88,s (TTC),"Potential conflict (critical): lgv #1189 <-> motorcycle #1882 - projected TTC 0.9s, closest approach 1.6m, closing 15 km/h (crossing/vulnerable-road-user)"
+sudden_stop,934.0,,35.57,,1759.1,55.41,high,-42.8,km/h/s,car #934 decelerated 43 km/h/s at t=35.6s
+sudden_stop,913.0,,36.44,,1738.88,63.37,high,-53.3,km/h/s,car #913 decelerated 53 km/h/s at t=36.4s
+against_dominant_flow,1985.0,,36.67,23.29,1271.1,443.6,high,168.9,deg from local flow,"car #1985 moved 169 deg against the dominant local flow for 667.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,1654.0,1796.0,37.64,,-31.4,-13.7,high,1.48,s (TTC),"Potential conflict (critical): car #1654 <-> pedestrian #1796 - projected TTC 1.5s, closest approach 1.3m, closing 14 km/h (crossing/vulnerable-road-user)"
+potential_conflict,1654.0,1882.0,37.67,,-32.0,-13.4,high,1.14,s (TTC),"Potential conflict (critical): car #1654 <-> motorcycle #1882 - projected TTC 1.1s, closest approach 1.4m, closing 13 km/h (crossing/vulnerable-road-user)"
+against_dominant_flow,2074.0,,39.24,16.35,1533.5,282.2,high,177.6,deg from local flow,"car #2074 moved 178 deg against the dominant local flow for 491.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,915.0,1810.0,39.61,,-57.5,-7.8,high,0.84,s (TTC),"Potential conflict (critical): lgv #915 <-> car #1810 - projected TTC 0.8s, closest approach 2.2m, closing 37 km/h (head-on)"
+against_dominant_flow,2120.0,,40.07,8.38,1597.8,260.4,high,176.1,deg from local flow,"car #2120 moved 176 deg against the dominant local flow for 252.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,1734.0,2084.0,40.87,,-19.3,-26.9,high,0.95,s (TTC),"Potential conflict (critical): car #1734 <-> pedestrian #2084 - projected TTC 0.9s, closest approach 0.9m, closing 18 km/h (crossing/vulnerable-road-user)"
+potential_conflict,1734.0,2058.0,41.41,,-21.4,-27.8,high,1.33,s (TTC),"Potential conflict (critical): car #1734 <-> pedestrian #2058 - projected TTC 1.3s, closest approach 1.2m, closing 14 km/h (crossing/vulnerable-road-user)"
+potential_conflict,1896.0,2084.0,41.64,,-19.6,-24.9,high,0.52,s (TTC),"Potential conflict (critical): car #1896 <-> pedestrian #2084 - projected TTC 0.5s, closest approach 0.5m, closing 15 km/h (crossing/vulnerable-road-user)"
+potential_conflict,1983.0,2084.0,43.48,,-17.7,-25.0,high,0.96,s (TTC),"Potential conflict (critical): lgv #1983 <-> pedestrian #2084 - projected TTC 1.0s, closest approach 1.4m, closing 15 km/h (crossing/vulnerable-road-user)"
+potential_conflict,50.0,2320.0,44.98,,16.1,-42.5,high,0.23,s (TTC),"Potential conflict (critical): hgv #50 <-> car #2320 - projected TTC 0.2s, closest approach 1.0m, closing 20 km/h (following)"
+potential_conflict,2320.0,2350.0,44.98,,16.1,-42.5,high,0.23,s (TTC),"Potential conflict (critical): car #2320 <-> hgv #2350 - projected TTC 0.2s, closest approach 1.0m, closing 20 km/h (crossing)"
+potential_conflict,52.0,2288.0,45.45,,-89.6,-1.3,high,1.17,s (TTC),"Potential conflict (critical): car #52 <-> motorcycle #2288 - projected TTC 1.2s, closest approach 1.5m, closing 28 km/h (crossing/vulnerable-road-user)"
+sudden_stop,2288.0,,47.41,,1766.75,46.57,high,-49.6,km/h/s,motorcycle #2288 decelerated 50 km/h/s at t=47.4s
+potential_conflict,52.0,2121.0,48.41,,-91.6,-1.1,high,0.97,s (TTC),"Potential conflict (critical): car #52 <-> motorcycle #2121 - projected TTC 1.0s, closest approach 1.3m, closing 15 km/h (merging/vulnerable-road-user)"
+potential_conflict,1896.0,2516.0,49.52,,-41.0,-8.2,high,0.4,s (TTC),"Potential conflict (critical): car #1896 <-> car #2516 - projected TTC 0.4s, closest approach 1.3m, closing 31 km/h (head-on)"
+queue_formation,,,50.0,2.0,-18.1,-17.2,high,82.3,m,"Queue of 28 vehicles, ~82 m long at t=50s"
+queue_formation,,,50.0,2.0,-21.2,-52.9,high,30.6,m,"Queue of 8 vehicles, ~31 m long at t=50s"
+against_dominant_flow,2601.0,,50.38,5.74,1414.7,218.1,high,176.6,deg from local flow,"motorcycle #2601 moved 177 deg against the dominant local flow for 156.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,9.0,1896.0,50.38,,-46.6,-4.9,high,1.41,s (TTC),"Potential conflict (critical): car #9 <-> car #1896 - projected TTC 1.4s, closest approach 1.0m, closing 26 km/h (following)"
+sudden_stop,1896.0,,50.55,,1280.31,503.49,high,-48.9,km/h/s,car #1896 decelerated 49 km/h/s at t=50.5s
+sudden_stop,2325.0,,50.85,,1702.86,94.99,high,-44.9,km/h/s,motorcycle #2325 decelerated 45 km/h/s at t=50.9s
+potential_conflict,2601.0,2608.0,51.32,,-75.9,-7.8,high,0.37,s (TTC),"Potential conflict (critical): motorcycle #2601 <-> motorcycle #2608 - projected TTC 0.4s, closest approach 0.3m, closing 12 km/h (merging/vulnerable-road-user)"
+sudden_stop,2296.0,,54.72,,1254.81,799.81,high,-41.8,km/h/s,car #2296 decelerated 42 km/h/s at t=54.7s
+sudden_stop,2550.0,,55.19,,1591.93,185.29,high,-83.0,km/h/s,car #2550 decelerated 83 km/h/s at t=55.2s
+against_dominant_flow,2862.0,,56.56,3.4,1841.0,90.2,high,178.9,deg from local flow,"lgv #2862 moved 179 deg against the dominant local flow for 103.0 observations (flow anomaly, not a confirmed violation)"
+potential_conflict,2768.0,2913.0,58.56,,-59.2,-1.1,high,0.45,s (TTC),"Potential conflict (critical): pedestrian #2768 <-> car #2913 - projected TTC 0.5s, closest approach 1.1m, closing 17 km/h (head-on/vulnerable-road-user)"
+potential_conflict,52.0,1734.0,59.39,,-90.9,-1.3,high,1.01,s (TTC),"Potential conflict (critical): car #52 <-> car #1734 - projected TTC 1.0s, closest approach 0.9m, closing 21 km/h (crossing)"
+potential_conflict,2806.0,2913.0,59.63,,-65.1,-0.0,high,0.22,s (TTC),"Potential conflict (critical): car #2806 <-> car #2913 - projected TTC 0.2s, closest approach 1.1m, closing 33 km/h (head-on)"
+queue_formation,,,0.0,2.0,-47.2,0.8,medium,18.7,m,"Queue of 6 vehicles, ~19 m long at t=0s"
+stationary_vehicle_candidate,96.0,,0.27,6.54,1486.0,168.1,medium,6.54,s,motorcycle #96 stationary 6.5s. Stationary vehicle candidate - outside any detected queue
+sudden_stop,42.0,,0.83,,1756.21,61.56,medium,-31.5,km/h/s,car #42 decelerated 32 km/h/s at t=0.8s
+potential_conflict,87.0,129.0,0.87,,16.2,-42.4,medium,0.23,s (TTC),"Potential conflict (serious): car #87 <-> bus #129 - projected TTC 0.2s, closest approach 1.7m, closing 20 km/h (crossing)"
+potential_conflict,50.0,87.0,0.87,,16.2,-42.3,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #87 - projected TTC 0.2s, closest approach 1.7m, closing 20 km/h (crossing)"
+sudden_stop,12.0,,0.93,,1846.56,27.14,medium,-20.5,km/h/s,car #12 decelerated 21 km/h/s at t=0.9s
+potential_conflict,52.0,64.0,0.93,,-93.3,-0.6,medium,0.27,s (TTC),"Potential conflict (serious): car #52 <-> car #64 - projected TTC 0.3s, closest approach 1.2m, closing 18 km/h (crossing)"
+potential_conflict,64.0,146.0,0.93,,-93.3,-0.6,medium,0.28,s (TTC),"Potential conflict (serious): car #64 <-> lgv #146 - projected TTC 0.3s, closest approach 1.2m, closing 18 km/h (crossing)"
+potential_conflict,14.0,24.0,0.93,,2.5,-36.7,medium,0.58,s (TTC),"Potential conflict (serious): car #14 <-> motorcycle #24 - projected TTC 0.6s, closest approach 1.1m, closing 11 km/h (following/vulnerable-road-user)"
+sudden_stop,37.0,,1.3,,826.28,620.11,medium,-34.2,km/h/s,motorcycle #37 decelerated 34 km/h/s at t=1.3s
+sudden_stop,21.0,,1.87,,648.46,815.58,medium,-27.1,km/h/s,car #21 decelerated 27 km/h/s at t=1.9s
+sudden_stop,171.0,,1.94,,1781.46,42.63,medium,-34.9,km/h/s,car #171 decelerated 35 km/h/s at t=1.9s
+sudden_stop,5.0,,3.1,,1841.31,35.32,medium,-28.7,km/h/s,car #5 decelerated 29 km/h/s at t=3.1s
+potential_conflict,50.0,279.0,3.2,,16.2,-42.6,medium,0.21,s (TTC),"Potential conflict (serious): hgv #50 <-> car #279 - projected TTC 0.2s, closest approach 1.6m, closing 19 km/h (head-on)"
+potential_conflict,279.0,288.0,3.2,,16.3,-42.6,medium,0.21,s (TTC),"Potential conflict (serious): car #279 <-> bus #288 - projected TTC 0.2s, closest approach 1.6m, closing 18 km/h (crossing)"
+sudden_stop,24.0,,4.64,,780.34,594.42,medium,-30.9,km/h/s,motorcycle #24 decelerated 31 km/h/s at t=4.6s
+potential_conflict,22.0,427.0,4.87,,-30.5,-23.7,medium,0.23,s (TTC),"Potential conflict (serious): car #22 <-> motorcycle #427 - projected TTC 0.2s, closest approach 1.2m, closing 12 km/h (crossing/vulnerable-road-user)"
+potential_conflict,17.0,433.0,5.11,,-92.9,-0.5,medium,0.22,s (TTC),"Potential conflict (serious): car #17 <-> car #433 - projected TTC 0.2s, closest approach 2.0m, closing 15 km/h (head-on)"
+potential_conflict,52.0,269.0,5.81,,-93.0,-0.9,medium,0.3,s (TTC),"Potential conflict (serious): car #52 <-> car #269 - projected TTC 0.3s, closest approach 1.2m, closing 15 km/h (following)"
+sudden_stop,269.0,,5.87,,1682.66,83.41,medium,-31.1,km/h/s,car #269 decelerated 31 km/h/s at t=5.9s
+sudden_stop,325.0,,6.71,,1061.19,580.56,medium,-21.3,km/h/s,motorcycle #325 decelerated 21 km/h/s at t=6.7s
+sudden_stop,17.0,,6.74,,1793.49,27.73,medium,-24.9,km/h/s,car #17 decelerated 25 km/h/s at t=6.7s
+potential_conflict,138.0,583.0,7.04,,-21.8,19.6,medium,0.23,s (TTC),"Potential conflict (serious): car #138 <-> lgv #583 - projected TTC 0.2s, closest approach 1.0m, closing 19 km/h (crossing)"
+potential_conflict,23.0,52.0,7.64,,-93.5,-1.0,medium,0.24,s (TTC),"Potential conflict (serious): car #23 <-> car #52 - projected TTC 0.2s, closest approach 1.2m, closing 14 km/h (head-on)"
+sudden_stop,138.0,,7.77,,1578.12,1080.0,medium,-18.4,km/h/s,car #138 decelerated 18 km/h/s at t=7.8s
+potential_conflict,50.0,578.0,8.11,,16.3,-42.5,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #578 - projected TTC 0.2s, closest approach 1.9m, closing 13 km/h (crossing)"
+sudden_stop,189.0,,8.24,,1617.1,141.93,medium,-35.6,km/h/s,motorcycle #189 decelerated 36 km/h/s at t=8.2s
+potential_conflict,50.0,631.0,9.08,,16.1,-43.2,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #631 - projected TTC 0.2s, closest approach 0.8m, closing 14 km/h (crossing)"
+sudden_stop,38.0,,9.34,,1722.76,66.74,medium,-22.3,km/h/s,motorcycle #38 decelerated 22 km/h/s at t=9.3s
+potential_conflict,188.0,480.0,9.58,,-10.0,-29.7,medium,1.46,s (TTC),"Potential conflict (serious): car #188 <-> car #480 - projected TTC 1.5s, closest approach 1.9m, closing 19 km/h (following)"
+potential_conflict,177.0,474.0,10.14,,-22.7,-26.6,medium,0.23,s (TTC),"Potential conflict (serious): car #177 <-> pedestrian #474 - projected TTC 0.2s, closest approach 1.2m, closing 9 km/h (crossing/vulnerable-road-user)"
+potential_conflict,8.0,52.0,10.78,,-91.2,-1.2,medium,0.93,s (TTC),"Potential conflict (serious): car #8 <-> car #52 - projected TTC 0.9s, closest approach 2.1m, closing 19 km/h (following)"
+potential_conflict,8.0,722.0,10.84,,-91.4,-1.1,medium,0.87,s (TTC),"Potential conflict (serious): car #8 <-> car #722 - projected TTC 0.9s, closest approach 2.0m, closing 19 km/h (following)"
+sudden_stop,627.0,,11.21,,1334.33,331.56,medium,-27.8,km/h/s,car #627 decelerated 28 km/h/s at t=11.2s
+sudden_stop,1.0,,11.28,,1844.61,25.28,medium,-22.7,km/h/s,car #1 decelerated 23 km/h/s at t=11.3s
+potential_conflict,177.0,774.0,11.31,,-27.3,-24.2,medium,0.21,s (TTC),"Potential conflict (serious): car #177 <-> car #774 - projected TTC 0.2s, closest approach 1.3m, closing 13 km/h (head-on)"
+potential_conflict,329.0,774.0,11.74,,-26.5,-24.1,medium,0.23,s (TTC),"Potential conflict (serious): car #329 <-> car #774 - projected TTC 0.2s, closest approach 1.8m, closing 14 km/h (crossing)"
+queue_formation,,,12.0,2.0,-25.9,20.2,medium,8.8,m,"Queue of 5 vehicles, ~9 m long at t=12s"
+sudden_stop,748.0,,12.45,,853.38,745.27,medium,-22.8,km/h/s,car #748 decelerated 23 km/h/s at t=12.4s
+potential_conflict,113.0,892.0,13.21,,14.8,-31.6,medium,1.45,s (TTC),"Potential conflict (serious): car #113 <-> car #892 - projected TTC 1.4s, closest approach 1.2m, closing 13 km/h (head-on)"
+sudden_stop,125.0,,13.51,,1839.28,29.29,medium,-32.3,km/h/s,car #125 decelerated 32 km/h/s at t=13.5s
+potential_conflict,50.0,913.0,14.11,,16.5,-42.9,medium,0.21,s (TTC),"Potential conflict (serious): hgv #50 <-> car #913 - projected TTC 0.2s, closest approach 1.5m, closing 18 km/h (head-on)"
+sudden_stop,2.0,,14.65,,1832.27,26.46,medium,-29.9,km/h/s,car #2 decelerated 30 km/h/s at t=14.6s
+potential_conflict,50.0,934.0,14.75,,16.6,-42.7,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #934 - projected TTC 0.2s, closest approach 2.2m, closing 14 km/h (merging)"
+sudden_stop,113.0,,15.02,,225.69,1061.56,medium,-20.4,km/h/s,car #113 decelerated 20 km/h/s at t=15.0s
+potential_conflict,232.0,774.0,16.35,,-22.2,-24.2,medium,0.22,s (TTC),"Potential conflict (serious): car #232 <-> car #774 - projected TTC 0.2s, closest approach 1.2m, closing 13 km/h (head-on)"
+sudden_stop,13.0,,17.12,,1837.33,29.38,medium,-19.0,km/h/s,car #13 decelerated 19 km/h/s at t=17.1s
+potential_conflict,50.0,1109.0,18.02,,17.0,-42.4,medium,0.22,s (TTC),"Potential conflict (serious): hgv #50 <-> hgv #1109 - projected TTC 0.2s, closest approach 3.0m, closing 14 km/h (crossing)"
+sudden_stop,1025.0,,18.45,,548.1,172.12,medium,-22.9,km/h/s,lgv #1025 decelerated 23 km/h/s at t=18.5s
+potential_conflict,177.0,585.0,18.55,,-66.9,-8.1,medium,1.42,s (TTC),"Potential conflict (serious): car #177 <-> motorcycle #585 - projected TTC 1.4s, closest approach 0.9m, closing 8 km/h (following/vulnerable-road-user)"
+potential_conflict,329.0,480.0,18.85,,-65.1,-7.6,medium,0.82,s (TTC),"Potential conflict (serious): car #329 <-> car #480 - projected TTC 0.8s, closest approach 0.1m, closing 17 km/h (following)"
+potential_conflict,177.0,480.0,18.89,,-65.6,-7.9,medium,1.0,s (TTC),"Potential conflict (serious): car #177 <-> car #480 - projected TTC 1.0s, closest approach 0.5m, closing 15 km/h (following)"
+potential_conflict,693.0,899.0,19.39,,-25.4,-9.7,medium,0.23,s (TTC),"Potential conflict (serious): car #693 <-> car #899 - projected TTC 0.2s, closest approach 0.8m, closing 16 km/h (crossing)"
+potential_conflict,515.0,913.0,19.55,,-15.0,-29.7,medium,0.24,s (TTC),"Potential conflict (serious): car #515 <-> car #913 - projected TTC 0.2s, closest approach 1.2m, closing 13 km/h (merging)"
+sudden_stop,177.0,,19.75,,1504.76,219.48,medium,-23.8,km/h/s,car #177 decelerated 24 km/h/s at t=19.8s
+potential_conflict,934.0,1080.0,19.99,,-12.4,-28.6,medium,0.67,s (TTC),"Potential conflict (serious): car #934 <-> car #1080 - projected TTC 0.7s, closest approach 1.2m, closing 14 km/h (following)"
+sudden_stop,1111.0,,20.02,,288.98,922.37,medium,-19.6,km/h/s,lgv #1111 decelerated 20 km/h/s at t=20.0s
+sudden_stop,899.0,,20.75,,1137.93,722.8,medium,-19.4,km/h/s,car #899 decelerated 19 km/h/s at t=20.8s
+sudden_stop,1154.0,,21.89,,1332.92,914.12,medium,-18.9,km/h/s,car #1154 decelerated 19 km/h/s at t=21.9s
+sudden_stop,1100.0,,22.46,,570.6,761.74,medium,-23.9,km/h/s,car #1100 decelerated 24 km/h/s at t=22.5s
+sudden_stop,984.0,,22.52,,1329.99,384.28,medium,-27.8,km/h/s,car #984 decelerated 28 km/h/s at t=22.5s
+sudden_stop,585.0,,22.89,,1734.66,60.06,medium,-22.0,km/h/s,motorcycle #585 decelerated 22 km/h/s at t=22.9s
+stationary_vehicle_candidate,1324.0,,23.29,5.41,1484.2,169.8,medium,5.41,s,motorcycle #1324 stationary 5.4s. Stationary vehicle candidate - outside any detected queue
+potential_conflict,52.0,325.0,23.42,,-92.7,-0.9,medium,0.21,s (TTC),"Potential conflict (serious): car #52 <-> motorcycle #325 - projected TTC 0.2s, closest approach 1.4m, closing 12 km/h (merging/vulnerable-road-user)"
+sudden_stop,1091.0,,23.89,,1664.19,86.38,medium,-33.3,km/h/s,motorcycle #1091 decelerated 33 km/h/s at t=23.9s
+potential_conflict,564.0,1287.0,23.99,,-17.4,-22.7,medium,1.47,s (TTC),"Potential conflict (serious): car #564 <-> car #1287 - projected TTC 1.5s, closest approach 2.0m, closing 19 km/h (crossing)"
+potential_conflict,1111.0,1287.0,24.12,,-13.1,-26.0,medium,0.44,s (TTC),"Potential conflict (serious): lgv #1111 <-> car #1287 - projected TTC 0.4s, closest approach 0.9m, closing 20 km/h (merging)"
+potential_conflict,133.0,869.0,24.89,,16.9,-32.3,medium,0.22,s (TTC),"Potential conflict (serious): lgv #133 <-> lgv #869 - projected TTC 0.2s, closest approach 1.1m, closing 16 km/h (crossing)"
+sudden_stop,1347.0,,25.39,,1340.33,261.82,medium,-19.1,km/h/s,motorcycle #1347 decelerated 19 km/h/s at t=25.4s
+potential_conflict,10.0,1285.0,26.03,,-24.4,18.7,medium,0.21,s (TTC),"Potential conflict (serious): car #10 <-> car #1285 - projected TTC 0.2s, closest approach 1.5m, closing 12 km/h (crossing)"
+potential_conflict,133.0,937.0,27.26,,16.6,-32.5,medium,0.2,s (TTC),"Potential conflict (serious): lgv #133 <-> lgv #937 - projected TTC 0.2s, closest approach 1.7m, closing 14 km/h (head-on)"
+potential_conflict,1203.0,1347.0,27.33,,-70.9,-9.8,medium,1.29,s (TTC),"Potential conflict (serious): pedestrian #1203 <-> motorcycle #1347 - projected TTC 1.3s, closest approach 0.7m, closing 11 km/h (crossing/vulnerable-road-user)"
+potential_conflict,133.0,1094.0,27.93,,16.1,-32.1,medium,0.39,s (TTC),"Potential conflict (serious): lgv #133 <-> car #1094 - projected TTC 0.4s, closest approach 1.5m, closing 17 km/h (crossing)"
+sudden_stop,578.0,,28.83,,1630.77,125.26,medium,-31.4,km/h/s,car #578 decelerated 31 km/h/s at t=28.8s
+potential_conflict,39.0,515.0,28.83,,-23.8,-52.5,medium,0.93,s (TTC),"Potential conflict (serious): car #39 <-> car #515 - projected TTC 0.9s, closest approach 2.1m, closing 15 km/h (crossing)"
+potential_conflict,578.0,1663.0,29.63,,-92.8,-0.4,medium,0.26,s (TTC),"Potential conflict (serious): car #578 <-> lgv #1663 - projected TTC 0.3s, closest approach 1.7m, closing 14 km/h (crossing)"
+potential_conflict,52.0,578.0,29.63,,-92.8,-0.5,medium,0.26,s (TTC),"Potential conflict (serious): car #52 <-> car #578 - projected TTC 0.3s, closest approach 1.7m, closing 13 km/h (merging)"
+sudden_stop,564.0,,30.13,,226.83,1018.88,medium,-21.6,km/h/s,car #564 decelerated 22 km/h/s at t=30.1s
+sudden_stop,1199.0,,30.76,,664.81,480.71,medium,-28.2,km/h/s,motorcycle #1199 decelerated 28 km/h/s at t=30.8s
+potential_conflict,50.0,1734.0,32.0,,16.0,-42.2,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #1734 - projected TTC 0.2s, closest approach 0.9m, closing 12 km/h (following)"
+sudden_stop,1619.0,,32.83,,1217.18,809.15,medium,-22.0,km/h/s,hgv #1619 decelerated 22 km/h/s at t=32.8s
+sudden_stop,1815.0,,33.17,,1437.85,1013.85,medium,-20.1,km/h/s,car #1815 decelerated 20 km/h/s at t=33.2s
+sudden_stop,1131.0,,33.93,,1836.62,33.82,medium,-24.8,km/h/s,car #1131 decelerated 25 km/h/s at t=33.9s
+sudden_stop,1622.0,,34.2,,782.16,612.9,medium,-18.2,km/h/s,car #1622 decelerated 18 km/h/s at t=34.2s
+potential_conflict,1416.0,1859.0,34.77,,16.2,-31.9,medium,0.23,s (TTC),"Potential conflict (serious): car #1416 <-> lgv #1859 - projected TTC 0.2s, closest approach 1.7m, closing 13 km/h (merging)"
+potential_conflict,50.0,1906.0,35.6,,16.1,-42.2,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #1906 - projected TTC 0.2s, closest approach 1.1m, closing 19 km/h (crossing)"
+potential_conflict,913.0,1895.0,35.87,,-93.5,-0.1,medium,0.21,s (TTC),"Potential conflict (serious): car #913 <-> car #1895 - projected TTC 0.2s, closest approach 1.9m, closing 14 km/h (following)"
+potential_conflict,52.0,913.0,35.87,,-93.5,-0.1,medium,0.21,s (TTC),"Potential conflict (serious): car #52 <-> car #913 - projected TTC 0.2s, closest approach 2.0m, closing 13 km/h (following)"
+sudden_stop,1810.0,,36.14,,1655.06,191.54,medium,-28.8,km/h/s,car #1810 decelerated 29 km/h/s at t=36.1s
+potential_conflict,913.0,934.0,36.17,,-97.1,2.4,medium,1.33,s (TTC),"Potential conflict (serious): car #913 <-> car #934 - projected TTC 1.3s, closest approach 0.6m, closing 14 km/h (following)"
+potential_conflict,1287.0,1802.0,37.64,,-12.1,-26.1,medium,1.36,s (TTC),"Potential conflict (serious): car #1287 <-> car #1802 - projected TTC 1.4s, closest approach 0.6m, closing 14 km/h (following)"
+potential_conflict,271.0,1622.0,38.57,,-42.0,-19.3,medium,0.2,s (TTC),"Potential conflict (serious): car #271 <-> car #1622 - projected TTC 0.2s, closest approach 1.4m, closing 13 km/h (crossing)"
+sudden_stop,1668.0,,39.94,,170.22,1077.97,medium,-27.6,km/h/s,car #1668 decelerated 28 km/h/s at t=39.9s
+potential_conflict,1287.0,1896.0,40.11,,-14.1,-26.0,medium,0.87,s (TTC),"Potential conflict (serious): car #1287 <-> car #1896 - projected TTC 0.9s, closest approach 2.0m, closing 17 km/h (following)"
+queue_formation,,,42.0,2.0,-76.0,-4.4,medium,18.9,m,"Queue of 4 vehicles, ~19 m long at t=42s"
+sudden_stop,2117.0,,42.38,,1338.25,917.33,medium,-31.7,km/h/s,hgv #2117 decelerated 32 km/h/s at t=42.4s
+queue_formation,,,44.0,2.0,13.5,-35.8,medium,21.1,m,"Queue of 7 vehicles, ~21 m long at t=44s"
+queue_formation,,,44.0,2.0,-83.2,-2.6,medium,24.4,m,"Queue of 6 vehicles, ~24 m long at t=44s"
+sudden_stop,1392.0,,44.01,,1804.42,39.46,medium,-18.6,km/h/s,car #1392 decelerated 19 km/h/s at t=44.0s
+sudden_stop,1827.0,,44.18,,1327.05,443.34,medium,-26.7,km/h/s,car #1827 decelerated 27 km/h/s at t=44.2s
+potential_conflict,50.0,2305.0,44.68,,16.3,-42.0,medium,0.22,s (TTC),"Potential conflict (serious): hgv #50 <-> car #2305 - projected TTC 0.2s, closest approach 2.0m, closing 17 km/h (following)"
+potential_conflict,1906.0,2033.0,45.55,,-32.7,-19.8,medium,1.16,s (TTC),"Potential conflict (serious): car #1906 <-> motorcycle #2033 - projected TTC 1.2s, closest approach 1.5m, closing 11 km/h (merging/vulnerable-road-user)"
+sudden_stop,2341.0,,46.21,,1592.62,131.87,medium,-35.4,km/h/s,motorcycle #2341 decelerated 35 km/h/s at t=46.2s
+sudden_stop,915.0,,46.88,,1836.77,30.37,medium,-24.3,km/h/s,lgv #915 decelerated 24 km/h/s at t=46.9s
+potential_conflict,1983.0,2248.0,46.91,,-30.8,-18.6,medium,1.35,s (TTC),"Potential conflict (serious): lgv #1983 <-> car #2248 - projected TTC 1.4s, closest approach 2.1m, closing 12 km/h (crossing)"
+sudden_stop,1957.0,,47.11,,1270.37,463.18,medium,-18.2,km/h/s,car #1957 decelerated 18 km/h/s at t=47.1s
+sudden_stop,2121.0,,47.65,,1639.12,114.09,medium,-20.0,km/h/s,motorcycle #2121 decelerated 20 km/h/s at t=47.6s
+stationary_vehicle_candidate,2491.0,,48.05,10.84,376.3,16.4,medium,10.84,s,car #2491 stationary 10.8s. Stationary vehicle candidate - outside any detected queue
+sudden_stop,2120.0,,48.08,,1331.15,438.55,medium,-24.5,km/h/s,car #2120 decelerated 25 km/h/s at t=48.1s
+potential_conflict,1827.0,1896.0,48.15,,-33.6,-11.2,medium,0.23,s (TTC),"Potential conflict (serious): car #1827 <-> car #1896 - projected TTC 0.2s, closest approach 1.7m, closing 19 km/h (head-on)"
+sudden_stop,2481.0,,49.18,,1770.83,137.27,medium,-18.2,km/h/s,car #2481 decelerated 18 km/h/s at t=49.2s
+potential_conflict,2341.0,2510.0,49.18,,-92.4,-1.2,medium,1.07,s (TTC),"Potential conflict (serious): motorcycle #2341 <-> car #2510 - projected TTC 1.1s, closest approach 0.7m, closing 11 km/h (following/vulnerable-road-user)"
+potential_conflict,52.0,2341.0,49.18,,-92.4,-1.2,medium,1.13,s (TTC),"Potential conflict (serious): car #52 <-> motorcycle #2341 - projected TTC 1.1s, closest approach 0.6m, closing 10 km/h (following/vulnerable-road-user)"
+sudden_stop,2130.0,,49.35,,178.72,1073.04,medium,-21.2,km/h/s,car #2130 decelerated 21 km/h/s at t=49.3s
+sudden_stop,1467.0,,49.38,,1758.36,51.53,medium,-29.8,km/h/s,car #1467 decelerated 30 km/h/s at t=49.4s
+potential_conflict,1287.0,1859.0,49.52,,16.4,-32.3,medium,0.22,s (TTC),"Potential conflict (serious): car #1287 <-> lgv #1859 - projected TTC 0.2s, closest approach 1.9m, closing 14 km/h (crossing)"
+potential_conflict,2146.0,2305.0,50.22,,-19.6,-27.1,medium,1.02,s (TTC),"Potential conflict (serious): car #2146 <-> car #2305 - projected TTC 1.0s, closest approach 2.0m, closing 18 km/h (following)"
+sudden_stop,2362.0,,50.48,,1294.01,345.84,medium,-24.9,km/h/s,motorcycle #2362 decelerated 25 km/h/s at t=50.5s
+potential_conflict,1957.0,2560.0,50.52,,-29.4,-12.7,medium,1.25,s (TTC),"Potential conflict (serious): car #1957 <-> car #2560 - projected TTC 1.2s, closest approach 2.0m, closing 15 km/h (crossing)"
+potential_conflict,2585.0,2600.0,50.95,,16.5,-42.3,medium,0.55,s (TTC),"Potential conflict (serious): car #2585 <-> hgv #2600 - projected TTC 0.6s, closest approach 1.2m, closing 15 km/h (following)"
+potential_conflict,2199.0,2576.0,51.72,,18.1,-36.3,medium,0.23,s (TTC),"Potential conflict (serious): car #2199 <-> car #2576 - projected TTC 0.2s, closest approach 1.4m, closing 17 km/h (crossing)"
+queue_formation,,,52.0,2.0,-47.4,-0.1,medium,18.4,m,"Queue of 7 vehicles, ~18 m long at t=52s"
+potential_conflict,50.0,2653.0,52.32,,16.2,-42.4,medium,0.23,s (TTC),"Potential conflict (serious): hgv #50 <-> car #2653 - projected TTC 0.2s, closest approach 1.2m, closing 19 km/h (crossing)"
+potential_conflict,2647.0,2653.0,52.32,,16.2,-42.4,medium,0.23,s (TTC),"Potential conflict (serious): bus #2647 <-> car #2653 - projected TTC 0.2s, closest approach 1.2m, closing 19 km/h (crossing)"
+potential_conflict,1654.0,2576.0,52.39,,18.4,-35.7,medium,0.22,s (TTC),"Potential conflict (serious): car #1654 <-> car #2576 - projected TTC 0.2s, closest approach 1.7m, closing 13 km/h (crossing)"
+sudden_stop,2082.0,,53.82,,1336.82,344.86,medium,-24.1,km/h/s,car #2082 decelerated 24 km/h/s at t=53.8s
+potential_conflict,1985.0,2560.0,53.85,,-29.9,-14.8,medium,0.41,s (TTC),"Potential conflict (serious): car #1985 <-> car #2560 - projected TTC 0.4s, closest approach 1.6m, closing 14 km/h (crossing)"
+sudden_stop,2749.0,,54.72,,1281.43,361.28,medium,-34.3,km/h/s,car #2749 decelerated 34 km/h/s at t=54.7s
+potential_conflict,52.0,1906.0,56.59,,-92.7,-0.2,medium,0.23,s (TTC),"Potential conflict (serious): car #52 <-> car #1906 - projected TTC 0.2s, closest approach 2.0m, closing 16 km/h (crossing)"
+sudden_stop,2653.0,,57.59,,779.36,614.54,medium,-19.9,km/h/s,car #2653 decelerated 20 km/h/s at t=57.6s
+sudden_stop,2792.0,,57.72,,1524.3,188.1,medium,-20.2,km/h/s,motorcycle #2792 decelerated 20 km/h/s at t=57.7s
+sudden_stop,1906.0,,58.23,,1796.12,31.03,medium,-27.5,km/h/s,car #1906 decelerated 27 km/h/s at t=58.2s
+potential_conflict,271.0,2907.0,58.59,,-91.8,-1.0,medium,0.88,s (TTC),"Potential conflict (serious): car #271 <-> lgv #2907 - projected TTC 0.9s, closest approach 1.9m, closing 14 km/h (crossing)"
+potential_conflict,50.0,2919.0,58.69,,16.5,-42.0,medium,0.22,s (TTC),"Potential conflict (serious): hgv #50 <-> car #2919 - projected TTC 0.2s, closest approach 2.2m, closing 15 km/h (head-on)"
+potential_conflict,2919.0,2929.0,58.69,,16.5,-42.0,medium,0.22,s (TTC),"Potential conflict (serious): car #2919 <-> bus #2929 - projected TTC 0.2s, closest approach 2.2m, closing 15 km/h (head-on)"
+potential_conflict,1293.0,2305.0,58.69,,-52.4,-12.7,medium,0.38,s (TTC),"Potential conflict (serious): car #1293 <-> car #2305 - projected TTC 0.4s, closest approach 1.1m, closing 14 km/h (following)"
+sudden_stop,2515.0,,58.79,,1579.95,176.13,medium,-35.7,km/h/s,motorcycle #2515 decelerated 36 km/h/s at t=58.8s
+sudden_stop,2560.0,,58.79,,1142.16,435.65,medium,-22.9,km/h/s,car #2560 decelerated 23 km/h/s at t=58.8s
+sudden_stop,2806.0,,58.99,,1571.42,292.85,medium,-21.2,km/h/s,car #2806 decelerated 21 km/h/s at t=59.0s
+potential_conflict,2515.0,2749.0,59.53,,-79.4,-2.7,medium,0.99,s (TTC),"Potential conflict (serious): motorcycle #2515 <-> car #2749 - projected TTC 1.0s, closest approach 0.0m, closing 10 km/h (following/vulnerable-road-user)"
+sudden_stop,1734.0,,59.56,,1655.36,107.05,medium,-22.6,km/h/s,car #1734 decelerated 23 km/h/s at t=59.6s
+stationary_vehicle_candidate,15.0,,0.0,59.96,438.6,999.2,low,59.96,s,"lgv #15 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,32.0,,0.0,59.96,852.5,932.6,low,59.96,s,"car #32 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,11.0,,0.0,59.96,543.1,937.2,low,59.96,s,"car #11 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,7.0,,0.0,59.96,1712.5,245.0,low,59.96,s,"car #7 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,10.0,,0.0,59.96,1552.9,1006.8,low,59.96,s,"car #10 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,16.0,,0.0,59.96,928.2,765.0,low,59.96,s,"car #16 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,48.0,,0.0,59.96,584.0,461.8,low,59.96,s,"car #48 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,9.0,,0.0,59.96,1400.3,442.4,low,59.96,s,"car #9 stationary 60.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,18.0,,0.0,53.29,468.0,267.2,low,53.29,s,"car #18 stationary 53.3s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,35.0,,0.0,45.85,1624.4,1024.0,low,45.85,s,"car #35 stationary 45.9s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,52.0,,0.0,45.75,1686.9,66.9,low,45.75,s,"car #52 stationary 45.8s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,4.0,,0.0,39.37,1429.3,457.8,low,39.37,s,"lgv #4 stationary 39.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,36.0,,0.0,20.72,1471.9,518.3,low,20.72,s,"car #36 stationary 20.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,53.0,,0.0,16.32,572.2,596.3,low,16.32,s,"car #53 stationary 16.3s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,52.0,,0.0,3.0,1686.9,66.9,low,59.96,s,"car #52 stationary 59.5s of 60.0s in view (99%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,15.0,,0.0,3.0,438.6,999.2,low,59.96,s,"lgv #15 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,11.0,,0.0,3.0,543.1,937.2,low,59.96,s,"car #11 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,50.0,,0.0,3.0,153.1,915.3,low,59.96,s,"hgv #50 stationary 59.5s of 60.0s in view (99%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,32.0,,0.0,3.0,852.5,932.6,low,59.96,s,"car #32 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,10.0,,0.0,3.0,1552.9,1006.8,low,59.96,s,"car #10 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,7.0,,0.0,3.0,1712.5,245.0,low,59.96,s,"car #7 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,9.0,,0.0,3.0,1400.3,442.4,low,59.96,s,"car #9 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,18.0,,0.0,3.0,468.0,267.2,low,53.29,s,"car #18 stationary 53.3s of 53.3s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,51.0,,0.0,3.0,506.8,648.2,low,34.0,s,"pedestrian #51 stationary 34.0s of 34.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,48.0,,0.0,3.0,584.0,461.8,low,59.96,s,"car #48 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,4.0,,0.0,3.0,1429.3,457.8,low,59.96,s,"lgv #4 stationary 59.4s of 60.0s in view (99%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,29.0,,0.0,3.0,564.0,609.6,low,38.3,s,"pedestrian #29 stationary 37.5s of 38.3s in view (98%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,16.0,,0.0,3.0,928.2,765.0,low,59.96,s,"car #16 stationary 60.0s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,35.0,,0.0,3.0,1624.4,1024.0,low,59.96,s,"car #35 stationary 59.7s of 60.0s in view (99%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+parked_vehicle_candidate,39.0,,0.0,3.0,516.4,328.8,low,59.96,s,"car #39 stationary 59.8s of 60.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+near_miss_proximity,6.0,22.0,0.0,,0.2,-33.4,low,2.98,m,Sustained close proximity: lgv #6 <-> car #22 - min separation 3.0m (following)
+near_miss_proximity,34.0,40.0,0.07,,-28.8,-23.2,low,1.37,m,Sustained close proximity: motorcycle #34 <-> motorcycle #40 - min separation 1.4m (following/vulnerable-road-user)
+near_miss_proximity,23.0,41.0,0.1,,-57.5,-12.0,low,3.47,m,Sustained close proximity: car #23 <-> car #41 - min separation 3.5m (following)
+stationary_vehicle_candidate,97.0,,0.27,59.69,573.6,437.7,low,59.69,s,"car #97 stationary 59.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,97.0,,0.27,3.0,573.6,437.7,low,59.69,s,"car #97 stationary 59.7s of 59.7s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+close_interaction,52.0,54.0,0.27,,-89.0,-1.8,low,1.87,s (TTC),"Close interaction: car #52 <-> motorcycle #54 - TTC 1.9s but closing only 21 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,120.0,,0.43,18.62,679.9,534.1,low,18.62,s,"car #120 stationary 18.6s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,133.0,,0.53,28.0,254.3,1079.6,low,28.0,s,"lgv #133 stationary 28.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,133.0,,0.53,3.0,254.3,1079.6,low,28.0,s,"lgv #133 stationary 28.0s of 28.0s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+stationary_vehicle_candidate,137.0,,0.57,6.44,1353.4,559.3,low,6.44,s,"hgv #137 stationary 6.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,159.0,,0.77,26.49,1363.5,688.3,low,26.49,s,"lgv #159 stationary 26.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,159.0,,0.77,3.0,1363.5,688.3,low,26.49,s,"lgv #159 stationary 26.5s of 26.5s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+close_interaction,13.0,37.0,0.9,,-16.6,-26.5,low,0.62,s (TTC),"Close interaction: car #13 <-> motorcycle #37 - TTC 0.6s but closing only 7 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,179.0,,1.03,58.56,443.3,239.1,low,58.56,s,"car #179 stationary 58.6s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,179.0,,1.03,3.0,443.3,239.1,low,58.56,s,"car #179 stationary 58.6s of 58.6s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+near_miss_proximity,5.0,171.0,1.07,,-94.1,2.8,low,2.49,m,Sustained close proximity: car #5 <-> car #171 - min separation 2.5m (following)
+close_interaction,22.0,91.0,1.33,,-18.6,-28.6,low,2.62,s (TTC),"Close interaction: car #22 <-> pedestrian #91 - TTC 2.6s but closing only 26 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,223.0,,1.67,41.48,754.1,991.8,low,41.48,s,"car #223 stationary 41.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,223.0,,1.67,3.0,754.1,991.8,low,41.48,s,"car #223 stationary 41.5s of 41.5s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+unusual_dwell,232.0,,1.77,28.03,1825.4,17.3,low,28.03,s,"car #232 in view 28.0s, moving for 26.8s then dwelling 1.3s - a journey interrupted"
+close_interaction,28.0,37.0,1.83,,-26.9,-19.6,low,1.6,s (TTC),"Close interaction: car #28 <-> motorcycle #37 - TTC 1.6s but closing only 22 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,30.0,34.0,1.94,,-39.1,-20.3,low,2.35,s (TTC),"Close interaction: pedestrian #30 <-> motorcycle #34 - TTC 2.4s but closing only 12 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+unusual_dwell,271.0,,2.24,57.72,1727.0,66.4,low,57.72,s,"car #271 in view 57.7s, moving for 39.5s then dwelling 18.2s - a journey interrupted"
+stationary_vehicle_candidate,43.0,,2.27,7.84,931.8,1079.2,low,7.84,s,"lgv #43 stationary 7.8s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,17.0,269.0,2.27,,-75.0,-5.7,low,1.61,m,Sustained close proximity: car #17 <-> car #269 - min separation 1.6m (following)
+near_miss_proximity,23.0,218.0,2.87,,-68.3,-7.8,low,2.36,m,Sustained close proximity: car #23 <-> motorcycle #218 - min separation 2.4m (following/vulnerable-road-user)
+near_miss_proximity,5.0,271.0,2.94,,-102.8,8.5,low,3.14,m,Sustained close proximity: car #5 <-> car #271 - min separation 3.1m (head-on)
+near_miss_proximity,134.0,186.0,3.04,,-32.9,-13.4,low,1.17,m,Sustained close proximity: car #134 <-> car #186 - min separation 1.2m (following)
+close_interaction,6.0,25.0,3.14,,-15.2,-26.0,low,2.46,s (TTC),"Close interaction: lgv #6 <-> motorcycle #25 - TTC 2.5s but closing only 13 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,125.0,189.0,3.4,,-55.5,-11.3,low,1.71,m,Sustained close proximity: car #125 <-> motorcycle #189 - min separation 1.7m (following/vulnerable-road-user)
+stationary_vehicle_candidate,349.0,,3.47,52.19,482.9,291.5,low,52.19,s,"car #349 stationary 52.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,349.0,,3.47,3.0,482.9,291.5,low,52.19,s,"car #349 stationary 52.2s of 52.2s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+close_interaction,186.0,306.0,3.5,,-30.9,-15.7,low,0.24,s (TTC),"Close interaction: car #186 <-> car #306 - TTC 0.2s but closing only 10 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,17.0,356.0,3.6,,-82.1,-3.6,low,1.95,m,Sustained close proximity: car #17 <-> motorcycle #356 - min separation 1.9m (following/vulnerable-road-user)
+near_miss_proximity,269.0,356.0,3.7,,-82.0,-4.4,low,0.03,m,Sustained close proximity: car #269 <-> motorcycle #356 - min separation 0.0m (following/vulnerable-road-user)
+close_interaction,3.0,325.0,3.77,,-31.5,-12.2,low,2.07,s (TTC),"Close interaction: car #3 <-> motorcycle #325 - TTC 2.1s but closing only 18 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,20.0,113.0,3.77,,-19.2,-16.7,low,2.21,s (TTC),"Close interaction: car #20 <-> car #113 - TTC 2.2s but closing only 18 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,177.0,188.0,3.94,,4.6,-36.4,low,2.17,m,Sustained close proximity: car #177 <-> car #188 - min separation 2.2m (following)
+close_interaction,14.0,91.0,4.0,,-19.6,-28.9,low,3.9,s (TTC),"Close interaction: car #14 <-> pedestrian #91 - TTC 3.9s but closing only 16 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,417.0,,4.3,8.31,1611.3,986.3,low,8.31,s,"car #417 stationary 8.3s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,52.0,356.0,4.37,,-89.4,-2.3,low,2.04,s (TTC),"Close interaction: car #52 <-> motorcycle #356 - TTC 2.0s but closing only 17 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,429.0,,4.4,7.44,1433.6,809.3,low,7.44,s,"car #429 stationary 7.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,20.0,,4.4,5.44,855.4,743.6,low,5.44,s,"car #20 stationary 5.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,24.0,28.0,4.44,,-26.6,-22.8,low,3.16,s (TTC),"Close interaction: motorcycle #24 <-> car #28 - TTC 3.2s but closing only 23 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,80.0,271.0,4.44,,-93.4,5.3,low,2.88,m,Sustained close proximity: hgv #80 <-> car #271 - min separation 2.9m (head-on)
+close_interaction,27.0,133.0,4.54,,16.8,-32.6,low,0.23,s (TTC),"Close interaction: car #27 <-> lgv #133 - TTC 0.2s but closing only 10 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,14.0,427.0,4.57,,-22.5,-27.4,low,2.38,s (TTC),"Close interaction: car #14 <-> motorcycle #427 - TTC 2.4s but closing only 28 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,325.0,365.0,4.91,,-33.8,-11.6,low,2.73,s (TTC),"Close interaction: motorcycle #325 <-> car #365 - TTC 2.7s but closing only 17 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,21.0,27.0,5.17,,16.8,-34.1,low,1.19,s (TTC),"Close interaction: car #21 <-> car #27 - TTC 1.2s but closing only 10 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1.0,189.0,5.17,,-68.6,-7.0,low,2.21,s (TTC),"Close interaction: car #1 <-> motorcycle #189 - TTC 2.2s but closing only 11 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,13.0,28.0,5.21,,-35.9,-18.5,low,1.09,s (TTC),"Close interaction: car #13 <-> car #28 - TTC 1.1s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,481.0,,5.41,54.55,964.4,769.0,low,54.55,s,"car #481 stationary 54.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+parked_vehicle_candidate,481.0,,5.41,3.0,964.4,769.0,low,54.55,s,"car #481 stationary 54.5s of 54.5s in view (100%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+close_interaction,41.0,269.0,5.51,,-88.9,-1.5,low,0.98,s (TTC),"Close interaction: car #41 <-> car #269 - TTC 1.0s but closing only 11 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,24.0,306.0,5.54,,-28.9,-21.6,low,2.29,s (TTC),"Close interaction: motorcycle #24 <-> car #306 - TTC 2.3s but closing only 19 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,22.0,34.0,5.57,,-38.4,-21.1,low,3.36,s (TTC),"Close interaction: car #22 <-> motorcycle #34 - TTC 3.4s but closing only 12 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,25.0,87.0,5.61,,-14.8,-28.6,low,1.73,s (TTC),"Close interaction: motorcycle #25 <-> car #87 - TTC 1.7s but closing only 18 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,25.0,177.0,5.61,,-11.9,-30.2,low,2.37,s (TTC),"Close interaction: motorcycle #25 <-> car #177 - TTC 2.4s but closing only 23 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,23.0,433.0,5.71,,-88.5,-2.7,low,2.27,s (TTC),"Close interaction: car #23 <-> car #433 - TTC 2.3s but closing only 18 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,38.0,433.0,5.71,,-84.2,-3.9,low,3.58,s (TTC),"Close interaction: motorcycle #38 <-> car #433 - TTC 3.6s but closing only 20 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,232.0,386.0,5.81,,-6.8,-29.0,low,3.77,s (TTC),"Close interaction: car #232 <-> pedestrian #386 - TTC 3.8s but closing only 16 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,232.0,279.0,5.87,,0.1,-33.9,low,2.15,m,Sustained close proximity: car #232 <-> car #279 - min separation 2.1m (following)
+stationary_vehicle_candidate,160.0,,5.94,18.55,1551.5,932.5,low,18.55,s,"car #160 stationary 18.6s. Stationary within a detected queue - likely signal/queue related, not an incident"
+unusual_dwell,515.0,,5.94,30.16,344.4,68.0,low,30.16,s,"car #515 in view 30.2s, moving for 26.3s then dwelling 3.9s - a journey interrupted"
+close_interaction,41.0,52.0,6.04,,-93.0,-0.6,low,0.35,s (TTC),"Close interaction: car #41 <-> car #52 - TTC 0.3s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,3.0,439.0,6.07,,-23.7,-15.4,low,1.79,s (TTC),"Close interaction: car #3 <-> lgv #439 - TTC 1.8s but closing only 13 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,2.0,8.0,6.07,,-60.9,-9.5,low,3.04,m,Sustained close proximity: car #2 <-> car #8 - min separation 3.0m (following)
+close_interaction,87.0,474.0,6.37,,-18.6,-28.4,low,3.08,s (TTC),"Close interaction: car #87 <-> pedestrian #474 - TTC 3.1s but closing only 12 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,50.0,,6.47,53.49,153.1,915.3,low,53.49,s,"hgv #50 stationary 53.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,279.0,474.0,6.57,,-14.0,-30.3,low,3.19,s (TTC),"Close interaction: car #279 <-> pedestrian #474 - TTC 3.2s but closing only 23 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,87.0,177.0,6.81,,-12.6,-30.1,low,2.31,s (TTC),"Close interaction: car #87 <-> car #177 - TTC 2.3s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,50.0,515.0,7.21,,16.3,-42.6,low,0.22,s (TTC),"Close interaction: hgv #50 <-> car #515 - TTC 0.2s but closing only 12 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,279.0,585.0,7.21,,-12.0,-30.0,low,3.36,s (TTC),"Close interaction: car #279 <-> motorcycle #585 - TTC 3.4s but closing only 10 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,606.0,,7.44,6.44,1132.1,369.4,low,6.44,s,"motorcycle #606 stationary 6.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,6.0,188.0,7.54,,-13.0,-26.9,low,2.32,s (TTC),"Close interaction: lgv #6 <-> car #188 - TTC 2.3s but closing only 10 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,188.0,279.0,7.71,,-10.4,-29.5,low,0.42,s (TTC),"Close interaction: car #188 <-> car #279 - TTC 0.4s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,232.0,329.0,7.94,,-7.1,-31.2,low,2.75,m,Sustained close proximity: car #232 <-> car #329 - min separation 2.8m (following)
+unusual_dwell,631.0,,7.97,26.93,1787.3,23.6,low,26.93,s,"car #631 in view 26.9s, moving for 26.9s then dwelling 0.0s - a journey interrupted"
+near_miss_proximity,125.0,271.0,7.97,,-75.0,-1.6,low,3.31,m,Sustained close proximity: car #125 <-> car #271 - min separation 3.3m (head-on)
+close_interaction,329.0,474.0,8.34,,-16.5,-29.4,low,2.54,s (TTC),"Close interaction: car #329 <-> pedestrian #474 - TTC 2.5s but closing only 20 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,22.0,627.0,8.47,,-46.7,-15.8,low,3.7,m,Sustained close proximity: car #22 <-> car #627 - min separation 3.7m (following)
+close_interaction,177.0,279.0,8.57,,-15.9,-28.6,low,0.63,s (TTC),"Close interaction: car #177 <-> car #279 - TTC 0.6s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,2.0,271.0,8.64,,-71.9,-2.9,low,3.48,m,Sustained close proximity: car #2 <-> car #271 - min separation 3.5m (head-on)
+close_interaction,14.0,325.0,8.94,,-32.4,-20.0,low,2.17,s (TTC),"Close interaction: car #14 <-> motorcycle #325 - TTC 2.2s but closing only 10 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,113.0,134.0,9.01,,-5.9,-25.0,low,1.15,m,Sustained close proximity: car #113 <-> car #134 - min separation 1.1m (following)
+near_miss_proximity,113.0,186.0,9.01,,-6.0,-25.7,low,2.24,m,Sustained close proximity: car #113 <-> car #186 - min separation 2.2m (following)
+stationary_vehicle_candidate,681.0,,9.21,18.55,832.5,763.9,low,18.55,s,"car #681 stationary 18.6s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,279.0,654.0,9.21,,-23.7,-20.1,low,3.63,s (TTC),"Close interaction: car #279 <-> pedestrian #654 - TTC 3.6s but closing only 18 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,91.0,480.0,9.31,,-16.4,-29.4,low,3.61,s (TTC),"Close interaction: pedestrian #91 <-> car #480 - TTC 3.6s but closing only 24 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+unusual_dwell,693.0,,9.41,41.58,1866.2,21.1,low,41.58,s,"car #693 in view 41.6s, moving for 32.1s then dwelling 9.5s - a journey interrupted"
+stationary_vehicle_candidate,705.0,,9.51,13.18,417.3,62.5,low,13.18,s,"car #705 stationary 13.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,719.0,,9.74,12.68,549.1,597.9,low,12.68,s,"lgv #719 stationary 12.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,232.0,480.0,10.11,,-9.8,-29.7,low,0.23,s (TTC),"Close interaction: car #232 <-> car #480 - TTC 0.2s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,23.0,38.0,10.14,,-102.9,3.5,low,1.61,s (TTC),"Close interaction: car #23 <-> motorcycle #38 - TTC 1.6s but closing only 9 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+parked_vehicle_candidate,748.0,,10.21,3.0,850.2,763.5,low,49.75,s,"car #748 stationary 49.2s of 49.8s in view (99%) - parked, or stopped for the whole observation. Not distinguishable from an obstruction in one clip."
+close_interaction,22.0,657.0,10.54,,-66.8,-10.7,low,1.86,s (TTC),"Close interaction: car #22 <-> pedestrian #657 - TTC 1.9s but closing only 26 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,365.0,681.0,10.74,,-16.6,-18.4,low,1.57,s (TTC),"Close interaction: car #365 <-> car #681 - TTC 1.6s but closing only 14 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,606.0,773.0,10.81,,-39.9,-17.6,low,3.87,s (TTC),"Close interaction: motorcycle #606 <-> pedestrian #773 - TTC 3.9s but closing only 11 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1.0,38.0,10.81,,-103.4,5.2,low,2.32,m,Sustained close proximity: car #1 <-> motorcycle #38 - min separation 2.3m (following/vulnerable-road-user)
+close_interaction,25.0,46.0,11.01,,-25.6,-55.3,low,3.56,s (TTC),"Close interaction: motorcycle #25 <-> pedestrian #46 - TTC 3.6s but closing only 22 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,40.0,722.0,11.14,,-89.5,-2.2,low,1.56,s (TTC),"Close interaction: motorcycle #40 <-> car #722 - TTC 1.6s but closing only 22 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,37.0,722.0,11.14,,-87.4,-2.5,low,2.59,s (TTC),"Close interaction: motorcycle #37 <-> car #722 - TTC 2.6s but closing only 19 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,2.0,40.0,11.21,,-85.1,-1.9,low,2.38,m,Sustained close proximity: car #2 <-> motorcycle #40 - min separation 2.4m (following/vulnerable-road-user)
+close_interaction,37.0,52.0,11.74,,-88.9,-2.2,low,1.83,s (TTC),"Close interaction: motorcycle #37 <-> car #52 - TTC 1.8s but closing only 20 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,474.0,578.0,11.85,,-12.7,-30.2,low,4.79,s (TTC),"Close interaction: pedestrian #474 <-> car #578 - TTC 4.8s but closing only 17 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,271.0,627.0,11.85,,-58.5,-7.9,low,3.43,m,Sustained close proximity: car #271 <-> car #627 - min separation 3.4m (head-on)
+close_interaction,8.0,40.0,11.95,,-92.2,-0.2,low,1.6,s (TTC),"Close interaction: car #8 <-> motorcycle #40 - TTC 1.6s but closing only 14 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,585.0,773.0,12.01,,-37.2,-18.2,low,2.2,s (TTC),"Close interaction: motorcycle #585 <-> pedestrian #773 - TTC 2.2s but closing only 8 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,748.0,,12.48,47.48,850.2,763.5,low,47.48,s,"car #748 stationary 47.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,3.0,134.0,12.51,,6.4,-30.4,low,0.72,s (TTC),"Close interaction: car #3 <-> car #134 - TTC 0.7s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,325.0,585.0,12.51,,-42.0,-17.7,low,4.11,s (TTC),"Close interaction: motorcycle #325 <-> motorcycle #585 - TTC 4.1s but closing only 7 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,24.0,627.0,12.65,,-63.1,-9.5,low,2.65,m,Sustained close proximity: motorcycle #24 <-> car #627 - min separation 2.6m (following/vulnerable-road-user)
+stationary_vehicle_candidate,885.0,,12.68,10.24,842.9,761.5,low,10.24,s,"car #885 stationary 10.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,133.0,134.0,12.91,,13.3,-31.5,low,2.13,s (TTC),"Close interaction: lgv #133 <-> car #134 - TTC 2.1s but closing only 14 km/h, so low-energy (head-on). Density signal, not a safety event."
+near_miss_proximity,515.0,578.0,13.21,,-8.1,-31.9,low,1.53,m,Sustained close proximity: car #515 <-> car #578 - min separation 1.5m (following)
+unusual_dwell,915.0,,13.41,33.83,1860.3,14.3,low,33.83,s,"lgv #915 in view 33.8s, moving for 22.0s then dwelling 11.8s - a journey interrupted"
+near_miss_proximity,8.0,125.0,13.81,,-105.6,5.9,low,2.18,m,Sustained close proximity: car #8 <-> car #125 - min separation 2.2m (following)
+near_miss_proximity,3.0,113.0,13.91,,14.0,-33.2,low,2.22,m,Sustained close proximity: car #3 <-> car #113 - min separation 2.2m (following)
+close_interaction,22.0,37.0,14.01,,-90.0,-1.1,low,2.18,s (TTC),"Close interaction: car #22 <-> motorcycle #37 - TTC 2.2s but closing only 20 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,24.0,895.0,14.25,,-83.4,-4.3,low,3.32,s (TTC),"Close interaction: motorcycle #24 <-> car #895 - TTC 3.3s but closing only 23 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,37.0,40.0,14.38,,-100.3,2.4,low,1.68,s (TTC),"Close interaction: motorcycle #37 <-> motorcycle #40 - TTC 1.7s but closing only 11 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,113.0,133.0,14.58,,17.1,-32.6,low,0.28,s (TTC),"Close interaction: car #113 <-> lgv #133 - TTC 0.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,177.0,329.0,14.58,,-41.6,-17.5,low,0.33,s (TTC),"Close interaction: car #177 <-> car #329 - TTC 0.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,961.0,,14.62,6.47,1377.4,644.4,low,6.47,s,"lgv #961 stationary 6.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,970.0,,14.75,8.14,1616.3,989.8,low,8.14,s,"car #970 stationary 8.1s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,2.0,37.0,15.05,,-103.7,5.0,low,2.01,s (TTC),"Close interaction: car #2 <-> motorcycle #37 - TTC 2.0s but closing only 9 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+unusual_dwell,1025.0,,15.65,44.31,459.6,898.3,low,44.31,s,"lgv #1025 in view 44.3s, moving for 35.5s then dwelling 8.8s - a journey interrupted"
+near_miss_proximity,585.0,1001.0,15.82,,-54.5,-12.7,low,1.31,m,Sustained close proximity: motorcycle #585 <-> car #1001 - min separation 1.3m (following/vulnerable-road-user)
+stationary_vehicle_candidate,1040.0,,15.85,6.37,1470.3,450.0,low,6.37,s,"car #1040 stationary 6.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,13.0,22.0,16.08,,-98.4,3.2,low,2.42,m,Sustained close proximity: car #13 <-> car #22 - min separation 2.4m (following)
+close_interaction,578.0,774.0,16.15,,-19.3,-25.8,low,1.88,s (TTC),"Close interaction: car #578 <-> car #774 - TTC 1.9s but closing only 15 km/h, so low-energy (head-on). Density signal, not a safety event."
+close_interaction,325.0,657.0,16.15,,-66.6,-10.5,low,2.86,s (TTC),"Close interaction: motorcycle #325 <-> pedestrian #657 - TTC 2.9s but closing only 16 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,774.0,880.0,16.22,,-14.9,-27.5,low,2.49,s (TTC),"Close interaction: car #774 <-> car #880 - TTC 2.5s but closing only 25 km/h, so low-energy (head-on). Density signal, not a safety event."
+close_interaction,271.0,564.0,16.42,,-44.1,-10.8,low,1.79,s (TTC),"Close interaction: car #271 <-> car #564 - TTC 1.8s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,899.0,915.0,16.55,,-24.8,-13.2,low,1.93,s (TTC),"Close interaction: car #899 <-> lgv #915 - TTC 1.9s but closing only 15 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,631.0,880.0,16.98,,-12.0,-29.9,low,0.46,s (TTC),"Close interaction: car #631 <-> car #880 - TTC 0.5s but closing only 12 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,325.0,1001.0,17.08,,-63.4,-9.6,low,2.65,m,Sustained close proximity: motorcycle #325 <-> car #1001 - min separation 2.6m (following/vulnerable-road-user)
+close_interaction,515.0,880.0,17.22,,-14.0,-29.4,low,0.21,s (TTC),"Close interaction: car #515 <-> car #880 - TTC 0.2s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,515.0,631.0,17.32,,-14.6,-29.8,low,0.21,s (TTC),"Close interaction: car #515 <-> car #631 - TTC 0.2s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,1095.0,1100.0,17.62,,22.7,-42.6,low,2.06,m,Sustained close proximity: lgv #1095 <-> car #1100 - min separation 2.1m (following)
+near_miss_proximity,1109.0,1111.0,17.89,,20.8,-41.6,low,3.3,m,Sustained close proximity: hgv #1109 <-> lgv #1111 - min separation 3.3m (following)
+near_miss_proximity,1100.0,1109.0,17.95,,20.5,-41.7,low,3.18,m,Sustained close proximity: car #1100 <-> hgv #1109 - min separation 3.2m (following)
+near_miss_proximity,585.0,1091.0,18.05,,-66.3,-9.7,low,2.2,m,Sustained close proximity: motorcycle #585 <-> motorcycle #1091 - min separation 2.2m (following/vulnerable-road-user)
+near_miss_proximity,439.0,1100.0,18.09,,22.1,-40.2,low,2.78,m,Sustained close proximity: lgv #439 <-> car #1100 - min separation 2.8m (head-on)
+close_interaction,480.0,585.0,18.15,,-62.7,-9.3,low,2.22,s (TTC),"Close interaction: car #480 <-> motorcycle #585 - TTC 2.2s but closing only 14 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,439.0,1111.0,18.15,,22.3,-40.1,low,2.18,m,Sustained close proximity: lgv #439 <-> lgv #1111 - min separation 2.2m (head-on)
+near_miss_proximity,1095.0,1109.0,18.25,,16.4,-40.4,low,0.0,m,Sustained close proximity: lgv #1095 <-> hgv #1109 - min separation 0.0m (following)
+close_interaction,901.0,1094.0,18.48,,-19.8,-19.1,low,2.5,s (TTC),"Close interaction: motorcycle #901 <-> car #1094 - TTC 2.5s but closing only 10 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,1155.0,,19.22,10.01,432.8,346.6,low,10.01,s,"car #1155 stationary 10.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,578.0,1086.0,19.59,,-38.2,-21.4,low,2.6,s (TTC),"Close interaction: car #578 <-> motorcycle #1086 - TTC 2.6s but closing only 20 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,631.0,1086.0,19.59,,-34.4,-22.8,low,4.87,s (TTC),"Close interaction: car #631 <-> motorcycle #1086 - TTC 4.9s but closing only 17 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1111.0,1131.0,19.79,,13.2,-38.4,low,0.33,s (TTC),"Close interaction: lgv #1111 <-> car #1131 - TTC 0.3s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1100.0,1111.0,19.85,,11.6,-37.1,low,0.69,s (TTC),"Close interaction: car #1100 <-> lgv #1111 - TTC 0.7s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,1181.0,,19.95,9.18,578.3,601.4,low,9.18,s,"car #1181 stationary 9.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,774.0,1080.0,19.99,,-10.2,-27.1,low,3.28,m,Sustained close proximity: car #774 <-> car #1080 - min separation 3.3m (head-on)
+close_interaction,515.0,934.0,20.02,,-15.2,-29.2,low,0.23,s (TTC),"Close interaction: car #515 <-> car #934 - TTC 0.2s but closing only 10 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,177.0,1091.0,20.09,,-74.4,-6.0,low,2.45,m,Sustained close proximity: car #177 <-> motorcycle #1091 - min separation 2.5m (following/vulnerable-road-user)
+unusual_dwell,1189.0,,20.12,25.79,122.5,1079.1,low,25.79,s,"lgv #1189 in view 25.8s, moving for 25.8s then dwelling 0.0s - a journey interrupted"
+close_interaction,774.0,1111.0,20.12,,0.9,-31.1,low,1.78,s (TTC),"Close interaction: car #774 <-> lgv #1111 - TTC 1.8s but closing only 44 km/h, so low-energy (head-on). Density signal, not a safety event."
+close_interaction,1100.0,1131.0,20.35,,8.1,-36.6,low,0.24,s (TTC),"Close interaction: car #1100 <-> car #1131 - TTC 0.2s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,774.0,1095.0,20.92,,-5.2,-28.8,low,2.68,m,Sustained close proximity: car #774 <-> lgv #1095 - min separation 2.7m (head-on)
+close_interaction,564.0,1095.0,21.42,,-20.3,-22.2,low,2.1,s (TTC),"Close interaction: car #564 <-> lgv #1095 - TTC 2.1s but closing only 42 km/h, so low-energy (head-on). Density signal, not a safety event."
+near_miss_proximity,913.0,1080.0,21.59,,-23.1,-24.9,low,2.78,m,Sustained close proximity: car #913 <-> car #1080 - min separation 2.8m (following)
+near_miss_proximity,774.0,869.0,21.79,,0.7,-28.0,low,3.38,m,Sustained close proximity: car #774 <-> lgv #869 - min separation 3.4m (following)
+near_miss_proximity,774.0,1100.0,21.82,,-0.1,-30.9,low,2.7,m,Sustained close proximity: car #774 <-> car #1100 - min separation 2.7m (head-on)
+close_interaction,1154.0,1202.0,21.86,,-21.9,11.7,low,2.39,s (TTC),"Close interaction: car #1154 <-> hgv #1202 - TTC 2.4s but closing only 10 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,11.0,869.0,22.02,,3.1,-26.1,low,0.21,s (TTC),"Close interaction: car #11 <-> lgv #869 - TTC 0.2s but closing only 7 km/h, so low-energy (head-on). Density signal, not a safety event."
+stationary_vehicle_candidate,1287.0,,22.39,17.75,166.7,1080.0,low,17.75,s,"car #1287 stationary 17.8s. Stationary within a detected queue - likely signal/queue related, not an incident"
+unusual_dwell,1287.0,,22.39,28.03,166.7,1080.0,low,28.03,s,"car #1287 in view 28.0s, moving for 10.3s then dwelling 17.8s - a journey interrupted"
+near_miss_proximity,1100.0,1262.0,22.49,,-4.5,-29.2,low,2.57,m,Sustained close proximity: car #1100 <-> car #1262 - min separation 2.6m (head-on)
+unusual_dwell,1293.0,,22.52,37.44,1346.1,306.7,low,37.44,s,"car #1293 in view 37.4s, moving for 29.4s then dwelling 8.0s - a journey interrupted"
+close_interaction,15.0,869.0,23.22,,8.5,-28.2,low,0.21,s (TTC),"Close interaction: lgv #15 <-> lgv #869 - TTC 0.2s but closing only 9 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,578.0,1347.0,23.72,,-54.5,-14.7,low,1.69,m,Sustained close proximity: car #578 <-> motorcycle #1347 - min separation 1.7m (following/vulnerable-road-user)
+close_interaction,11.0,1094.0,23.92,,0.0,-24.8,low,1.67,s (TTC),"Close interaction: car #11 <-> car #1094 - TTC 1.7s but closing only 15 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,937.0,1094.0,23.92,,-2.4,-25.1,low,3.18,m,Sustained close proximity: lgv #937 <-> car #1094 - min separation 3.2m (following)
+near_miss_proximity,913.0,1095.0,24.82,,-34.3,-20.1,low,4.02,m,Sustained close proximity: car #913 <-> lgv #1095 - min separation 4.0m (following)
+close_interaction,325.0,1091.0,24.86,,-97.3,1.2,low,1.75,s (TTC),"Close interaction: motorcycle #325 <-> motorcycle #1091 - TTC 1.8s but closing only 9 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,774.0,1392.0,25.02,,20.0,-39.2,low,2.5,m,Sustained close proximity: car #774 <-> car #1392 - min separation 2.5m (head-on)
+near_miss_proximity,564.0,1111.0,25.02,,-15.9,-23.6,low,3.33,m,Sustained close proximity: car #564 <-> lgv #1111 - min separation 3.3m (head-on)
+near_miss_proximity,934.0,1095.0,25.26,,-37.9,-18.5,low,3.71,m,Sustained close proximity: car #934 <-> lgv #1095 - min separation 3.7m (following)
+stationary_vehicle_candidate,693.0,,25.49,9.41,1866.2,21.1,low,9.41,s,"car #693 stationary 9.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,271.0,934.0,25.56,,-40.6,-20.1,low,0.3,s (TTC),"Close interaction: car #271 <-> car #934 - TTC 0.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,1262.0,1392.0,25.56,,15.0,-37.1,low,2.45,m,Sustained close proximity: car #1262 <-> car #1392 - min separation 2.5m (head-on)
+close_interaction,869.0,1262.0,25.73,,18.1,-35.7,low,1.06,s (TTC),"Close interaction: lgv #869 <-> car #1262 - TTC 1.1s but closing only 11 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,578.0,880.0,25.86,,-66.1,-8.9,low,0.46,s (TTC),"Close interaction: car #578 <-> car #880 - TTC 0.5s but closing only 12 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,631.0,1080.0,25.86,,-52.9,-13.4,low,3.16,m,Sustained close proximity: car #631 <-> car #1080 - min separation 3.2m (following)
+stationary_vehicle_candidate,271.0,,26.19,16.68,1727.0,66.4,low,16.68,s,"car #271 stationary 16.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,915.0,,26.36,6.37,1860.3,14.3,low,6.37,s,"lgv #915 stationary 6.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,271.0,913.0,26.39,,-41.3,-19.8,low,0.2,s (TTC),"Close interaction: car #271 <-> car #913 - TTC 0.2s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,50.0,1407.0,26.63,,16.0,-42.9,low,0.22,s (TTC),"Close interaction: hgv #50 <-> car #1407 - TTC 0.2s but closing only 10 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,913.0,1131.0,26.83,,-42.1,-17.2,low,3.0,m,Sustained close proximity: car #913 <-> car #1131 - min separation 3.0m (following)
+close_interaction,631.0,1347.0,27.33,,-65.1,-11.5,low,2.74,s (TTC),"Close interaction: car #631 <-> motorcycle #1347 - TTC 2.7s but closing only 10 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,39.0,,27.46,32.5,516.4,328.8,low,32.5,s,"car #39 stationary 32.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,564.0,1392.0,27.53,,-1.1,-29.8,low,3.54,m,Sustained close proximity: car #564 <-> car #1392 - min separation 3.5m (head-on)
+stationary_vehicle_candidate,1554.0,,27.59,12.25,1481.9,446.4,low,12.25,s,"car #1554 stationary 12.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,631.0,1324.0,27.59,,-69.0,-10.3,low,2.33,s (TTC),"Close interaction: car #631 <-> motorcycle #1324 - TTC 2.3s but closing only 20 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,1563.0,,27.69,5.11,1441.0,814.0,low,5.11,s,"car #1563 stationary 5.1s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1324.0,1347.0,27.69,,-72.8,-9.6,low,2.0,s (TTC),"Close interaction: motorcycle #1324 <-> motorcycle #1347 - TTC 2.0s but closing only 10 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,934.0,1131.0,27.69,,-49.2,-14.3,low,2.83,m,Sustained close proximity: car #934 <-> car #1131 - min separation 2.8m (following)
+close_interaction,915.0,1111.0,27.76,,-30.8,-18.1,low,2.19,s (TTC),"Close interaction: lgv #915 <-> lgv #1111 - TTC 2.2s but closing only 11 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,1287.0,1416.0,27.83,,-15.7,-21.6,low,1.91,s (TTC),"Close interaction: car #1287 <-> car #1416 - TTC 1.9s but closing only 13 km/h, so low-energy (head-on). Density signal, not a safety event."
+near_miss_proximity,1416.0,1557.0,27.89,,-17.3,-18.6,low,0.01,m,Sustained close proximity: car #1416 <-> lgv #1557 - min separation 0.0m (following)
+close_interaction,913.0,1203.0,28.43,,-61.5,-12.1,low,4.68,s (TTC),"Close interaction: car #913 <-> pedestrian #1203 - TTC 4.7s but closing only 18 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1095.0,1189.0,28.7,,-65.0,-4.4,low,3.66,m,Sustained close proximity: lgv #1095 <-> lgv #1189 - min separation 3.7m (head-on)
+close_interaction,693.0,1467.0,28.76,,-28.9,-14.3,low,1.28,s (TTC),"Close interaction: car #693 <-> car #1467 - TTC 1.3s but closing only 9 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,48.0,1199.0,29.0,,-19.2,-37.3,low,3.2,s (TTC),"Close interaction: car #48 <-> motorcycle #1199 - TTC 3.2s but closing only 15 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1601.0,1654.0,29.0,,-89.1,7.5,low,2.68,m,Sustained close proximity: car #1601 <-> car #1654 - min separation 2.7m (following)
+near_miss_proximity,631.0,1095.0,29.13,,-70.2,-6.6,low,4.01,m,Sustained close proximity: car #631 <-> lgv #1095 - min separation 4.0m (following)
+close_interaction,97.0,1199.0,29.4,,-19.7,-38.9,low,3.11,s (TTC),"Close interaction: car #97 <-> motorcycle #1199 - TTC 3.1s but closing only 15 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1095.0,1293.0,29.7,,-74.6,-1.1,low,3.41,m,Sustained close proximity: lgv #1095 <-> car #1293 - min separation 3.4m (head-on)
+close_interaction,1407.0,1622.0,30.33,,6.5,-37.5,low,0.21,s (TTC),"Close interaction: car #1407 <-> car #1622 - TTC 0.2s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,349.0,1199.0,30.5,,-22.5,-48.1,low,3.16,s (TTC),"Close interaction: car #349 <-> motorcycle #1199 - TTC 3.2s but closing only 25 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+unusual_dwell,1734.0,,30.76,29.1,1670.2,95.6,low,29.1,s,"car #1734 in view 29.1s, moving for 29.1s then dwelling 0.0s - a journey interrupted"
+close_interaction,39.0,1199.0,30.8,,-22.3,-47.1,low,2.02,s (TTC),"Close interaction: car #39 <-> motorcycle #1199 - TTC 2.0s but closing only 27 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,631.0,1690.0,31.0,,-87.5,-2.8,low,2.22,s (TTC),"Close interaction: car #631 <-> lgv #1690 - TTC 2.2s but closing only 22 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,7.0,1601.0,31.13,,-79.5,6.4,low,0.22,s (TTC),"Close interaction: car #7 <-> car #1601 - TTC 0.2s but closing only 8 km/h, so low-energy (head-on). Density signal, not a safety event."
+near_miss_proximity,1619.0,1686.0,31.2,,-24.1,7.5,low,3.25,m,Sustained close proximity: hgv #1619 <-> motorcycle #1686 - min separation 3.2m (head-on/vulnerable-road-user)
+stationary_vehicle_candidate,1732.0,,31.46,8.88,1376.0,581.4,low,8.88,s,"hgv #1732 stationary 8.9s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,1793.0,,31.8,5.04,1494.2,171.5,low,5.04,s,"motorcycle #1793 stationary 5.0s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1287.0,1668.0,32.03,,-15.7,-21.5,low,1.88,s (TTC),"Close interaction: car #1287 <-> car #1668 - TTC 1.9s but closing only 12 km/h, so low-energy (head-on). Density signal, not a safety event."
+close_interaction,1392.0,1767.0,32.16,,-32.1,-18.9,low,3.8,s (TTC),"Close interaction: car #1392 <-> pedestrian #1767 - TTC 3.8s but closing only 14 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1293.0,1654.0,32.2,,-64.1,-2.2,low,0.27,s (TTC),"Close interaction: car #1293 <-> car #1654 - TTC 0.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+unusual_dwell,1827.0,,32.63,27.33,635.3,842.2,low,27.33,s,"car #1827 in view 27.3s, moving for 27.3s then dwelling 0.0s - a journey interrupted"
+near_miss_proximity,1810.0,1827.0,32.63,,-104.1,11.4,low,2.3,m,Sustained close proximity: car #1810 <-> car #1827 - min separation 2.3m (following)
+near_miss_proximity,1095.0,1810.0,32.73,,-103.4,8.7,low,2.92,m,Sustained close proximity: lgv #1095 <-> car #1810 - min separation 2.9m (head-on)
+close_interaction,1392.0,1712.0,32.77,,-34.3,-21.0,low,3.93,s (TTC),"Close interaction: car #1392 <-> pedestrian #1712 - TTC 3.9s but closing only 11 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,631.0,1131.0,32.77,,-93.4,1.5,low,3.28,m,Sustained close proximity: car #631 <-> car #1131 - min separation 3.3m (following)
+near_miss_proximity,1131.0,1810.0,33.43,,-98.7,6.8,low,3.4,m,Sustained close proximity: car #1131 <-> car #1810 - min separation 3.4m (head-on)
+stationary_vehicle_candidate,1859.0,,33.7,21.82,253.2,1080.0,low,21.82,s,"lgv #1859 stationary 21.8s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1392.0,1467.0,33.73,,-32.2,-19.7,low,0.27,s (TTC),"Close interaction: car #1392 <-> car #1467 - TTC 0.3s but closing only 6 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,1734.0,1802.0,34.13,,8.2,-36.6,low,3.02,m,Sustained close proximity: car #1734 <-> car #1802 - min separation 3.0m (following)
+close_interaction,1189.0,1796.0,34.5,,-31.6,-12.4,low,1.92,s (TTC),"Close interaction: lgv #1189 <-> pedestrian #1796 - TTC 1.9s but closing only 16 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1896.0,1906.0,34.67,,22.7,-43.3,low,2.06,m,Sustained close proximity: car #1896 <-> car #1906 - min separation 2.1m (following)
+near_miss_proximity,1111.0,1293.0,35.23,,-53.5,-8.8,low,3.63,m,Sustained close proximity: lgv #1111 <-> car #1293 - min separation 3.6m (head-on)
+close_interaction,1654.0,1903.0,35.8,,-34.2,-10.0,low,2.7,s (TTC),"Close interaction: car #1654 <-> motorcycle #1903 - TTC 2.7s but closing only 20 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1952.0,1957.0,36.04,,-103.0,12.7,low,0.53,s (TTC),"Close interaction: car #1952 <-> car #1957 - TTC 0.5s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1864.0,1896.0,36.17,,11.6,-37.3,low,0.48,s (TTC),"Close interaction: car #1864 <-> car #1896 - TTC 0.5s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,1972.0,,36.27,6.74,1481.6,522.9,low,6.74,s,"car #1972 stationary 6.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,1467.0,1954.0,36.44,,-38.3,-18.8,low,0.01,m,Sustained close proximity: car #1467 <-> car #1954 - min separation 0.0m (following)
+near_miss_proximity,915.0,1954.0,36.44,,-39.0,-17.1,low,3.79,m,Sustained close proximity: lgv #915 <-> car #1954 - min separation 3.8m (following)
+close_interaction,271.0,1954.0,36.57,,-40.6,-19.3,low,1.33,s (TTC),"Close interaction: car #271 <-> car #1954 - TTC 1.3s but closing only 10 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,915.0,1467.0,37.1,,-41.3,-16.5,low,3.63,m,Sustained close proximity: lgv #915 <-> car #1467 - min separation 3.6m (following)
+close_interaction,1952.0,1985.0,37.2,,-101.7,11.8,low,1.86,s (TTC),"Close interaction: car #1952 <-> car #1985 - TTC 1.9s but closing only 13 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,271.0,1467.0,37.27,,-42.0,-18.9,low,0.22,s (TTC),"Close interaction: car #271 <-> car #1467 - TTC 0.2s but closing only 6 km/h, so low-energy (head-on). Density signal, not a safety event."
+near_miss_proximity,1111.0,1810.0,37.94,,-70.9,-3.1,low,2.89,m,Sustained close proximity: lgv #1111 <-> car #1810 - min separation 2.9m (head-on)
+stationary_vehicle_candidate,1025.0,,38.01,8.71,459.6,898.3,low,8.71,s,"lgv #1025 stationary 8.7s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1654.0,1935.0,38.34,,-28.8,-13.9,low,2.27,s (TTC),"Close interaction: car #1654 <-> car #1935 - TTC 2.3s but closing only 11 km/h, so low-energy (crossing). Density signal, not a safety event."
+stationary_vehicle_candidate,2042.0,,38.6,21.16,837.9,763.2,low,21.16,s,"car #2042 stationary 21.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,693.0,1622.0,38.77,,-41.3,-17.3,low,2.89,m,Sustained close proximity: car #693 <-> car #1622 - min separation 2.9m (following)
+stationary_vehicle_candidate,2072.0,,39.17,8.34,857.6,750.1,low,8.34,s,"car #2072 stationary 8.3s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1392.0,2046.0,39.17,,-62.9,-8.6,low,0.2,s (TTC),"Close interaction: car #1392 <-> car #2046 - TTC 0.2s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1407.0,1734.0,39.54,,-14.2,-29.8,low,0.81,s (TTC),"Close interaction: car #1407 <-> car #1734 - TTC 0.8s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,1864.0,1906.0,39.67,,-5.1,-31.0,low,2.67,m,Sustained close proximity: car #1864 <-> car #1906 - min separation 2.7m (following)
+near_miss_proximity,2074.0,2120.0,40.07,,-104.6,11.9,low,1.51,m,Sustained close proximity: car #2074 <-> car #2120 - min separation 1.5m (following)
+close_interaction,1864.0,2058.0,40.14,,-16.1,-29.6,low,3.48,s (TTC),"Close interaction: car #1864 <-> pedestrian #2058 - TTC 3.5s but closing only 20 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1111.0,1985.0,40.14,,-85.7,2.5,low,3.87,m,Sustained close proximity: lgv #1111 <-> car #1985 - min separation 3.9m (head-on)
+close_interaction,1734.0,1896.0,40.17,,-14.1,-28.2,low,0.83,s (TTC),"Close interaction: car #1734 <-> car #1896 - TTC 0.8s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,1189.0,1864.0,40.74,,-7.7,-26.6,low,3.42,m,Sustained close proximity: lgv #1189 <-> car #1864 - min separation 3.4m (head-on)
+close_interaction,1864.0,1983.0,40.77,,-6.5,-29.7,low,2.07,s (TTC),"Close interaction: car #1864 <-> lgv #1983 - TTC 2.1s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1906.0,2084.0,40.87,,-16.4,-27.8,low,2.09,s (TTC),"Close interaction: car #1906 <-> pedestrian #2084 - TTC 2.1s but closing only 18 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,9.0,1827.0,40.94,,-56.2,-2.3,low,2.03,s (TTC),"Close interaction: car #9 <-> car #1827 - TTC 2.0s but closing only 16 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,1896.0,1903.0,41.27,,-23.1,-20.0,low,2.53,s (TTC),"Close interaction: car #1896 <-> motorcycle #1903 - TTC 2.5s but closing only 23 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1906.0,2058.0,41.41,,-18.9,-28.5,low,1.71,s (TTC),"Close interaction: car #1906 <-> pedestrian #2058 - TTC 1.7s but closing only 22 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1983.0,2058.0,41.54,,-16.1,-28.9,low,2.77,s (TTC),"Close interaction: lgv #1983 <-> pedestrian #2058 - TTC 2.8s but closing only 20 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1111.0,2074.0,41.61,,-97.0,6.5,low,3.78,m,Sustained close proximity: lgv #1111 <-> car #2074 - min separation 3.8m (head-on)
+close_interaction,1864.0,2084.0,41.64,,-16.0,-25.8,low,2.49,s (TTC),"Close interaction: car #1864 <-> pedestrian #2084 - TTC 2.5s but closing only 14 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2084.0,2199.0,41.64,,-21.0,-18.3,low,3.69,s (TTC),"Close interaction: pedestrian #2084 <-> car #2199 - TTC 3.7s but closing only 13 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1467.0,1963.0,41.81,,-68.9,-9.5,low,2.03,s (TTC),"Close interaction: car #1467 <-> pedestrian #1963 - TTC 2.0s but closing only 24 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1467.0,1793.0,41.81,,-68.6,-9.5,low,3.06,s (TTC),"Close interaction: car #1467 <-> motorcycle #1793 - TTC 3.1s but closing only 15 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1896.0,2033.0,41.81,,-23.4,-19.4,low,3.54,s (TTC),"Close interaction: car #1896 <-> motorcycle #2033 - TTC 3.5s but closing only 14 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,271.0,1882.0,41.94,,-39.3,-18.6,low,1.95,s (TTC),"Close interaction: car #271 <-> motorcycle #1882 - TTC 1.9s but closing only 13 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,693.0,1810.0,41.94,,-50.9,-10.7,low,3.21,m,Sustained close proximity: car #693 <-> car #1810 - min separation 3.2m (head-on)
+close_interaction,1734.0,1906.0,42.08,,-18.6,-26.8,low,2.03,s (TTC),"Close interaction: car #1734 <-> car #1906 - TTC 2.0s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1467.0,1622.0,42.11,,-62.9,-10.0,low,0.55,s (TTC),"Close interaction: car #1467 <-> car #1622 - TTC 0.6s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,2060.0,2117.0,42.14,,-28.9,0.2,low,3.41,s (TTC),"Close interaction: pedestrian #2060 <-> hgv #2117 - TTC 3.4s but closing only 24 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1810.0,2033.0,42.21,,-38.5,-12.1,low,3.88,s (TTC),"Close interaction: car #1810 <-> motorcycle #2033 - TTC 3.9s but closing only 20 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1810.0,2212.0,42.21,,-38.5,-12.0,low,4.17,s (TTC),"Close interaction: car #1810 <-> motorcycle #2212 - TTC 4.2s but closing only 19 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1906.0,2146.0,42.31,,-18.3,-27.7,low,0.31,s (TTC),"Close interaction: car #1906 <-> car #2146 - TTC 0.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,1885.0,,42.64,5.6,145.7,1014.0,low,5.6,s,"car #1885 stationary 5.6s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1025.0,1734.0,42.81,,-23.8,-26.0,low,0.33,s (TTC),"Close interaction: lgv #1025 <-> car #1734 - TTC 0.3s but closing only 6 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,1952.0,2120.0,42.91,,-82.9,5.6,low,0.23,s (TTC),"Close interaction: car #1952 <-> car #2120 - TTC 0.2s but closing only 11 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,1293.0,,42.94,7.94,1346.1,306.7,low,7.94,s,"car #1293 stationary 7.9s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,7.0,1952.0,43.31,,-79.8,6.4,low,0.38,s (TTC),"Close interaction: car #7 <-> car #1952 - TTC 0.4s but closing only 6 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,1189.0,1885.0,43.38,,13.0,-35.2,low,2.36,s (TTC),"Close interaction: lgv #1189 <-> car #1885 - TTC 2.4s but closing only 21 km/h, so low-energy (crossing). Density signal, not a safety event."
+stationary_vehicle_candidate,2287.0,,43.44,12.05,433.3,344.7,low,12.05,s,"car #2287 stationary 12.1s. Stationary within a detected queue - likely signal/queue related, not an incident"
+stationary_vehicle_candidate,2146.0,,43.48,5.24,920.5,492.3,low,5.24,s,"car #2146 stationary 5.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,1467.0,2288.0,43.61,,-71.2,-7.0,low,1.93,m,Sustained close proximity: car #1467 <-> motorcycle #2288 - min separation 1.9m (following/vulnerable-road-user)
+stationary_vehicle_candidate,2315.0,,44.01,15.95,1479.8,449.0,low,15.95,s,"car #2315 stationary 15.9s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1734.0,1903.0,44.01,,-29.7,-20.5,low,3.83,s (TTC),"Close interaction: car #1734 <-> motorcycle #1903 - TTC 3.8s but closing only 8 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,2305.0,2320.0,44.08,,22.0,-44.1,low,1.63,m,Sustained close proximity: car #2305 <-> car #2320 - min separation 1.6m (following)
+near_miss_proximity,1654.0,1896.0,44.28,,-24.5,-19.0,low,2.4,m,Sustained close proximity: car #1654 <-> car #1896 - min separation 2.4m (crossing)
+close_interaction,1293.0,1810.0,44.34,,-38.8,-13.4,low,2.06,s (TTC),"Close interaction: car #1293 <-> car #1810 - TTC 2.1s but closing only 10 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,1957.0,1985.0,44.34,,-58.3,-4.7,low,2.48,m,Sustained close proximity: car #1957 <-> car #1985 - min separation 2.5m (following)
+close_interaction,1903.0,1906.0,44.44,,-29.8,-20.2,low,2.26,s (TTC),"Close interaction: motorcycle #1903 <-> car #1906 - TTC 2.3s but closing only 14 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,2344.0,,44.51,15.38,579.5,600.3,low,15.38,s,"car #2344 stationary 15.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1734.0,2286.0,44.74,,-35.3,-22.0,low,2.39,s (TTC),"Close interaction: car #1734 <-> pedestrian #2286 - TTC 2.4s but closing only 18 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,693.0,2341.0,45.21,,-74.2,-5.5,low,3.18,s (TTC),"Close interaction: car #693 <-> motorcycle #2341 - TTC 3.2s but closing only 16 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1734.0,2033.0,45.51,,-32.9,-20.2,low,2.24,s (TTC),"Close interaction: car #1734 <-> motorcycle #2033 - TTC 2.2s but closing only 7 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1896.0,2228.0,45.68,,-28.0,-16.3,low,0.22,s (TTC),"Close interaction: car #1896 <-> car #2228 - TTC 0.2s but closing only 7 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,1906.0,2362.0,45.78,,-34.8,-19.3,low,2.28,s (TTC),"Close interaction: car #1906 <-> motorcycle #2362 - TTC 2.3s but closing only 8 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1287.0,2130.0,45.78,,-3.1,-26.0,low,1.5,m,Sustained close proximity: car #1287 <-> car #2130 - min separation 1.5m (following)
+close_interaction,1983.0,2228.0,46.05,,-27.5,-19.2,low,1.61,s (TTC),"Close interaction: lgv #1983 <-> car #2228 - TTC 1.6s but closing only 13 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,1467.0,2341.0,46.15,,-82.5,-3.6,low,0.4,s (TTC),"Close interaction: car #1467 <-> motorcycle #2341 - TTC 0.4s but closing only 7 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,2036.0,,46.21,13.51,1569.5,925.5,low,13.51,s,"car #2036 stationary 13.5s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1467.0,2121.0,46.55,,-84.3,-2.8,low,0.5,s (TTC),"Close interaction: car #1467 <-> motorcycle #2121 - TTC 0.5s but closing only 6 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2250.0,2384.0,46.75,,-23.8,8.0,low,1.6,s (TTC),"Close interaction: motorcycle #2250 <-> hgv #2384 - TTC 1.6s but closing only 32 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1952.0,2074.0,46.95,,-70.1,0.7,low,2.89,m,Sustained close proximity: car #1952 <-> car #2074 - min separation 2.9m (following)
+stationary_vehicle_candidate,2453.0,,46.98,6.21,1369.7,686.9,low,6.21,s,"lgv #2453 stationary 6.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,2121.0,2325.0,47.45,,-75.7,-5.5,low,4.95,s (TTC),"Close interaction: motorcycle #2121 <-> motorcycle #2325 - TTC 5.0s but closing only 17 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1654.0,2199.0,47.81,,-5.1,-26.6,low,3.29,m,Sustained close proximity: car #1654 <-> car #2199 - min separation 3.3m (following)
+close_interaction,1985.0,2120.0,47.85,,-48.0,-7.8,low,2.17,s (TTC),"Close interaction: car #1985 <-> car #2120 - TTC 2.2s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+stationary_vehicle_candidate,2466.0,,47.98,7.41,1481.1,513.0,low,7.41,s,"car #2466 stationary 7.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1827.0,2296.0,48.05,,-28.9,-15.6,low,2.41,s (TTC),"Close interaction: car #1827 <-> car #2296 - TTC 2.4s but closing only 22 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,2033.0,2362.0,48.08,,-42.7,-16.2,low,1.66,m,Sustained close proximity: motorcycle #2033 <-> motorcycle #2362 - min separation 1.7m (following/vulnerable-road-user)
+close_interaction,1983.0,2082.0,48.12,,-35.1,-18.6,low,1.31,s (TTC),"Close interaction: lgv #1983 <-> car #2082 - TTC 1.3s but closing only 6 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,10.0,2250.0,48.22,,-25.2,13.2,low,3.23,s (TTC),"Close interaction: car #10 <-> motorcycle #2250 - TTC 3.2s but closing only 14 km/h, so low-energy (merging/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,2121.0,2341.0,48.25,,-88.9,-1.7,low,0.96,m,Sustained close proximity: motorcycle #2121 <-> motorcycle #2341 - min separation 1.0m (following/vulnerable-road-user)
+close_interaction,52.0,1467.0,48.28,,-92.9,-0.3,low,0.24,s (TTC),"Close interaction: car #52 <-> car #1467 - TTC 0.2s but closing only 12 km/h, so low-energy (merging). Density signal, not a safety event."
+stationary_vehicle_candidate,2511.0,,48.62,11.34,753.2,995.2,low,11.34,s,"car #2511 stationary 11.3s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,1896.0,1957.0,49.08,,-36.9,-10.3,low,2.45,m,Sustained close proximity: car #1896 <-> car #1957 - min separation 2.5m (head-on)
+near_miss_proximity,1734.0,2550.0,49.58,,-47.1,-15.8,low,2.73,m,Sustained close proximity: car #1734 <-> car #2550 - min separation 2.7m (following)
+close_interaction,1654.0,1859.0,50.28,,11.9,-31.1,low,1.85,s (TTC),"Close interaction: car #1654 <-> lgv #1859 - TTC 1.9s but closing only 20 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,271.0,2362.0,50.28,,-55.2,-12.8,low,2.21,s (TTC),"Close interaction: car #271 <-> motorcycle #2362 - TTC 2.2s but closing only 7 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2074.0,2082.0,50.38,,-48.6,-10.4,low,2.31,s (TTC),"Close interaction: car #2074 <-> car #2082 - TTC 2.3s but closing only 26 km/h, so low-energy (head-on). Density signal, not a safety event."
+close_interaction,2305.0,2534.0,50.42,,-28.3,-21.1,low,4.3,s (TTC),"Close interaction: car #2305 <-> pedestrian #2534 - TTC 4.3s but closing only 20 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2296.0,2560.0,50.45,,-25.6,-12.3,low,0.3,s (TTC),"Close interaction: car #2296 <-> car #2560 - TTC 0.3s but closing only 7 km/h, so low-energy (crossing). Density signal, not a safety event."
+close_interaction,271.0,1906.0,51.22,,-60.4,-11.4,low,0.3,s (TTC),"Close interaction: car #271 <-> car #1906 - TTC 0.3s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,50.0,2585.0,51.25,,15.9,-42.1,low,0.2,s (TTC),"Close interaction: hgv #50 <-> car #2585 - TTC 0.2s but closing only 10 km/h, so low-energy (crossing). Density signal, not a safety event."
+stationary_vehicle_candidate,2647.0,,51.28,6.17,151.0,914.3,low,6.17,s,"bus #2647 stationary 6.2s. Stationary within a detected queue - likely signal/queue related, not an incident"
+near_miss_proximity,2646.0,2653.0,51.69,,21.7,-42.6,low,2.81,m,Sustained close proximity: car #2646 <-> car #2653 - min separation 2.8m (following)
+close_interaction,9.0,1952.0,51.85,,-54.2,-2.7,low,2.07,s (TTC),"Close interaction: car #9 <-> car #1952 - TTC 2.1s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,271.0,2608.0,51.88,,-69.1,-9.4,low,2.77,s (TTC),"Close interaction: car #271 <-> motorcycle #2608 - TTC 2.8s but closing only 16 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,1734.0,2601.0,52.05,,-64.9,-10.9,low,2.2,s (TTC),"Close interaction: car #1734 <-> motorcycle #2601 - TTC 2.2s but closing only 29 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+stationary_vehicle_candidate,2687.0,,52.12,6.37,1356.4,563.3,low,6.37,s,"hgv #2687 stationary 6.4s. Stationary within a detected queue - likely signal/queue related, not an incident"
+close_interaction,1827.0,2595.0,52.22,,-20.6,-16.5,low,1.51,s (TTC),"Close interaction: car #1827 <-> car #2595 - TTC 1.5s but closing only 6 km/h, so low-energy (merging). Density signal, not a safety event."
+close_interaction,2296.0,2676.0,52.22,,-26.7,0.0,low,3.52,s (TTC),"Close interaction: car #2296 <-> pedestrian #2676 - TTC 3.5s but closing only 16 km/h, so low-energy (head-on/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2362.0,2550.0,52.25,,-60.6,-8.9,low,0.21,s (TTC),"Close interaction: motorcycle #2362 <-> car #2550 - TTC 0.2s but closing only 6 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,2199.0,2646.0,52.29,,20.3,-38.5,low,3.61,m,Sustained close proximity: car #2199 <-> car #2646 - min separation 3.6m (head-on)
+close_interaction,2516.0,2560.0,52.92,,-28.3,-13.7,low,0.23,s (TTC),"Close interaction: car #2516 <-> car #2560 - TTC 0.2s but closing only 8 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,271.0,2601.0,53.39,,-68.7,-9.5,low,1.9,m,Sustained close proximity: car #271 <-> motorcycle #2601 - min separation 1.9m (head-on/vulnerable-road-user)
+close_interaction,1734.0,2680.0,54.05,,-71.9,-8.6,low,3.06,s (TTC),"Close interaction: car #1734 <-> motorcycle #2680 - TTC 3.1s but closing only 18 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,271.0,2550.0,54.15,,-70.8,-6.0,low,3.14,m,Sustained close proximity: car #271 <-> car #2550 - min separation 3.1m (following)
+close_interaction,2585.0,2653.0,54.39,,3.4,-35.9,low,0.35,s (TTC),"Close interaction: car #2585 <-> car #2653 - TTC 0.3s but closing only 8 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,2082.0,2481.0,54.52,,-57.8,-7.0,low,3.58,m,Sustained close proximity: car #2082 <-> car #2481 - min separation 3.6m (head-on)
+close_interaction,1906.0,2550.0,54.62,,-77.0,-3.6,low,1.63,s (TTC),"Close interaction: car #1906 <-> car #2550 - TTC 1.6s but closing only 9 km/h, so low-energy (following). Density signal, not a safety event."
+close_interaction,1957.0,2595.0,54.66,,-16.1,-20.3,low,1.52,s (TTC),"Close interaction: car #1957 <-> car #2595 - TTC 1.5s but closing only 7 km/h, so low-energy (following). Density signal, not a safety event."
+near_miss_proximity,2601.0,2792.0,55.05,,-62.6,-12.1,low,1.54,m,Sustained close proximity: motorcycle #2601 <-> motorcycle #2792 - min separation 1.5m (head-on/vulnerable-road-user)
+close_interaction,1906.0,2808.0,55.16,,-88.3,-1.9,low,1.69,s (TTC),"Close interaction: car #1906 <-> lgv #2808 - TTC 1.7s but closing only 23 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,1734.0,1983.0,55.19,,-68.9,-7.1,low,3.02,m,Sustained close proximity: car #1734 <-> lgv #1983 - min separation 3.0m (following)
+close_interaction,11.0,2465.0,55.35,,-0.9,-24.3,low,1.84,s (TTC),"Close interaction: car #11 <-> lgv #2465 - TTC 1.8s but closing only 17 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,2228.0,2749.0,55.45,,-54.5,-12.2,low,1.74,m,Sustained close proximity: car #2228 <-> car #2749 - min separation 1.7m (following)
+close_interaction,2074.0,2481.0,56.72,,-41.5,-11.3,low,1.63,s (TTC),"Close interaction: car #2074 <-> car #2481 - TTC 1.6s but closing only 19 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,1827.0,1957.0,57.22,,-10.4,-22.7,low,3.1,m,Sustained close proximity: car #1827 <-> car #1957 - min separation 3.1m (following)
+near_miss_proximity,1935.0,2862.0,57.29,,-104.8,9.3,low,4.02,m,Sustained close proximity: car #1935 <-> lgv #2862 - min separation 4.0m (head-on)
+close_interaction,2768.0,2806.0,57.32,,-68.9,2.0,low,2.86,s (TTC),"Close interaction: pedestrian #2768 <-> car #2806 - TTC 2.9s but closing only 23 km/h, so low-energy (crossing/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,271.0,2876.0,57.62,,-89.6,-1.7,low,1.85,s (TTC),"Close interaction: car #271 <-> car #2876 - TTC 1.9s but closing only 16 km/h, so low-energy (merging). Density signal, not a safety event."
+near_miss_proximity,1025.0,2646.0,57.79,,-4.1,-28.4,low,3.65,m,Sustained close proximity: lgv #1025 <-> car #2646 - min separation 3.6m (head-on)
+close_interaction,2515.0,2792.0,58.06,,-75.9,-4.9,low,0.52,s (TTC),"Close interaction: motorcycle #2515 <-> motorcycle #2792 - TTC 0.5s but closing only 7 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+close_interaction,2749.0,2792.0,58.06,,-73.1,-5.6,low,2.41,s (TTC),"Close interaction: car #2749 <-> motorcycle #2792 - TTC 2.4s but closing only 10 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,2515.0,2915.0,58.16,,-75.7,-4.4,low,0.11,m,Sustained close proximity: motorcycle #2515 <-> motorcycle #2915 - min separation 0.1m (following/vulnerable-road-user)
+close_interaction,1734.0,2907.0,58.49,,-89.0,-1.9,low,2.19,s (TTC),"Close interaction: car #1734 <-> lgv #2907 - TTC 2.2s but closing only 16 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,2082.0,2515.0,58.59,,-78.7,-2.3,low,2.24,m,Sustained close proximity: car #2082 <-> motorcycle #2515 - min separation 2.2m (following/vulnerable-road-user)
+close_interaction,10.0,2296.0,58.76,,-24.5,19.2,low,0.21,s (TTC),"Close interaction: car #10 <-> car #2296 - TTC 0.2s but closing only 8 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,271.0,1983.0,58.86,,-90.3,1.1,low,3.29,m,Sustained close proximity: car #271 <-> lgv #1983 - min separation 3.3m (following)
+near_miss_proximity,2082.0,2915.0,58.99,,-80.6,-1.5,low,1.96,m,Sustained close proximity: car #2082 <-> motorcycle #2915 - min separation 2.0m (following/vulnerable-road-user)
+near_miss_proximity,2296.0,2946.0,59.09,,-22.4,20.1,low,2.36,m,Sustained close proximity: car #2296 <-> lgv #2946 - min separation 2.4m (head-on)
+near_miss_proximity,2516.0,2646.0,59.09,,-8.5,-26.5,low,3.65,m,Sustained close proximity: car #2516 <-> car #2646 - min separation 3.6m (head-on)
+close_interaction,52.0,271.0,59.26,,-93.2,-0.5,low,0.21,s (TTC),"Close interaction: car #52 <-> car #271 - TTC 0.2s but closing only 9 km/h, so low-energy (crossing). Density signal, not a safety event."
+near_miss_proximity,1983.0,2862.0,59.33,,-92.6,5.4,low,3.43,m,Sustained close proximity: lgv #1983 <-> lgv #2862 - min separation 3.4m (head-on)
+near_miss_proximity,2560.0,2796.0,59.43,,-43.4,-16.7,low,1.64,m,Sustained close proximity: car #2560 <-> motorcycle #2796 - min separation 1.6m (following/vulnerable-road-user)
+close_interaction,2228.0,2515.0,59.53,,-77.2,-4.0,low,4.5,s (TTC),"Close interaction: car #2228 <-> motorcycle #2515 - TTC 4.5s but closing only 6 km/h, so low-energy (following/vulnerable-road-user). Density signal, not a safety event."
+near_miss_proximity,1827.0,2516.0,59.66,,-4.9,-24.8,low,2.28,m,Sustained close proximity: car #1827 <-> car #2516 - min separation 2.3m (following)
+near_miss_proximity,1025.0,2595.0,59.96,,4.4,-29.2,low,1.69,m,Sustained close proximity: lgv #1025 <-> car #2595 - min separation 1.7m (following)
+near_miss_proximity,2885.0,2919.0,59.96,,8.9,-36.6,low,3.02,m,Sustained close proximity: car #2885 <-> car #2919 - min separation 3.0m (following)

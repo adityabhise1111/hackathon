@@ -1,0 +1,28 @@
+{
+ "headline": "",
+ "_parse_failed": true,
+ "_meta": {
+  "model": "anthropic/claude-opus-5-ps-aws-dst",
+  "endpoint": "https://agentrouter.org",
+  "input_tokens": 9228,
+  "output_tokens": 4096,
+  "evidence_keys": [
+   "classification",
+   "congestion",
+   "events",
+   "fleet",
+   "interactions",
+   "kinematics",
+   "measurement_limits",
+   "most_severe_events",
+   "notable_vehicles",
+   "queues",
+   "road_segmentation",
+   "scene",
+   "speed",
+   "stationary_candidates",
+   "tracking_quality",
+   "turning_movements"
+  ]
+ }
+}
