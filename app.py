@@ -21,6 +21,7 @@ import streamlit as st
 from pipeline import interpret as interp
 
 OUT_DIR = "outputs"
+SOURCE_VIDEO = os.path.join("data", "Video Project 5.mp4")
 
 st.set_page_config(page_title="Drone Traffic Intelligence", page_icon="::", layout="wide")
 
@@ -329,6 +330,16 @@ st.divider()
 left, right = st.columns([1.65, 1], gap="large")
 
 with left:
+    st.subheader("Original aerial view")
+    if os.path.exists(SOURCE_VIDEO):
+        st.video(SOURCE_VIDEO)
+        st.caption(
+            f"source: `{os.path.basename(SOURCE_VIDEO)}` "
+            f"({os.path.getsize(SOURCE_VIDEO) / 1e6:.0f} MB)"
+        )
+    else:
+        st.info("Original source video is not available.")
+
     st.subheader("Annotated aerial view")
     playable, newest_raw = playable_video("annotated", tag)
     if playable and os.path.exists(playable):

@@ -1,8 +1,11 @@
 # Videos and telemetry - far too large for git
 data/
+!data/
+data/*
 *.mp4
 *.MP4
 *.srt
+!data/Video Project 5.mp4
 
 # Model weights (downloaded on demand by ultralytics)
 models/
